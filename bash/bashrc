@@ -21,3 +21,9 @@ export XDG_DESKTOP_DIR="${HOME}/wsp"
 export XDG_DOCUMENTS_DIR="${HOME}/doc"
 export XDG_DOWNLOAD_DIe="${HOME}/dwld"
 export XDG_MUSIC_DIR="${HOME}/mdi/msic"
+
+#Prg>Tmux
+if [ -z ${TMUX} ]
+then
+    tmux
+fi

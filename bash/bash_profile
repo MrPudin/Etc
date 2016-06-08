@@ -8,3 +8,9 @@
 
 #Src>Bashrc
 source ${HOME}/.bashrc
+
+#Pg>Xsvr
+if ! xset q &>/dev/null
+then
+    startx
+fi
