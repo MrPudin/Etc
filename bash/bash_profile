@@ -7,5 +7,4 @@
 #
 
 #Src>Bashrc
-source $(HOME)/.bashrc
-
+source ${HOME}/.bashrc
