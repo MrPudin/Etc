@@ -32,6 +32,9 @@ PDCT+=~/.vimrc
 #Tmux
 SRC+=tmux/tmux.conf
 PDCT+=~/.tmux.conf
+#i3
+SRC+=i3/wm_config
+PDCT+=~/.i3/config
 
 #Def>Newline
 define \n
