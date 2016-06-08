@@ -1,0 +1,11 @@
+#
+# ~/etc/bash/bash_profile
+# Usr Config - Bash Profile
+# 
+# Made by Zhu Zhan Yan
+# Copyright (c) 2016. All Rights Reserved.
+#
+
+#Src>Bashrc
+source $(HOME)/.bashrc
+
