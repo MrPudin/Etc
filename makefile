@@ -1,7 +1,7 @@
 #
 # ~/etc/makefile
 # Usr Config - Generate Links and Copies
-# Version 0.0.1 
+# Version 0.0.2 
 #
 # Made by Zhu Zhan Yan.
 # Copyright (c) 2016. All Rights Reserved.
@@ -10,7 +10,7 @@
 #Var
 #Var>Info
 INFO_NAME=ETC Cfg Linker
-INFO_VERSION=0.0.1
+INFO_VERSION=0.0.2
 #Var>Prg
 RM=rm -f
 LN=ln -f
@@ -29,6 +29,9 @@ PDCT+=~/.bash_profile
 #Vim
 SRC+=vim/vimrc
 PDCT+=~/.vimrc
+#Tmux
+SRC+=tmux/tmux.conf
+PDCT+=~/.tmux.conf
 
 #Def>Newline
 define \n

@@ -11,22 +11,13 @@
 set -o vi
 
 #Var
-#Var>Pager
 export PAGER="less"
-#Var>Ed
 export EDITOR="vim"
-#Var>ViEd
 export VISUAL="vim"
-#Var>Browser
 export BROWSER="w3m"
 #Var>XDG
-#Var>XDG>CfgHome
 export XDG_CONFIG_HOME="${HOME}/etc"
-#Var>XDG>Wsp
 export XDG_DESKTOP_DIR="${HOME}/wsp"
-#Var>XDG>Doc
 export XDG_DOCUMENTS_DIR="${HOME}/doc"
-#Var>XDG>Dwld
 export XDG_DOWNLOAD_DIe="${HOME}/dwld"
-#Var>XDG>Misc
 export XDG_MUSIC_DIR="${HOME}/mdi/msic"
