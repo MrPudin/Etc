@@ -1,0 +1,94 @@
+!
+! ~/etc/xsvr/xresources
+! Usr Config - Xres
+!
+! Made by Zhu Zhan Yan.
+! Copyright (c) 2016. All Rights Reserved.
+!
+
+! Solarized
+
+#define S_yellow        #b58900
+#define S_orange        #cb4b16
+#define S_red           #dc322f
+#define S_magenta       #d33682
+#define S_violet        #6c71c4
+#define S_blue          #268bd2
+#define S_cyan          #2aa198
+#define S_green         #859900
+
+
+! Solarized-Dark
+
+#define SD_base03        #002b36
+#define SD_base02        #073642
+#define SD_base01        #586e75
+#define SD_base00        #657b83
+#define SD_base0         #839496
+#define SD_base1         #93a1a1
+#define SD_base2         #eee8d5
+#define SD_base3         #fdf6e3
+
+
+! Solarized-Light
+
+#define SL_base03        #fdf6e3
+#define SL_base02        #eee8d5
+#define SL_base01        #93a1a1
+#define SL_base00        #839496
+#define SL_base0         #657b83
+#define SL_base1         #586e75
+#define SL_base2         #073642
+#define SL_base3         #002b36
+
+!!General
+!*foreground:              SL_base0
+!*fading:                  40
+!*fadeColor:               SL_base03
+!*cursorColor:             SL_base1
+!*pointerColorBackground:  SL_base01
+!*pointerColorForeground:  SL_base1
+!
+!*color0:                  SL_base02
+!*color1:                  S_red
+!*color2:                  S_green
+!*color3:                  S_yellow
+!*color4:                  S_blue
+!*color5:                  S_magenta
+!*color6:                  S_cyan
+!*color7:                  SL_base2
+!*color9:                  S_orange
+!*color8:                  SL_base03
+!*color10:                 SL_base01
+!*color11:                 SL_base00
+!*color12:                 SL_base0
+!*color13:                 S_violet
+!*color14:                 SL_base1
+!*color15:                 SL_base3
+
+!URxvt
+URxvt*background:              SD_base03
+URxvt*foreground:              SD_base0
+URxvt*fading:                  40
+URxvt*fadeColor:               SD_base03
+URxvt*cursorColor:             SD_base1
+URxvt*pointerColorBackground:  SD_base01
+URxvt*pointerColorForeground:  SD_base1
+
+URxvt*color0:                  SD_base02
+URxvt*color1:                  S_red
+URxvt*color2:                  S_green
+URxvt*color3:                  S_yellow
+URxvt*color4:                  S_blue
+URxvt*color5:                  S_magenta
+URxvt*color6:                  S_cyan
+URxvt*color7:                  SD_base2
+URxvt*color9:                  S_orange
+URxvt*color8:                  SD_base03
+URxvt*color10:                 SD_base01
+URxvt*color11:                 SD_base00
+URxvt*color12:                 SD_base0
+URxvt*color13:                 S_violet
+URxvt*color14:                 SD_base1
+URxvt*color15:                 SD_base3
+
