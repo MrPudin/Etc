@@ -35,6 +35,9 @@ PDCT+=~/.tmux.conf
 #i3
 SRC+=i3/wm_config
 PDCT+=~/.i3/config
+#Xsvr
+SRC+=xsvr/xresources
+PDCT+=~/.Xresources
 
 #Def>Newline
 define \n
