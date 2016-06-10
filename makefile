@@ -35,6 +35,8 @@ PDCT+=~/.tmux.conf
 #i3
 SRC+=i3/wm_config
 PDCT+=~/.i3/config
+SRC+=i3/status_config
+PDCT+=~/.i3status.conf
 #Xsvr
 SRC+=xsvr/xresources
 PDCT+=~/.Xresources

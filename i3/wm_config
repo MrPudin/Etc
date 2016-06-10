@@ -7,7 +7,7 @@
 #
 
 #Font
-font pango:DejaVu Sans Mono 8
+font pango:DejaVu Sans Mono 7
 
 #Kbd
 set $mod Mod4
@@ -31,14 +31,14 @@ bindsym $mod+v split v
 
 bindsym $mod+z fullscreen
 
-bindsym $mod+"'" layout tabbed
-bindsym $mod+'"' layout toggle split
+bindsym $mod+apostrophe layout tabbed
+bindsym $mod+Shift+apostrophe layout toggle split
 
 # toggle tiling / floating
-bindsym $mod+- floating toggle
+bindsym $mod+minus floating toggle
 
 bindsym $mod+f focus mode_toggle
-bindsym $mod+f focus parent
+bindsym $mod+Shift+f focus parent
 bindsym $mod+Control+f focus child
 
 bindsym $mod+1 workspace 1

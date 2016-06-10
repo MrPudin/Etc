@@ -41,30 +41,30 @@
 #define SL_base2         #073642
 #define SL_base3         #002b36
 
-!!General
-!*foreground:              SL_base0
-!*fading:                  40
-!*fadeColor:               SL_base03
-!*cursorColor:             SL_base1
-!*pointerColorBackground:  SL_base01
-!*pointerColorForeground:  SL_base1
-!
-!*color0:                  SL_base02
-!*color1:                  S_red
-!*color2:                  S_green
-!*color3:                  S_yellow
-!*color4:                  S_blue
-!*color5:                  S_magenta
-!*color6:                  S_cyan
-!*color7:                  SL_base2
-!*color9:                  S_orange
-!*color8:                  SL_base03
-!*color10:                 SL_base01
-!*color11:                 SL_base00
-!*color12:                 SL_base0
-!*color13:                 S_violet
-!*color14:                 SL_base1
-!*color15:                 SL_base3
+!General
+*foreground:              SL_base0
+*fading:                  40
+*fadeColor:               SL_base03
+*cursorColor:             SL_base1
+*pointerColorBackground:  SL_base01
+*pointerColorForeground:  SL_base1
+
+*color0:                  SL_base02
+*color1:                  S_red
+*color2:                  S_green
+*color3:                  S_yellow
+*color4:                  S_blue
+*color5:                  S_magenta
+*color6:                  S_cyan
+*color7:                  SL_base2
+*color9:                  S_orange
+*color8:                  SL_base03
+*color10:                 SL_base01
+*color11:                 SL_base00
+*color12:                 SL_base0
+*color13:                 S_violet
+*color14:                 SL_base1
+*color15:                 SL_base3
 
 !URxvt
 URxvt*background:              SD_base03
@@ -92,3 +92,5 @@ URxvt*color13:                 S_violet
 URxvt*color14:                 SD_base1
 URxvt*color15:                 SD_base3
 
+URxvt*letterSpace:             -2
+URxvt*font:                    xft:DejaVu Sans Mono:pixelsize=9,xft:PowerlineSymbols:style=Medium
