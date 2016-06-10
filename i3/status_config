@@ -1,0 +1,75 @@
+#
+# ~/etc/i3/status_config
+# Usr Config - i3 Status Bar
+#
+# Made by Zhu Zhan Yan.
+# Copyright (c) 2016. All Rights Reserved.
+#
+
+general
+{
+    colors = true
+    color_good = "#859900"
+    color_degraded = "#b58900"
+    color_bad = "#dc322f"
+
+    output_format = "i3bar"
+    interval = 5
+}
+
+disk "/"
+{
+    prefix_type = "binary"
+    format = "D:%avail/%total"
+}
+
+wireless "wlan0"
+{
+    format_up = "W:%quality[%bitrate](%essid,%ip)"
+    format_down = "W:Dwn"
+}
+
+ethernet "eth0"
+{
+    format_up = "E:[%speed](%ip)"
+    format_down = "E:DWN"
+}
+
+battery "0"
+{
+    low_threshold = 10 
+    threshold_type = "percentage"
+    last_full_capacity = true
+    format = "B:[%status,%percentage](%remaining,%consumption)"
+    format_down = "B:DWN"
+}
+
+cpu_temperature "0"
+{
+    format = "CT:%degrees°C"
+    max_threshold = 70
+}
+
+cpu_usage
+{
+    format = "CU:%usage"
+}
+
+load
+{
+    format = "CL:[%1min,%5min,%15min]"
+}
+
+time
+{
+    format = "[%Y-%m-%d]%H:%M:%S"
+}
+
+order += "wireless wlan0"
+order += "ethernet eth0"
+order += "disk /"
+order += "battery 0"
+order += "cpu_temperature 0"
+order += "load"
+order += "cpu_usage"
+order += "time"
