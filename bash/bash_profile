@@ -10,7 +10,8 @@
 source ${HOME}/.bashrc
 
 #Pg>Xsvr
-if ! xset q &>/dev/null
+if ! xset q &>/dev/null && [ -z ${TMUX} ]
 then
     startx
 fi
+
