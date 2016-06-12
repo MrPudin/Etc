@@ -18,11 +18,11 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'majutsushi/tagbar'
-Plugin 'SirVir/ultisnips'
+Plugin 'SirVer/ultisnips'
 Plugin 'honza/vim-snippets'
 Plugin 'edkolev/tmuxline.vim'
 Plugin 'Shougo/vimproc.vim'
-Plugin 'neitanod/vim-clevertab'
+Plugin 'ervandew/supertab'
 call vundle#end()
 
 let g:airline_detect_modified=1
@@ -47,13 +47,16 @@ let g:syntastic_check_on_wq=0
 let g:syntastic_sort_aggregated_errors=1
 let g:syntastic_auto_jump=3
 nmap <leader>pss :SyntasticCheck<cr>
+nmap <leader>psr :SyntasticReset<cr>
 nmap <leader>psl :Errors<cr>
 
 colorscheme solarized
 
-let g:neocomplete#enable_at_startip=1
+let g:neocomplete#enable_at_startup=1
 let g:neocomplete#max_list=100
 let g:neocomplete#max_keyword_width=1000
 let g:neocomplete#auto_completetion_start_length=2
 let g:neocomplete#min_keyword_length=2
 let g:neocomplete#enable_ignore_case=1
+
+let g:SuperTabDefaultCompletionType='<c-n>'
