@@ -26,7 +26,7 @@ disk "/"
 wireless "wlan0"
 {
     format_up = "W:%quality[%bitrate](%essid,%ip)"
-    format_down = "W:Dwn"
+    format_down = "W:DWN"
 }
 
 ethernet "eth0"
