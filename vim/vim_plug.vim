@@ -23,6 +23,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'edkolev/tmuxline.vim'
 Plugin 'Shougo/vimproc.vim'
 Plugin 'ervandew/supertab'
+Plugin 'tclem/vim-arduino'
 call vundle#end()
 
 let g:airline_detect_modified=1
