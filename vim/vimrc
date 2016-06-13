@@ -55,9 +55,9 @@ nmap <leader>tn :tabnext<cr>
 nmap <leader>tN :tabNext<cr>
 nmap <leader>tr :tabrewind<cr>
 nmap <leader>tl :tablast<cr>
-nmap <leader>t[ :tabmove -1
-nmap <leader>t] :tabmove +1
-nmap <leader>s :setl spell
+nmap <leader>t[ :tabmove -1<cr>
+nmap <leader>t] :tabmove +1<cr>
+nmap <leader>s :setl spell<cr>
 nmap <leader>sn ]s
 nmap <leader>sN [s
 nmap <leader>ss zg
