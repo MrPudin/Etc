@@ -24,7 +24,7 @@ export XDG_DOWNLOAD_DIe="${HOME}/dwld"
 export XDG_MUSIC_DIR="${HOME}/mdi/msic"
 
 #Src>Alias
-if [ -f ${HOME}/etc/bash/bash_alias ]
+if [ -x ${HOME}/etc/bash/bash_alias ]
 then
     source ${HOME}/etc/bash/bash_alias 
 fi
