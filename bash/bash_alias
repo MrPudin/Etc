@@ -1,0 +1,11 @@
+#
+# ~/etc/bash/bash_alias
+# Usr Config - Bashrc
+# 
+# Made by Zhu Zhan Yan
+# Copyright (c) 2016. All Rights Reserved.
+#
+
+#Var
+#Var>Addr
+Inc_aws="52.77.179.187"

@@ -6,6 +6,7 @@
 # Copyright (c) 2016. All Rights Reserved.
 #
 
+
 #Set
 #Set>CmdEd
 set -o vi
@@ -22,8 +23,15 @@ export XDG_DOCUMENTS_DIR="${HOME}/doc"
 export XDG_DOWNLOAD_DIe="${HOME}/dwld"
 export XDG_MUSIC_DIR="${HOME}/mdi/msic"
 
+#Src>Alias
+if [ -f ${HOME}/etc/bash/bash_alias ]
+then
+    source ${HOME}/etc/bash/bash_alias 
+fi
+
 #Prg>Tmux
 if [ -z ${TMUX} ] && xset q &>/dev/null
 then
     tmux
 fi
+
