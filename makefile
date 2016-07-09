@@ -79,7 +79,7 @@ uninstall:
 	
 	@#Remove Directories
 	$(foreach d,$(shell echo {1..$(words $(DIR))}),\
-		$(RM) $(word $(d),$(DIR))$(\n)\
+		$(RM) -r $(word $(d),$(DIR))$(\n)\
 	)
 	@printf "Uninstallation Complete\n"
 
