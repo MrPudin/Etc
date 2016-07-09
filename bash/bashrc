@@ -29,9 +29,8 @@ then
     source ${HOME}/etc/bash/bash_alias 
 fi
 
-#Prg>Tmux
-if [ -z ${TMUX} ] && xset q &>/dev/null
+#Src>Prg
+if [ -f ${HOME}/etc/bash/bash_alias ]
 then
-    tmux
+    source ${HOME}/etc/bash/prg.sh
 fi
-

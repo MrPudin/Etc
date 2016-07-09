@@ -73,6 +73,4 @@ nmap <leader>sS zuw
 nmap <leader>sr z=
 
 "Src
-if filereadable("~/etc/vim/vim_plug.vim")
-    source ~/etc/vim/vim_plug.vim
-endif
+source ~/etc/vim/vim_plug.vim
