@@ -30,7 +30,7 @@ then
 fi
 
 #Src>Prg
-if [ -f ${HOME}/etc/bash/bash_alias ]
+if [ -f ${HOME}/etc/bash/prg.sh ]
 then
     source ${HOME}/etc/bash/prg.sh
 fi

@@ -9,12 +9,12 @@
 NO_X=true
 NO_TMUX=false
 
-if [ ! ${NO_X} == true ] && [ -z ${TMUX} ] && ! xset q &>/dev/null
+if [ ! ${NO_X} == true ] && [ -z ${TMUX} ] && [ ! xset q &>/dev/null ]
 then
     startx
 fi
 
-if [ ! ${NO_TMUX} == true] && [ -z ${TMUX} ]
+if [ ! ${NO_TMUX} == true ] && [ -z ${TMUX} ]
 then
     tmux
 fi
