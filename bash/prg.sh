@@ -17,4 +17,7 @@ fi
 if [ ! ${NO_TMUX} == true ] && [ -z ${TMUX} ]
 then
     tmux
+else if [ ! ${NO_TMUX} == true ]
+then
+    tmux attach
 fi
