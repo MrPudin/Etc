@@ -24,6 +24,10 @@ Plugin 'edkolev/tmuxline.vim'
 Plugin 'Shougo/vimproc.vim'
 Plugin 'ervandew/supertab'
 Plugin 'tclem/vim-arduino'
+Plugin 'Shougo/context_filetype.vim'
+Plugin 'Shougo/neoinclude.vim'
+Plugin 'Shougo/neco-syntax'
+Plugin 'Shougo/neopairs.vim'
 call vundle#end()
 
 let g:airline_detect_modified=1
