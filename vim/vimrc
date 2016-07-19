@@ -40,6 +40,14 @@ syntax enable
 colorscheme desert
 
 "Kbd
+nmap <leader>a :args<cr>
+nmap <leader>aa :argedit
+nmap <leader>ad :argdelete %<cr>
+nmap <leader>an :next<cr>
+nmap <leader>aN :Next<cr>
+nmap <leader>ar :rewind<cr>
+nmap <leader>al :last<cr>
+nmap <leader>ad :argdo
 nmap <leader>b :ls<cr>
 nmap <leader>bd :bdelete<cr>
 nmap <leader>bs :sbuffer<cr>
