@@ -63,5 +63,10 @@ let g:neocomplete#max_keyword_width=1000
 let g:neocomplete#auto_completetion_start_length=2
 let g:neocomplete#min_keyword_length=2
 let g:neocomplete#enable_ignore_case=1
+let g:neocompleteenable_smart_case=1
+let g:neocompleteuse_vimproc=1
+nmap <leader>pnn :NeoCompleteLock<cr>
+nmap <leader>pnt :NeoCompleteToggle<cr>
+nmap <leader>pnc :NeoCompleteBufferMakeCache<bar>NeoCompleteDictionaryMakeCache<cr>
 
 let g:SuperTabDefaultCompletionType='<c-n>'

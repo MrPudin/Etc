@@ -71,6 +71,7 @@ nmap <leader>sN [s
 nmap <leader>ss zg
 nmap <leader>sS zuw
 nmap <leader>sr z=
+nmap <leader>/h :noh<cr>
 
 "Src
 source ~/etc/vim/vim_plug.vim
