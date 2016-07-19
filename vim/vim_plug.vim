@@ -70,3 +70,52 @@ nmap <leader>pnt :NeoCompleteToggle<cr>
 nmap <leader>pnc :NeoCompleteBufferMakeCache<bar>NeoCompleteDictionaryMakeCache<cr>
 
 let g:SuperTabDefaultCompletionType='<c-n>'
+
+nmap <leader>ptt :NERDTreeToggle<cr>
+nmap <leader>ptb :Bookmark
+nmap <leader>pto :OpenBookmark
+nmap <leader>ptr :ClearBook
+let g:NERDTreeHijackNetrw=1
+
+let g:ctrlp_switch_buffer='Evht'
+let g:ctrlp_clear_cache_on_exit=0
+let g:ctrlp_prompt_mappings = {
+\ 'PrtBS()':              ['<bs>', '<c-]>'],
+\ 'PrtDelete()':          ['<del>'],
+\ 'PrtDeleteWord()':      ['<c-w>'],
+\ 'PrtClear()':           ['<c-u>'],
+\ 'PrtSelectMove("j")':   ['<c-j>'],
+\ 'PrtSelectMove("k")':   ['<c-k>'],
+\ 'PrtSelectMove("t")':   ['<Home>', '<kHome>'],
+\ 'PrtSelectMove("b")':   ['<End>', '<kEnd>'],
+\ 'PrtSelectMove("u")':   ['<PageUp>', '<kPageUp>'],
+\ 'PrtSelectMove("d")':   ['<PageDown>', '<kPageDown>'],
+\ 'PrtHistory(-1)':       ['<down>'],
+\ 'PrtHistory(1)':        ['<up>'],
+\ 'AcceptSelection("e")': ['<cr>', '<2-LeftMouse>'],
+\ 'AcceptSelection("h")': ['<c-x>', '<c-cr>', '<c-s>'],
+\ 'AcceptSelection("t")': ['<c-t>'],
+\ 'AcceptSelection("v")': ['<c-v>', '<RightMouse>'],
+\ 'ToggleFocus()':        ['<s-tab>'],
+\ 'ToggleRegex()':        ['<c-r>'],
+\ 'ToggleByFname()':      ['<c-d>'],
+\ 'ToggleType(1)':        ['<c-f>'],
+\ 'ToggleType(-1)':       ['<c-b>'],
+\ 'PrtExpandDir()':       ['<tab>'],
+\ 'PrtInsert("c")':       ['<MiddleMouse>', '<insert>'],
+\ 'PrtInsert()':          ['<c-\>'],
+\ 'PrtCurStart()':        ['<c-a>'],
+\ 'PrtCurEnd()':          ['<c-e>'],
+\ 'PrtCurLeft()':         ['<c-h>', '<left>', '<c-^>'],
+\ 'PrtCurRight()':        ['<c-l>', '<right>'],
+\ 'PrtClearCache()':      ['<F5>'],
+\ 'PrtDeleteEnt()':       ['<F7>'],
+\ 'CreateNewFile()':      ['<c-p>'],
+\ 'MarkToOpen()':         ['<c-m>'],
+\ 'OpenMulti()':          ['<c-o>'],
+\ 'PrtExit()':            ['<esc>', '<c-c>', '<c-g>'],
+\ }
+
+let g:UltiSnipUsePythonVersion=2
+let g:UltiSnipsEnableSnipMate=1
+let g:UltiSnipsExpandTrigger="<c-x>"
