@@ -1,3 +1,6 @@
+#Auto Generated
+bash/prg.sh
+
+#Misc
 *.sw?
 .DS_Store
-bash/prg.sh

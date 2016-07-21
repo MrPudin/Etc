@@ -82,11 +82,13 @@ install:
 	 )
 
 	@#Prepare Files
+	@printf "Generating Files...\n"
 	$(if $(SED_ARG),\
-		$(SED) $(SED_ARG) bash/prg.sh >bash/prg.sh.tmp && $(MV) bash/prg.sh.tmp bash/prg.sh\
-	  )
+		$(SED) $(SED_ARG) bash/prg.sh.tmplt >bash/prg.sh ,\
+		$(CP) bash/prg.sh.tmplt bash/prg.sh\
+	)
 
-
+	@printf "Linking Files...\n"
 	@#Link Files
 	$(foreach i,$(shell echo {1..$(words $(SRC))}),\
 		$(LN) $(word $(i),$(SRC)) $(word $(i),$(PDCT))$(\n)\
