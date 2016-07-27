@@ -65,6 +65,7 @@ let g:neocomplete#min_keyword_length=2
 let g:neocomplete#enable_ignore_case=1
 let g:neocompleteenable_smart_case=1
 let g:neocompleteuse_vimproc=1
+let g:neocomplete#enable_auto_delimiter=1
 nmap <leader>pnn :NeoCompleteLock<cr>
 nmap <leader>pnt :NeoCompleteToggle<cr>
 nmap <leader>pnc :NeoCompleteBufferMakeCache<bar>NeoCompleteDictionaryMakeCache<cr>
