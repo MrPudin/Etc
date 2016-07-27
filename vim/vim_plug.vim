@@ -28,6 +28,7 @@ Plugin 'Shougo/context_filetype.vim'
 Plugin 'Shougo/neoinclude.vim'
 Plugin 'Shougo/neco-syntax'
 Plugin 'Shougo/neopairs.vim'
+Plugin 'osyo-manga/vim-marching'
 call vundle#end()
 
 let g:airline_detect_modified=1
