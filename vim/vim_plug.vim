@@ -56,7 +56,7 @@ nmap <leader>pss :SyntasticCheck<cr>
 nmap <leader>psr :SyntasticReset<cr>
 nmap <leader>psl :Errors<cr>
 
-colorscheme solarized
+colorscheme solarized 
 
 let g:neocomplete#enable_at_startup=1
 let g:neocomplete#max_list=100
