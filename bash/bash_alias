@@ -9,3 +9,6 @@
 #Var
 #Var>Addr
 Inc_aws="52.77.179.187"
+
+#Alias>Python
+alias python="python3"
