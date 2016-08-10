@@ -73,5 +73,10 @@ nmap <leader>sS zuw
 nmap <leader>sr z=
 nmap <leader>/h :noh<cr>
 
+"AutoCmd
+autocmd BufReadPost *.swift setf swift
+autocmd BufReadPost *[Mm]akefile setl noexpandtab
+autocmd BufReadPost *.txt set background=light
+
 "Src
 source ~/etc/vim/vim_plug.vim
