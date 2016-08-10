@@ -13,3 +13,4 @@ Inc_aws="52.77.179.187"
 #Alias>Python
 PATH="/usr/local/bin:${PATH}"
 alias python="python3"
+alias sqlite="sqlite3"
