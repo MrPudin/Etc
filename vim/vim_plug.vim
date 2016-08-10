@@ -1,5 +1,3 @@
-"
-" ~/etc/vim/vim_plug.vim
 " Usr Config - Vim Plugin
 " 
 " Made by Zhu Zhan Yan
@@ -29,6 +27,8 @@ Plugin 'Shougo/neoinclude.vim'
 Plugin 'Shougo/neco-syntax'
 Plugin 'Shougo/neopairs.vim'
 Plugin 'osyo-manga/vim-marching'
+Plugin 'kovisoft/slimv'
+Plugin 'keith/swift.vim'
 call vundle#end()
 
 let g:airline_detect_modified=1
