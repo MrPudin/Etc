@@ -93,4 +93,6 @@ URxvt*color14:                 SD_base1
 URxvt*color15:                 SD_base3
 
 URxvt*letterSpace:             -2
-URxvt*font:                    xft:DejaVu Sans Mono:pixelsize=9,xft:PowerlineSymbols:style=Medium
+URxvt*font:                    xft:DejaVu Sans Mono:style=Book:pixelsize=9,xft:DejaVu Sans Mono For Powerline:style=Book
+URxvt*boldFont:                xft:DejaVu Sans Mono:style=Bold:pixelsize=9,xft:DejaVu Sans Mono For Powerline:style=Bold
+URxvt*boldItalicFont:              xft:DejaVu Sans Mono:style=Oblique:weight=200:pixelsize=9,xft:DejaVu Sans Mono For Powerline:style=Oblique
