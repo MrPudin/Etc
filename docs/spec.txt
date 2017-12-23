@@ -1,0 +1,45 @@
+[Etc 2.0 specifications]
+Design document for Etc 2.0
+System Configuration Deployment System 2.0
+Automates the setting up a an (development) enviroment.
+
+[Requirements]
+Requirements;
+1. Operating System Independence (at least Unix like OS okay).
+2. Package manager independence. (apt-get, brew, pacman. I dont care)
+3. Ease of configuration and setup.
+4. Dependecy managment (at a higher level than package manager to include 
+    stuff not supported by package managers)(eg. vim-plug, which is installed \
+    from git is dependent on neovim, which is installed on from the package 
+    manager)
+5. Modular Configuaration possible. (neovim configuration can be independent of 
+    tmux configuration...
+Optional Requirements:
+1, Concurrency to speed things up where possible (eg. downloading stuff, 
+    building software ...)
+2. Detects the software installed in the system and uses the fastest one where
+    possible. (ie. aria2c instead of curl)
+
+[Project]
+Project Organisation
+src/ - source code
+src/etc.m4 - m4 macros for use to create deployments. See: docs/macro.txt
+docs/ - documentation for the project.
+makefile - makefile for building the project
+    Targets: 
+        all - make everything
+        install - install etc.
+        docs - make docs
+        clean - remove make generated files
+
+[Design]
+make + m4 system 
+- user types make (install|update|remove) to use deployment.
+- make provides dependecy system, target system.
+- m4 provides make with useful macros, which speed up setup & configuration
+
+File "makefile" 
+- Core Etc makefile
+- Bootstraps actual deployment process
+    - finds modular deployment makefiles with m4 macro extensions 
+    - expands m4 macros for
