@@ -241,22 +241,37 @@ ETC_MARK',
 rm -rf $2
 ETC_UNMARK')')
 
-#Resource
+#Remote Resource
 dnl Usage: ETC_RESOURCE(url, destination)
-dnl Maintain resource at 'destination' using resource located at 'url'
+dnl Maintain remote resource at 'destination' using resource located at 'url'
 dnl 
 define(ETC_RESOURCE,`dnl
 ETC_GEN_MAKE(ETC_SELECTION,`dnl
-ETC_RETRIEVE($2,$1)
+ETC_RETRIEVE($1,$2)
 ETC_MARK',
 `dnl
 rm -rf $2
-ETC_RETRIEVE($2,$1)
+ETC_RETRIEVE($1,$2)
 ETC_MARK',
 `dnl
 rm -rf $2
 ETC_UNMARK')')
 
+#Local Hirarchy
+dnl Usage: ETC_HIERARCHY(from, to)
+dnl Maintain local path at 'to' using file hierarchy located at 'from'
+dnl 
+define(ETC_HIERARCHY,`dnl
+ETC_GEN_MAKE(ETC_SELECTION,`dnl
+cp -avf $1 $2
+ETC_MARK',
+`dnl
+rm -rf $2
+cp -avf $1 $2
+ETC_MARK',
+`dnl
+rm -rf $2
+ETC_UNMARK')')
 
 ifelse(`
 #Autotools #TODO:test if working
