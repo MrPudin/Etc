@@ -76,9 +76,9 @@ rm -f ETC_TARGET($1))')
 #Fetch&ExtractMacros
 dnl Usage: ETC_RETRIEVE('url', 'destination')
 dnl Attempts to retrieve the resource pointed to at 'url' to the filepath at
-dnl 'destination'
+dnl 'destination' using the most optimal retrieval program.
 dnl
-define(ETC_RETRIEVE,'dnl
+define(ETC_RETRIEVE,`dnl
 ifelse(ETC_INSTALLED(aria2c),TRUE,aria2c -x 10 -s 10 -o $2 $1,dnl
 ifelse(ETC_INSTALLED(curl),TRUE,curl -o $2 $1))')
 
@@ -215,11 +215,11 @@ ETC_MARK')
 popdef(`ETC_PKG_MANAGER'))')
 
 #Git
-dnl Usage: ETC_GIT_RETREIVE('url', 'destination')
-dnl Expand to the command retrieve the git repositiory pointed to at 'url'
+dnl Usage: ETC_GIT_RETRIEVE('url', 'destination')
+dnl Expands to the command retrieve the git repositiory pointed to at 'url'
 dnl to the 'destination' filepath.
 dnl
-define(ETC_GIT_RETREIVE, `git clone $1 $2')
+define(ETC_GIT_RETRIEVE, `git clone $1 $2')
 
 
 dnl Usage: ETC_GIT_UPDATE(path)
@@ -232,7 +232,7 @@ dnl Maintain git repositiory at path using git repositiory pointed to by 'url'
 dnl 
 define(ETC_GIT,`dnl
 ETC_GEN_MAKE(ETC_SELECTION,`dnl
-ETC_GIT_RETREIVE($1,$2)
+ETC_GIT_RETRIEVE($1,$2)
 ETC_MARK',
 `dnl
 ETC_GIT_UPDATE($2)
@@ -241,8 +241,26 @@ ETC_MARK',
 rm -rf $2
 ETC_UNMARK')')
 
+#Resource
+dnl Usage: ETC_RESOURCE(url, destination)
+dnl Maintain resource at 'destination' using resource located at 'url'
+dnl 
+define(ETC_RESOURCE,`dnl
+ETC_GEN_MAKE(ETC_SELECTION,`dnl
+ETC_RETRIEVE($2,$1)
+ETC_MARK',
+`dnl
+rm -rf $2
+ETC_RETRIEVE($2,$1)
+ETC_MARK',
+`dnl
+rm -rf $2
+ETC_UNMARK')')
+
+
 ifelse(`
 #Autotools #TODO:test if working
+#Autotools is disabled for the present being
 #TODO: Translate macro to use ETC_GEN_MAKE
 dnl Usage: ETC_AUTL_INSTALL(<path>)
 dnl Expands to the commands used to install the package 'name' using Autotools
