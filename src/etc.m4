@@ -4,20 +4,20 @@
 # Etc Deployment System
 # 
 
-divert(-1)
+divert(-1)dnl
 #Constants
 pushdef(TRUE, 1)
 pushdef(FALSE, 0)
-pushdef(PERROR,`errprint(__program__:__file__:__line__`:Error: $*
-     ')m4exit(`1')')
+pushdef(WORK_DIR,.etc)
+pushdef(CHOMP,`patsubst($1,`\s*',)')
 
 #Operating System
 define(ETC_OS_MACOS,Darwin)
 define(ETC_OS_LINUX,Linux)
-define(ETC_OS, `ifelse(syscmd(uname -S),$1,TRUE,FALSE)')
+define(ETC_OS, `CHOMP(esyscmd(uname -s))')
 
 #Uility Macros
-define(ETC_INSTALLED, `ifelse(syscmd(command -v $1),,FALSE,TRUE)')
+define(ETC_INSTALLED, `ifelse(CHOMP(esyscmd(command -v $1)),,FALSE,TRUE)')
 define(ETC_EXISTS, `syscmd(test -e $1)ifelse(sysval,0,TRUE,FALSE)')
 
 dnl Usage: ETC_SELECT_BEGIN(<name>)
@@ -25,7 +25,7 @@ dnl .... <use make macros using selection> ...
 dnl ETC_SELECT_END(<name>)
 dnl
 define(ETC_SELECT_BEGIN,`pushdef(ETC_SELECTION,$1)')
-define(ETC_SELECT_END,`popdef(ETC_SELECTION,$1)')
+define(ETC_SELECT_END,`popdef(ETC_SELECTION)')
 
 #Make Macros
 
@@ -33,40 +33,39 @@ dnl Usage: ETC_TARGET([<name>])
 dnl Expands to the marker path of 'name', if 'name' is obmitted, gives marker
 dnl path of current selection.
 dnl
-define(ETC_TARGET,`
-ifelse(eval($# < 1),TRUE,ETC_TARGET(ETC_SELECTION()),dnl
-.etc/mark_$1)')
+define(ETC_TARGET,`dnl
+ifelse(eval($# < 1),TRUE,`ETC_TARGET(ETC_SELECTION)',WORK_DIR/mark_$1)')
 
 dnl Usage: ETC_DEPEND(<dependency>,[<dependent>])
 dnl Makes 'dependent' depend on 'dependency'
 dnl if 'name' is obmitted, makes current selection depend on 'dependency'
 dnl
-define(ETC_DEPEND,`
+define(ETC_DEPEND,`dnl
 ifelse(eval($# > 1),TRUE,ETC_TARGET($1): ETC_TARGET($2),dnl
-ETC_SELECTION(): ETC_TARGET($1))')
+ETC_TARGET(ETC_SELECTION): ETC_TARGET($1))')
 
 dnl Usage: ETC_MARK(<name>)
 dnl Marks 'name' status as completed and fullfills any dependency created by
 dnl 'name'
 dnl
 define(ETC_MARK,`dnl
-ifelse(eval($# < 1),TRUE,ETC_MARK(ETC_SELECTION()),dnl
-syscmd(touch -f ETC_TARGET($1)))'))
+ifelse(eval($# < 1),TRUE,`ETC_MARK(ETC_SELECTION)',dnl
+touch -f ETC_TARGET($1))')
 
 dnl Usage: ETC_MARK(<name>)
 dnl Marks 'name' status as incomplete and unfullfills any dependency created by
 dnl 'name'
 dnl
 define(ETC_UNMARK,`dnl
-ifelse(eval($# < 1),TRUE,ETC_UNMARK(ETC_SELECTION()),dnl
-syscmd(rm -f ETC_TARGET($1)))')
+ifelse(eval($# < 1),TRUE,`ETC_UNMARK(ETC_SELECTION)',dnl
+rm -f ETC_TARGET($1))')
 
 #Conditionals
 dnl Usage: ETC_IF_OS(<OS>,<TRUE>,<FALSE>)
 dnl Expands to 'TRUE' if current Operating System is indeed 'OS', else expands
 dnl to 'FALSE'.
 dnl
-define(ETC_IF_OS,`ifelse(ETC_OS($1),TRUE,$2,$3)')
+define(ETC_IF_OS,`ifelse(ETC_OS,$1,$2,$3)')
 
 dnl Usage: ETC_IF_OS(<OS>,<TRUE>,<FALSE>)
 dnl Expands to 'TRUE' if 'name' is installed else expands to 'FALSE'.
@@ -80,7 +79,7 @@ dnl Attempts to retrieve the resource pointed to at 'url' to the filepath at
 dnl 'destination'
 dnl
 define(ETC_RETRIEVE,'dnl
-ifelse(ETC_INSTALLED(aria2c),TRUE,aria2c -x 10 -s 10 -o $2 $1
+ifelse(ETC_INSTALLED(aria2c),TRUE,aria2c -x 10 -s 10 -o $2 $1,dnl
 ifelse(ETC_INSTALLED(curl),TRUE,curl -o $2 $1))')
 
 dnl Usage: ETC_RETRIEVE_GIT('url', 'destination')
@@ -102,11 +101,11 @@ dnl Select the package manager referenced by 'name' for use.
 dnl If argument is obmitted, reset package manager selection to default.
 dnl
 define(ETC_PKG_SELECT,`dnl
-ETC_IF_INSTALLED(brew, `define(ETC_PKG_MANAGER, brew)',dnl
-ETC_IF_INSTALLED(apt-get, `define(ETC_PKG_MANAGER, apt-get)',dnl
-ETC_IF_INSTALLED(apt-fast, `define(ETC_PKG_MANAGER, apt-fast)',dnl
-PERROR("Package Manager not supported. Edit etc.m4 to add support))))
-')
+undefine(ETC_PKG_MANAGER)dnl
+ifelse(ETC_INSTALLED($1),TRUE, `define(`ETC_PKG_MANAGER', $1)',dnl
+ifelse(ETC_INSTALLED(brew),TRUE,`define(`ETC_PKG_MANAGER', brew)',dnl
+ifelse(ETC_INSTALLED(apt-get),TRUE, `define(`ETC_PKG_MANAGER', apt-get)',dnl
+ifelse(ETC_INSTALLED(apt-fast),TRUE, `define(`ETC_PKG_MANAGER', apt-fast)'))))')
 
 dnl Usage: ETC_PKG_INSTALL(<name>)
 dnl Expands to the command used to install the package 'name' using the current
@@ -117,8 +116,7 @@ ifelse(ETC_PKG_MANAGER,brew,brew install $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y install $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y install $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install $1,dnl
-PERROR("Package Manager not supported. Edit etc.m4 to add support)))))
-')
+ifelse(ETC_PKG_MANAGER,pip3,pip3 install $1)))))')
 
 dnl Usage: ETC_PKG_UPDATE(<name>)
 dnl Expands to the command used to update the package 'name' using the current
@@ -129,8 +127,7 @@ ifelse(ETC_PKG_MANAGER,brew,brew update; brew upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y update; sudo apt-get -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y update; sudo apt-fast -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade,dnl
-PERROR("Package Manager not supported. Edit etc.m4 to add support)))))
-')
+ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade)))))')
 
 dnl Usage: ETC_PKG_UPDATE(<name>)
 dnl Expands to the command used to remove the package 'name' using the current
@@ -140,9 +137,8 @@ define(ETC_PKG_REMOVE,`dnl
 ifelse(ETC_PKG_MANAGER,brew,brew uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y remove $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y remove $1,dnl
-ifelse(ETC_PKG_MANAGER,pip,pip uninstall $1,
-PERROR("Package Manager not supported. Edit etc.m4 to add support)))))
-')
+ifelse(ETC_PKG_MANAGER,pip,pip uninstall $1,dnl
+ifelse(ETC_PKG_MANAGER,pip3,pip3 uninstall $1)))))')
 
 dnl Usage: ETC_PKG(<name>)
 dnl Maintain package by 'name' using the current selected package manager.
@@ -150,7 +146,7 @@ dnl If the package by 'name' is not installed, would install package.
 dnl If the package by 'name,' is outdated, would update package.
 dnl If the remove target is called, would remove package.
 dnl 
-define(ETC_PKG,'dnl
+define(ETC_PKG,`dnl
 .PHONY: install update remove
 install: ETC_TARGET($1)
 update:
@@ -164,7 +160,7 @@ ETC_TARGET($1):
 	ETC_MARK($1)
 ')
 
-#Autotools
+#Autotools #TODO:test if working
 dnl Usage: ETC_AUTL_INSTALL(<path>)
 dnl Expands to the commands used to install the package 'name' using Autotools
 dnl from source to at 'path'
@@ -197,7 +193,7 @@ dnl If 'name' update target is called, would reinstall 'name' from source
 dnl If the remove target is called, would remove 'name' using source.
 dnl 
 define(ETC_AUTL,`dnl
-ifelse(eval($# < 3),TRUE,ETC_AUTL($1, $2, .etc/autl-$1),dnl
+ifelse(eval($# < 3),TRUE,ETC_AUTL($1, $2, WORK_DIR/autl-$1),dnl
 .PHONY: install update remove
 install: ETC_TARGET($1)
 update:
@@ -224,19 +220,18 @@ dnl If 'name' update target is called, would reinstall 'name' from source
 dnl If the remove target is called, would remove 'name' using source.
 dnl 
 define(ETC_GIT,`dnl
-ifelse(eval($# < 3),TRUE,ETC_GIT($1, $2, .etc/git-$1/),dnl
+ifelse(eval($# < 3),TRUE,`ETC_GIT($1, $2, WORK_DIR/git-$1/)',dnl
 .PHONY: install update remove
 install: ETC_TARGET($1)
 	ETC_MARK($1)
 update:
-	ETC_RETRIEVE_GIT($2, `$3/$1')
+	ETC_RETRIEVE_GIT($2, $3)
 	ETC_MARK($1)
 remove:
-	rm -rf 1$3/$1'
+	rm -rf $3
 	ETC_UNMARK($1)
 ETC_TARGET($1):
-	@mkdir $3
-	ETC_RETRIEVE_GIT($2, `$3/$1')
+	ETC_RETRIEVE_GIT($2, $3)
 	ETC_MARK($1)
 )')
 
@@ -244,10 +239,12 @@ ETC_TARGET($1):
 popdef(TRUE)
 popdef(FALSE)
 popdef(PERROR)
+popdef(WORK_DIR)
+popdef(CHOMP)
 undefine(ETC_SELECTION)
 undefine(ETC_PKG_MANAGER)
 divert(0)
 
 #Setup Default
 
-ETC_PKG_SELECT() #Select Default Package Manager
+ETC_PKG_SELECT #Select Default Package Manager
