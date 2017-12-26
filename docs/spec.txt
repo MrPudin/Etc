@@ -1,4 +1,5 @@
 [Etc 2.0 specifications]
+Etc - etcetera
 Design document for Etc 2.0
 System Configuration Deployment System 2.0
 Automates the setting up a an (development) enviroment.
@@ -33,8 +34,8 @@ makefile - makefile for building the project
         clean - remove make generated files
 
 [Design]
+Deployment
 make + m4 + git system 
-- user types make (install|update|remove) to use deployment.
 - make provides dependecy system, target system.
 - m4 provides make with useful macros, which speed up setup & configuration
 - git provides upstream update support, as well as updating upstream support.
@@ -67,3 +68,6 @@ ETC_HIERARCHY(init.vim, ~/.config/nvim/init.vim)
 
 ETC_MODULE_END(neovim)
 - Defines dependencies between modules
+
+CLI
+etcetera (install|update|remove)

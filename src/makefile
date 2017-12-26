@@ -5,8 +5,9 @@
 
 #Variables
 WORK_DIR := .etc_work
+DEPLOY_DIR := deploy
 SOURCE_DIR := $(WORK_DIR)/source
-MARK_DIR :f= $(WORK_DIR)/mark
+MARK_DIR := $(WORK_DIR)/mark
 MACRO := etc.m4
 SOURCES := $(shell find . -name "?*.etc")
 PP_SOURCES := $(addprefix $(SOURCE_DIR)/,\
@@ -27,11 +28,15 @@ remove:: $(PP_SOURCES)
 clean:
 	rm -rf $(WORK_DIR)
 
-$(SOURCE_DIR)/%.mk: %.etc
+$(SOURCE_DIR)/%.mk: $(DEPLOY_DIR)/%.etc
 	m4 --include=. $< >$@
 
-$(PP_SOURCES): $(SOURCE_DIR)
-$(SOURCE_DIR):
-	mkdir -p $@
+$(PP_SOURCES): $(WORK_DIR)
 
+$(WORK_DIR):
+	mkdir -p $@
+	mkdir -p $(SOURCE_DIR)
+	mkdir -p $(WORK_DIR)
+	mkdir -p $(MARK_DIR)
+	
 include $(PP_SOURCES)

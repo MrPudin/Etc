@@ -13,6 +13,11 @@ pushdef(CHOMP,`patsubst($1,`\s*',)')
 pushdef(NEWLINE,`
 ')
 
+dnl Usage: ETC_DEPLOYDIR
+dnl Expands to the deploy directory, where user defined files can be referenced.
+dnl
+define(ETC_DEPLOYDIR,`deploy')
+
 #Operating System
 define(ETC_OS_MACOS,Darwin)
 define(ETC_OS_LINUX,Linux)
