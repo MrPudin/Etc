@@ -22,12 +22,12 @@ define(ETC_OS, `CHOMP(esyscmd(uname -s))')
 define(ETC_INSTALLED, `ifelse(CHOMP(esyscmd(command -v $1)),,FALSE,TRUE)')
 define(ETC_EXISTS, `syscmd(test -e $1)ifelse(sysval,0,TRUE,FALSE)')
 
-dnl Usage: ETC_SELECT_BEGIN(<name>)
-dnl .... <use make macros using selection> ...
-dnl ETC_SELECT_END(<name>)
+dnl Usage: ETC_MODULE_BEGIN(<name>)
+dnl .... <use make macros for module> ...
+dnl        ETC_MODULE_END(<name>)
 dnl
-define(ETC_SELECT_BEGIN,`pushdef(ETC_SELECTION,$1)')
-define(ETC_SELECT_END,`popdef(ETC_SELECTION)')
+define(ETC_MODULE_BEGIN,`pushdef(ETC_MODULE,$1)')
+define(ETC_MODULE_END,`popdef(ETC_MODULE)')
 
 #Conditionals
 dnl Usage: ETC_IF_OS(<OS>,<TRUE>,<FALSE>)
@@ -44,25 +44,25 @@ define(ETC_IF_INSTALLED,`ifelse(ETC_INSTALLED($1),TRUE,$2,$3)')
 #Make Macros
 dnl Usage: ETC_TARGET([<name>])
 dnl Expands to the marker path of 'name', if 'name' is obmitted, gives marker
-dnl path of current selection.
+dnl path of current module.
 dnl
 define(ETC_TARGET,`dnl
-ifelse(eval($# < 1),TRUE,`ETC_TARGET(ETC_SELECTION)',WORK_DIR/mark_$1)')
+ifelse(eval($# < 1),TRUE,`ETC_TARGET(ETC_MODULE)',WORK_DIR/mark_$1)')
 
 dnl Usage: ETC_DEPEND(<dependency>,[<dependent>])
 dnl Makes 'dependent' depend on 'dependency'
-dnl if 'name' is obmitted, makes current selection depend on 'dependency'
+dnl if 'name' is obmitted, makes current module depend on 'dependency'
 dnl
 define(ETC_DEPEND,`dnl
 ifelse(eval($# > 1),TRUE,ETC_TARGET($1): ETC_TARGET($2),dnl
-ETC_TARGET(ETC_SELECTION): ETC_TARGET($1))')
+ETC_TARGET(ETC_MODULE): ETC_TARGET($1))')
 
 dnl Usage: ETC_MARK([name])
 dnl Marks 'name' status as completed and fullfills any dependency created by
 dnl 'name'
 dnl
 define(ETC_MARK,`dnl
-ifelse(eval($# < 1),TRUE,`ETC_MARK(ETC_SELECTION)',dnl
+ifelse(eval($# < 1),TRUE,`ETC_MARK(ETC_MODULE)',dnl
 touch -f ETC_TARGET($1))')
 
 dnl Usage: ETC_UNMARK([name])
@@ -70,7 +70,7 @@ dnl Marks 'name' status as incomplete and unfullfills any dependency created by
 dnl 'name'
 dnl
 define(ETC_UNMARK,`dnl
-ifelse(eval($# < 1),TRUE,`ETC_UNMARK(ETC_SELECTION)',dnl
+ifelse(eval($# < 1),TRUE,`ETC_UNMARK(ETC_MODULE)',dnl
 rm -f ETC_TARGET($1))')
 
 #Fetch&ExtractMacros
@@ -79,8 +79,8 @@ dnl Attempts to retrieve the resource pointed to at 'url' to the filepath at
 dnl 'destination' using the most optimal retrieval program.
 dnl
 define(ETC_RETRIEVE,`dnl
-ifelse(ETC_INSTALLED(aria2c),TRUE,aria2c -x 10 -s 10 -o $2 $1,dnl
-ifelse(ETC_INSTALLED(curl),TRUE,curl -o $2 $1))')
+ifelse(ETC_INSTALLED(aria2c),TRUE,aria2c -x 10 -s 10 -d $(dir $2) -o $(notdir $2) $1,dnl
+ifelse(ETC_INSTALLED(curl),TRUE,curl -fLo $2 --create-dirs $1))')
 
 
 dnl Usage: ETC_RETRIEVE(<path>)
@@ -94,51 +94,61 @@ dnl Define a hook  to be run after 'name'  changes or is modified in
 dnl some way, whether that is an install, update or removal. 
 dnl Only one hook for a 'name' can be defined at a given time, further 
 dnl invocations would override the previous hook
-dnl If 'name' is not given, would use current selection.
+dnl If 'name' is not given, would use current module.
 dnl 
-define(ETC_HOOK,`
-ifelse(eval($# < 2),TRUE,`ETC_HOOK(ETC_SELECTION,$1)',dnl
+define(ETC_HOOK,`dnl
+ifelse(eval($# < 2),TRUE,`ETC_HOOK(ETC_MODULE,$1)',dnl
 `define(__ETC_HOOK_$1__,$2)')')
 
 dnl Usage: ETC_HOOK_EVOLVE([name],implementation)
 dnl Define a hook  to be run after 'name' is installed or updated, (ie evolve)
 dnl Only one evolve hook for a 'name' can be defined at a given time, further 
 dnl invocations would override the previous evolve hook.
-dnl If 'name' is not given, would use current selection.
+dnl If 'name' is not given, would use current module.
 dnl
-define(ETC_HOOK_EVOLVE,`
-ifelse(eval($# < 2),TRUE,`ETC_HOOK_EVOLVE(ETC_SELECTION,$1)',dnl
+define(ETC_HOOK_EVOLVE,`dnl
+ifelse(eval($# < 2),TRUE,`ETC_HOOK_EVOLVE(ETC_MODULE,$1)',dnl
 `define(__ETC_HOOK_EVOLVE_$1__,$2)')')
 
 dnl Usage: ETC_HOOK_EVOLVE([name],implementation)
-dnl Define a hook  to be run after 'name' is removed,
+dnl Define a hook to be run after 'name' is removed,
 dnl Only one cremate hook for a 'name' can be defined at a given time, further 
 dnl invocations would override the previous cremate hook.
-dnl If 'name' is not given, would use current selection.
+dnl If 'name' is not given, would use current module.
 dnl
-define(ETC_HOOK_CREMATE,`
-ifelse(eval($# < 2),TRUE,`ETC_HOOK_CREMATE(ETC_SELECTION,$1)',dnl
+define(ETC_HOOK_CREMATE,`dnl
+ifelse(eval($# < 2),TRUE,`ETC_HOOK_CREMATE(ETC_MODULE,$1)',dnl
 `define(__ETC_HOOK_CREMATE_$1__,$2)')')
+
+dnl Usage: ETC_UNHOOK([name]
+dnl Undefine all hooks set using ETC_HOOK..() macros.
+dnl If 'name' is not given, would use current module.
+dnl 
+define(ETC_UNHOOK,`dnl
+ifelse(eval($# < 2),TRUE,`ETC_UNHOOK(ETC_MODULE,$1)',dnl
+`undefine(`__ETC_HOOK_$1__')'dnl
+`undefine(`__ETC_HOOK_EVOLVE_$1__')'dnl
+`undefine(`__ETC_HOOK_CREMATE_$1__')')')
 
 #Make Methods
 #Generics
 #TODO; Invergrate generic make generator into use in higher level macros below.
 dnl Usage: ETC_GEN_MAKE(name,install,update,remove)
-dnl Generates makefile rules for making current selection for the given install, 
+dnl Generates makefile rules for making current module for the given install, 
 dnl update dnl and removal command for 'name'
 dnl 
 define(ETC_GEN_MAKE, `dnl
 .PHONY: install update remove
-install: ETC_TARGET($1)
-ETC_TARGET($1):
+install:: ETC_TARGET($1)
+ETC_TARGET($1)::
 patsubst(`$2',NEWLINE,NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_$1__',__ETC_HOOK_$1__,),NEWLINE,NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_EVOLVE_$1__',__ETC_HOOK_EVOLVE_$1__,),NEWLINE,NEWLINE	)
-update:
+update::
 patsubst(`$3',NEWLINE,NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_$1__',__ETC_HOOK_$1__,),NEWLINE,NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_EVOLVE_$1__',__ETC_HOOK_EVOLVE_$1__,),NEWLINE,NEWLINE	)
-remove:
+remove::
 patsubst(`$4',NEWLINE,NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_$1__',__ETC_HOOK_$1__,),NEWLINE,NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_CREMATE_$1__',__ETC_HOOK_CREMATE_$1__,),NEWLINE,NEWLINE	)
@@ -174,11 +184,11 @@ dnl selected package manager.
 dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_UPDATE,`dnl
-ifelse(ETC_PKG_MANAGER,brew,brew update; brew upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,brew,-brew update && brew upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y update; sudo apt-get -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y update; sudo apt-fast -y upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade,dnl
-ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade)))))')
+ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade $1)))))')
 
 dnl Usage: ETC_PKG_UPDATE(<name>)
 dnl Expands to the command used to remove the package 'name' using the current
@@ -203,7 +213,7 @@ dnl string.
 define(ETC_PKG,`dnl
 ifelse(eval($# < 2),TRUE,`ETC_PKG($1,ETC_PKG_MANAGER)',dnl
 ETC_PKG_SELECT($2)dnl
-ETC_GEN_MAKE(ETC_SELECTION,`dnl
+ETC_GEN_MAKE(ETC_MODULE,`dnl
 ETC_PKG_INSTALL($1)
 ETC_MARK',
 `dnl
@@ -231,7 +241,7 @@ dnl Usage: ETC_GIT(<url>,<path>)
 dnl Maintain git repositiory at path using git repositiory pointed to by 'url'
 dnl 
 define(ETC_GIT,`dnl
-ETC_GEN_MAKE(ETC_SELECTION,`dnl
+ETC_GEN_MAKE(ETC_MODULE,`dnl
 ETC_GIT_RETRIEVE($1,$2)
 ETC_MARK',
 `dnl
@@ -246,7 +256,7 @@ dnl Usage: ETC_RESOURCE(url, destination)
 dnl Maintain remote resource at 'destination' using resource located at 'url'
 dnl 
 define(ETC_RESOURCE,`dnl
-ETC_GEN_MAKE(ETC_SELECTION,`dnl
+ETC_GEN_MAKE(ETC_MODULE,`dnl
 ETC_RETRIEVE($1,$2)
 ETC_MARK',
 `dnl
@@ -262,7 +272,7 @@ dnl Usage: ETC_HIERARCHY(from, to)
 dnl Maintain local path at 'to' using file hierarchy located at 'from'
 dnl 
 define(ETC_HIERARCHY,`dnl
-ETC_GEN_MAKE(ETC_SELECTION,`dnl
+ETC_GEN_MAKE(ETC_MODULE,`dnl
 cp -avf $1 $2
 ETC_MARK',
 `dnl
@@ -335,7 +345,7 @@ popdef(PERROR)
 popdef(WORK_DIR)
 popdef(CHOMP)
 popdef(NEWLINE)
-undefine(ETC_SELECTION)
+undefine(ETC_MODULE)
 undefine(ETC_PKG_MANAGER)
 
 #Defaults
