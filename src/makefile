@@ -4,8 +4,9 @@
 # 
 
 #Variables
-WORK_DIR := .etc
-SOURCE_DIR := $(WORK_DIR)/src
+WORK_DIR := .etc_work
+SOURCE_DIR := $(WORK_DIR)/source
+MARK_DIR :f= $(WORK_DIR)/mark
 MACRO := etc.m4
 SOURCES := $(shell find . -name "?*.etc")
 PP_SOURCES := $(addprefix $(SOURCE_DIR)/,\
@@ -24,7 +25,7 @@ update:: $(PP_SOURCES)
 remove:: $(PP_SOURCES)
 
 clean:
-	rm -rf $(SOURCE_DIR)
+	rm -rf $(WORK_DIR)
 
 $(SOURCE_DIR)/%.mk: %.etc
 	m4 --include=. $< >$@

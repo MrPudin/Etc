@@ -33,13 +33,37 @@ makefile - makefile for building the project
         clean - remove make generated files
 
 [Design]
-make + m4 system 
+make + m4 + git system 
 - user types make (install|update|remove) to use deployment.
 - make provides dependecy system, target system.
 - m4 provides make with useful macros, which speed up setup & configuration
+- git provides upstream update support, as well as updating upstream support.
+
+File "etc.m4"
+- Defines the etc macros for use to defining the deployment
+- see "docs/macro.txt" for documentation
 
 File "makefile" 
-- Core Etc makefile
+- Bootstrap makefile
 - Bootstraps actual deployment process
-    - finds modular deployment makefiles with m4 macro extensions 
-    - expands m4 macros for
+    - finds *.etc files.
+    - expands m4 macros for these files
+- Include *.etc files for running their deployment 
+
+File "*.etc"
+- Defines deployment through etc macros or makefile rules.
+- Defines modules of deployment - module is a user defined singular entity that
+    defines a particular setup for example the neovim module may contain
+    commands to install neovim, install the configuration Example:
+ETC_MODULE_BEGIN(neovim)
+
+ETC_PKG(neovim)
+ETC_PKG(neovim,pip3)
+
+ETC_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,~/.local/share/nvim/site/autoload/plug.vim)
+
+ETC_HOOK_EVOLVE(`nvim +PlugUpdate +qa')
+ETC_HIERARCHY(init.vim, ~/.config/nvim/init.vim)
+
+ETC_MODULE_END(neovim)
+- Defines dependencies between modules

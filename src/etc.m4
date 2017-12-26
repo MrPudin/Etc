@@ -8,7 +8,7 @@ divert(-1)dnl
 #Constants
 pushdef(TRUE, 1)
 pushdef(FALSE, 0)
-pushdef(WORK_DIR,.etc)
+pushdef(WORK_DIR,.etc_work)
 pushdef(CHOMP,`patsubst($1,`\s*',)')
 pushdef(NEWLINE,`
 ')
@@ -47,7 +47,7 @@ dnl Expands to the marker path of 'name', if 'name' is obmitted, gives marker
 dnl path of current module.
 dnl
 define(ETC_TARGET,`dnl
-ifelse(eval($# < 1),TRUE,`ETC_TARGET(ETC_MODULE)',WORK_DIR/mark_$1)')
+ifelse(eval($# < 1),TRUE,`ETC_TARGET(ETC_MODULE)',WORK_DIR/mark/$1)')
 
 dnl Usage: ETC_DEPEND(<dependency>,[<dependent>])
 dnl Makes 'dependent' depend on 'dependency'
