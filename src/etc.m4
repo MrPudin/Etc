@@ -1,4 +1,5 @@
 divert(-1)dnl
+ifdef(ETC_M4,,
 #
 # etc.m4
 # Core Definitions 
@@ -343,6 +344,9 @@ ETC_TARGET($1):
 
 ')
 
+#Include Protection
+define(ETC_M4,TRUE)
+
 #Cleanup
 popdef(TRUE)
 popdef(FALSE)
@@ -353,6 +357,10 @@ popdef(NEWLINE)
 undefine(ETC_MODULE)
 undefine(ETC_PKG_MANAGER)
 
+)
+
 #Defaults
 ETC_PKG_SELECT
+undefine(ETC_MODULE)
+undefine(ETC_PKG_MANAGER)
 divert(0)dnl
