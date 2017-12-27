@@ -1,0 +1,26 @@
+#
+# etc/xsvr/xsession
+# User Config - xsession
+# 
+# Made by Zhu Zhan Yan
+# Copyright (C) 2016. All rights reserved.
+#
+    
+#Keyboard
+xset b off 
+xset c off
+xset r rate 200 30
+setxkbmap -option "caps:escape"
+xmodmap -e "add Mod4 = Super_L"
+
+#Mouse
+xset m default
+
+#Display
+xset dpms 300 500 500
+
+#Init Programs
+#Screen Autolock
+xautolock -time 5 -locker slock &
+#Window Manager
+exec i3
