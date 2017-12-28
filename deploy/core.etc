@@ -30,6 +30,10 @@ ETC_MODULE(python3,`ETC_PKG(python3)')
 #Perl Development
 ETC_MODULE(perl,`ETC_PKG(perl)')
 ETC_MODULE(perl6,`ETC_PKG(perl6)')
+ETC_MODULE_BEGIN(cpanm)
+    ETC_PKG(cpanm)
+    ETC_PKG(App::cpanoutdated,cpan)
+ETC_MODULE_BEGIN(cpanm)
 
 #Ruby Development
 ETC_MODULE(ruby,`ETC_PKG(ruby)')
@@ -42,12 +46,11 @@ ETC_MODULE(cmake,`ETC_PKG(cmake)')
 ETC_MODULE(doxygen,`ETC_PKG(doxygen)')
 ETC_MODULE_BEGIN(clang)
     ETC_PKG(llvm)
-    ETC_PKG(clang,apt-get)
+    dnl ETC_PKG(clang,apt-get)
 ETC_MODULE_END(clang)
 
-#Zsh Shell
+
 ETC_DEPEND(zsh,zsh_plug)
-ETC_DEPEND(git,zsh_plug)
 
 ETC_MODULE(zsh,`ETC_PKG(zsh)')
 

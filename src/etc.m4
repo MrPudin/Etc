@@ -212,11 +212,12 @@ dnl If argument is obmitted, reset package manager selection to default.
 dnl If selected package manager isnt supported, would expand to an empty string
 dnl
 define(ETC_PKG_SELECT,`dnl
-ifelse(eval($#>0),TRUE, ifelse(ETC_INSTALLED($1),TRUE,`pushdef(`ETC_PKG_MANAGER', $1)'TRUE,FALSE),dnl
-ifelse(ETC_INSTALLED(brew),TRUE,`pushdef(`ETC_PKG_MANAGER', brew)'TRUE,dnl
-ifelse(ETC_INSTALLED(apt-get),TRUE, `pushdef(`ETC_PKG_MANAGER', apt-get)'TRUE,dnl
-ifelse(ETC_INSTALLED(apt-fast),TRUE, `pushdef(`ETC_PKG_MANAGER', apt-fast)'TRUE,dnl
-FALSE))))')
+ifelse(eval($#>0),TRUE,ifelse(ETC_INSTALLED($1),TRUE,dnl
+`pushdef(`ETC_PKG_MANAGER', $1)'TRUE,FALSE),`dnl
+ifelse(ETC_INSTALLED(brew),TRUE,`define(`ETC_PKG_MANAGER', brew)'TRUE,dnl
+ifelse(ETC_INSTALLED(apt-get),TRUE, `define(`ETC_PKG_MANAGER', apt-get)'TRUE,dnl
+ifelse(ETC_INSTALLED(apt-fast),TRUE, `define(`ETC_PKG_MANAGER', apt-fast)'TRUE,dnl
+FALSE)))')')
 
 dnl Usage: ETC_PKG_REFRESH
 dnl Expands to the command used to refresh the current package manager's index
@@ -241,7 +242,8 @@ ifelse(ETC_PKG_MANAGER,brew,brew install $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y install $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y install $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,pip3 install $1)))))')
+ifelse(ETC_PKG_MANAGER,pip3,pip3 install $1,dnl
+ifelse(ETC_PKG_MANAGER,cpan,sudo cpanm -S --installdeps $1,))))))')
 
 dnl Usage: ETC_PKG_UPDATE(<name>)
 dnl Expands to the command used to update the package 'name' using the current
@@ -253,7 +255,8 @@ ifelse(ETC_PKG_MANAGER,brew,-brew upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade $1)))))')
+ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade $1,dnl 
+ifelse(ETC_PKG_MANAGER,cpan,cpan-outdated -p | cpanm $1))))))')
 
 dnl Usage: ETC_PKG_UPDATE(<name>)
 dnl Expands to the command used to remove the package 'name' using the current
@@ -265,7 +268,8 @@ ifelse(ETC_PKG_MANAGER,brew,brew uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y remove $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y remove $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip uninstall $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,pip3 uninstall $1)))))')
+ifelse(ETC_PKG_MANAGER,pip3,pip3 uninstall $1,dnl
+ifelse(ETC_PKG_MANAGER,cpan,cpanm --uninstall $1))))))')
 
 dnl Usage: ETC_PKG(<name>, [package manager])
 dnl Maintain package by 'name' using the 'package manager'. If package manager
@@ -276,7 +280,7 @@ dnl If the remove target is called, would remove package.
 dnl If the selected package manager is not installed, would expand to an empty
 dnl string.
 define(ETC_PKG,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_PKG($1,ETC_PKG_MANAGER)',dnl
+ifelse(eval($# < 2),TRUE,`ETC_PKG($1,ETC_PKG_MANAGER)',`dnl
 ifelse(ETC_PKG_SELECT($2),FALSE,,dnl
 ETC_GEN_MAKE(ETC_MOD,`dnl
 ETC_PKG_INSTALL($1)
@@ -287,7 +291,7 @@ ETC_MARK',
 `dnl
 ETC_PKG_REMOVE($1)
 ETC_MARK')
-popdef(`ETC_PKG_MANAGER')))')
+popdef(`ETC_PKG_MANAGER'))')')
 
 #Git
 dnl Usage: ETC_GIT_RETRIEVE('url', 'destination')
@@ -403,23 +407,15 @@ ETC_TARGET($1):
 
 ')
 
-#Include Protection
-define(ETC_M4,TRUE)
 
 #Cleanup
-popdef(TRUE)
-popdef(FALSE)
-popdef(PERROR)
-popdef(WORK_DIR)
-popdef(CHOMP)
-popdef(NEWLINE)
-undefine(ETC_MOD)
-undefine(ETC_PKG_MANAGER)
+undefine(`ETC_MOD')
+undefine(`ETC_PKG_MANAGER')
 
-)
+#Include Protection
+define(ETC_M4,TRUE)
+) dnl INCLUDE PROTECTION DO NOT REMOVE
 
 #Defaults
 ETC_PKG_SELECT
-undefine(ETC_MOD)
-undefine(ETC_PKG_MANAGER)
 divert(0)dnl
