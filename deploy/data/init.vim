@@ -45,36 +45,32 @@ nmap <leader>M M
 nmap H <c-o>
 nmap L <c-i>
 nmap <leader>e :e
-nmap <leader>l :lopen<cr>
-nmap <leader>n :lnext<cr>
-nmap <leader>N :lNext<cr>
-nmap <leader>a :args<cr>
+nmap <leader>l :lnext<cr>
+nmap <leader>L :lNext<cr>
 nmap <leader>aa :argadd %<cr>
 nmap <leader>aq :argdelete %<cr>
 nmap <leader>an :next<cr>
 nmap <leader>aN :Next<cr>
-nmap <leader>a, :rewind<cr>
-nmap <leader>a. :last<cr>
 nmap <leader>a: :argdo
-nmap <leader>b :ls<cr>
-nmap <leader>t :tabs<cr>
-nmap <leader>tt :tabnew<cr>
-nmap <leader>tq :tabclose<cr>
-nmap <leader>tn :tabnext<cr>
-nmap <leader>tN :tabNext<cr>
-nmap <leader>t, :tabrewind<cr>
-nmap <leader>t. :tablast<cr>
-nmap <leader>t> :tabmove -1<cr>
-nmap <leader>t< :tabmove +1<cr>
-nmap <leader>s :setl spell<cr>
+nmap <leader>b: :bufdo
+nmap <leader>ww :tabnew<cr>
+nmap <leader>wx :tabclose<cr>
+nmap <leader>w] :tabnext<cr>
+nmap <leader>w[ :tabNext<cr>
+nmap <leader>w[ :tabNext<cr>
+nmap <leader>w0 :tabrewind<cr>
+nmap <leader>w$ :tablast<cr>
+nmap <leader>w{ :tabmove -1<cr>
+nmap <leader>w} :tabmove +1<cr>
+nmap <leader>ss :setl spell!<cr>
 nmap <leader>sn ]s
 nmap <leader>sN [s
-nmap <leader>ss z=
-nmap <leader>/n :noh<cr>
+nmap <leader>S z=
+nmap <Esc><Esc> :noh<cr>
 nmap <leader>/i :set ignorecase!<cr>
 nmap <leader>hl :setl background=light<cr>
 nmap <leader>hd :setl background=dark<cr>
-nmap <leader>\ :set colorcolumn=80<cr>
+nmap <leader>\ :set colorcolumn=80!<cr>
 
 "Plugin
 call plug#begin('~/.local/share/nvim/plugged')
@@ -102,10 +98,13 @@ Plug 'chemzqm/unite-location'
 Plug 'tmux-plugins/tmux-resurrect'
 Plug 'tpope/vim-obsession'
 Plug 'ervandew/supertab'
-
+Plug 'haya14busa/incsearch.vim'
+Plug 'wellle/targets.vim'
+Plug 'tpope/vim-rsi'
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-airline/vim-airline'
-
+Plug 'tpope/vim-characterize'
+Plug 'coderifous/textobj-word-column.vim'
 call plug#end()
 
 "Plugin Configuration
@@ -120,24 +119,20 @@ call denite#custom#var('grep', 'final_opts', [])
 call denite#custom#var('file_rec', 'command',
 	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 
+nmap <c-p> :Denite file_rec<cr>
+nmap <leader>/ :Denite grep<cr>
+nmap <leader>? :Denite outline<cr>
+nmap <leader>" :Denite register<cr>
+nmap <leader>l :Denite location_list<cr>`
+nmap <leader>: :Denite command<cr>
+nmap <leader>g :Denite jumps<cr>
+
+
 "Deoplete
 let g:deopleteA#enable_smart_case=1
 let g:deoplete#auto_complete_delay=40
 let g:deoplete#sources#clang#libclang_path="/usr/local/Cellar/llvm/4.0.1/lib/libclang.dylib"
 let g:deoplete#sources#clang#clang_header="/usr/local/Cellar/llvm/4.0.1/include/clang"
-
-"Neomake
-call neomake#configure#automake('w')
-
-"Plugin Bindings
-nmap <C-p> :Denite file_rec<cr>
-nmap <leader>l :Denite location_list<cr>`
-nmap <leader>/ :Denite grep<cr>
-nmap <leader>? :Denite outline<cr>
-nmap <leader>" :Denite register<cr>
-nmap <leader>: :Denite command<cr>
-nmap <leader>H :Denite colorscheme<cr>
-
 call denite#custom#map('normal', '<Esc>', '<C-c>',
       \'noremap')
 call denite#custom#map('normal', 'i', '<denite:enter_mode:insert>',
@@ -176,14 +171,24 @@ call denite#custom#map('insert', '<C-x>', '<denite:do_action:split>',
       \'noremap')
 call denite#custom#map('insert', '<C-t>', '<denite:do_action:tabopen>',
       \'noremap')
-
 nmap <leader>cc :call deoplete#toggle()<cr>
 
+"Neomake
+call neomake#configure#automake({
+\ 'TextChanged': {},
+\ 'InsertLeave': {},
+\ 'BufWritePost': {'delay': 0},
+\ 'BufWinEnter': {},
+\ }, 2000)
+
+"Supertab
 let g:SuperTabDefaultCompletionType="context"
 let g:SuperTabContextDefaultCompletionType="<C-n>"
-let g:UltiSnipsExpandTrigger="<C-x>"
 let g:SuperTabLongestEnhanced=1
 let g:SuperTabCrMapping=1
+
+"Ultisnips
+let g:UltiSnipsExpandTrigger="<C-x>"
 
 "Plugin Display Setting
 colorscheme solarized

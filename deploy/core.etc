@@ -10,6 +10,7 @@ ETC_PKG_REFRESH
 
 #Core Programs
 #Utilities
+ETC_MODULE(htop,`ETC_PKG(htop')
 ETC_MODULE(mutt,`ETC_PKG(mutt)')
 ETC_MODULE(w3m,`ETC_PKG(w3m)')
 ETC_MODULE(wget,`ETC_PKG(wget)')
