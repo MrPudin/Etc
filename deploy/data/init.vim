@@ -96,6 +96,7 @@ Plug 'neomake/neomake'
 Plug 'mileszs/ack.vim'
 Plug 'chemzqm/unite-location'
 Plug 'tmux-plugins/tmux-resurrect'
+Plug 'edkolev/tmuxline.vim'
 Plug 'tpope/vim-obsession'
 Plug 'ervandew/supertab'
 Plug 'haya14busa/incsearch.vim'
@@ -103,6 +104,7 @@ Plug 'wellle/targets.vim'
 Plug 'tpope/vim-rsi'
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-characterize'
 Plug 'coderifous/textobj-word-column.vim'
 call plug#end()
@@ -126,7 +128,6 @@ nmap <leader>" :Denite register<cr>
 nmap <leader>l :Denite location_list<cr>`
 nmap <leader>: :Denite command<cr>
 nmap <leader>g :Denite jumps<cr>
-
 
 "Deoplete
 let g:deopleteA#enable_smart_case=1
@@ -189,6 +190,12 @@ let g:SuperTabCrMapping=1
 
 "Ultisnips
 let g:UltiSnipsExpandTrigger="<C-x>"
+
+"Airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:airline_powerline_fonts = 1
 
 "Plugin Display Setting
 colorscheme solarized
