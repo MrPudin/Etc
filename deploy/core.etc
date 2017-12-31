@@ -5,6 +5,9 @@
 
 include(etc.m4)
 
+#Use Sudo if Necessary
+ETC_SUDO
+
 #Update Package Manager if Necessary
 ETC_PKG_REFRESH
 
@@ -47,10 +50,10 @@ ETC_MODULE(cmake,`ETC_PKG(cmake)')
 ETC_MODULE(doxygen,`ETC_PKG(doxygen)')
 ETC_MODULE_BEGIN(clang)
     ETC_PKG(llvm)
-    dnl ETC_PKG(clang,apt-get)
+    ETC_PKG(clang,apt-get)
 ETC_MODULE_END(clang)
 
-
+#Z Shell
 ETC_DEPEND(zsh,zsh_plug)
 
 ETC_MODULE(zsh,`ETC_PKG(zsh)')
@@ -61,7 +64,7 @@ ETC_MODULE_BEGIN(zsh_plug)
     ETC_HOOK_CREMATE(sh ~/.oh-my-zsh/tools/uninstall.sh)
     ETC_GIT(git://github.com/robbyrussell/oh-my-zsh.git,~/.oh-my-zsh)
 
-    ETC_HOOK_INSTALL(chsh -s /bin/zsh)
+    ETC_HOOK_INSTALL(sudo chsh -s /bin/zsh zzy)
     ETC_HIERARCHY(ETC_DEPLOYDIR/data/zshrc,~/.zshrc)
 ETC_MODULE_END(zsh-plug)
 

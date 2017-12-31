@@ -7,11 +7,11 @@ ifdef(ETC_M4,,
 # 
 
 #Constants
-pushdef(TRUE, 1)
-pushdef(FALSE, 0)
-pushdef(WORK_DIR,.etc_work)
-pushdef(CHOMP,`patsubst($1,`\s*',)')
-pushdef(NEWLINE,`
+pushdef(ETC_TRUE, 1)
+pushdef(ETC_FALSE, 0)
+pushdef(ETC_WORK_DIR,.etc_work)
+pushdef(ETC_CHOMP,`patsubst($1,`\s*',)')
+pushdef(ETC_NEWLINE,`
 ')
 
 dnl Usage: ETC_DEPLOYDIR
@@ -22,12 +22,20 @@ define(ETC_DEPLOYDIR,`deploy')
 #Operating System
 define(ETC_OS_MACOS,Darwin)
 define(ETC_OS_LINUX,Linux)
-define(ETC_OS, `CHOMP(esyscmd(uname -s))')
+define(ETC_OS, `ETC_CHOMP(esyscmd(uname -s))')
 
 #Uility Macros
-define(ETC_INSTALLED, `ifelse(CHOMP(esyscmd(command -v $1)),,FALSE,TRUE)')
-define(ETC_EXISTS, `syscmd(test -e $1)ifelse(sysval,0,TRUE,FALSE)')
+define(ETC_INSTALLED, `ifelse(ETC_CHOMP(esyscmd(command -v $1)),,ETC_FALSE,ETC_TRUE)')
+define(ETC_EXISTS, `syscmd(test -e $1)ifelse(sysval,0,ETC_TRUE,ETC_FALSE)')
+define(ETC_BASENAME,`regexp($1,`[a-zA-Z0-9_\.\-]*$',`\&')')
 
+dnl Usage: ETC_SUDO
+dnl Expands to the makefile runs to setup the use of sudo for the process,
+dnl where sudo is required.
+define(ETC_SUDO,`dnl
+install update remove:: 
+	sudo printf "\033[1m\033[31mSUDO USE ENABLED.\033[0m\n"
+')
 
 dnl Usage: ETC_MODULE_BEGIN(<name>)
 dnl        <implementation>
@@ -47,16 +55,16 @@ ETC_MODULE_END($1)
 ')
 
 #Conditionals
-dnl Usage: ETC_IF_OS(<OS>,<TRUE>,<FALSE>)
-dnl Expands to 'TRUE' if current Operating System is indeed 'OS', else expands
-dnl to 'FALSE'.
+dnl Usage: ETC_IF_OS(<OS>,<ETC_TRUE>,<ETC_FALSE>)
+dnl Expands to 'ETC_TRUE' if current Operating System is indeed 'OS', else expands
+dnl to 'ETC_FALSE'.
 dnl
 define(ETC_IF_OS,`ifelse(ETC_OS,$1,$2,$3)')
 
-dnl Usage: ETC_IF_OS(<OS>,<TRUE>,<FALSE>)
-dnl Expands to 'TRUE' if 'name' is installed else expands to 'FALSE'.
+dnl Usage: ETC_IF_OS(<OS>,<ETC_TRUE>,<ETC_FALSE>)
+dnl Expands to 'ETC_TRUE' if 'name' is installed else expands to 'ETC_FALSE'.
 dnl
-define(ETC_IF_INSTALLED,`ifelse(ETC_INSTALLED($1),TRUE,$2,$3)')
+define(ETC_IF_INSTALLED,`ifelse(ETC_INSTALLED($1),ETC_TRUE,$2,$3)')
 
 #Make Macros
 dnl Usage: ETC_TARGET([<name>])
@@ -64,13 +72,13 @@ dnl Expands to the marker path of 'name', if 'name' is obmitted, gives marker
 dnl path of current module.
 dnl
 define(ETC_TARGET,`dnl
-ifelse(eval($# < 1),TRUE,`ETC_TARGET(ETC_MOD)',WORK_DIR/mark/$1)')
+ifelse(eval($# < 1),ETC_TRUE,`ETC_TARGET(ETC_MOD)',ETC_WORK_DIR/mark/$1)')
 
 dnl Usage: ETC_DEPEND(<dependency>,<dependent>)
 dnl Makes 'dependent' depend on 'dependency'
 dnl
 define(ETC_DEPEND,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_DEPEND($1,ETC_MOD)',`dnl
+ifelse(eval($# < 2),ETC_TRUE,`ETC_DEPEND($1,ETC_MOD)',`dnl
 define(`ETC_DEPENDENCY_$2_INSTALL',ifdef(`ETC_DEPENDENCY_$2_INSTALL',dnl
 ETC_DEPENDENCY_$2_INSTALL) ETC_TARGET($1))dnl
 define(`ETC_DEPENDENCY_$2_UPDATE',ifdef(`ETC_DEPENDENCY_$2_UPDATE',dnl
@@ -84,7 +92,7 @@ dnl Marks 'name' status as completed and fullfills any dependency created by
 dnl 'name'
 dnl
 define(ETC_MARK,`dnl
-ifelse(eval($# < 1),TRUE,`ETC_MARK(ETC_MOD)',dnl
+ifelse(eval($# < 1),ETC_TRUE,`ETC_MARK(ETC_MOD)',dnl
 touch -f ETC_TARGET($1))')
 
 dnl Usage: ETC_UNMARK([name])
@@ -92,8 +100,15 @@ dnl Marks 'name' status as incomplete and unfullfills any dependency created by
 dnl 'name'
 dnl
 define(ETC_UNMARK,`dnl
-ifelse(eval($# < 1),TRUE,`ETC_UNMARK(ETC_MOD)',dnl
-rm -f ETC_TARGET($1))')
+ifelse(eval($# < 1),ETC_TRUE,`ETC_UNMARK(ETC_MOD)',dnl
+rm -f ETC_TARGET($1)); rm -f ETC_TARGET($1).update')
+
+dnl Usage: ETC_MARK_UPDATED([name])
+dnl Marks 'name' status as updated.
+dnl 
+define(ETC_MARK_UPDATED,`dnl
+ifelse(eval($# < 1),ETC_TRUE,`ETC_MARK(ETC_MOD)',dnl
+touch -f ETC_TARGET($1).update)')
 
 #Fetch&ExtractMacros
 dnl Usage: ETC_RETRIEVE('url', 'destination')
@@ -101,14 +116,14 @@ dnl Attempts to retrieve the resource pointed to at 'url' to the filepath at
 dnl 'destination' using the most optimal retrieval program.
 dnl
 define(ETC_RETRIEVE,`dnl
-ifelse(ETC_INSTALLED(aria2c),TRUE,aria2c -x 10 -s 10 -d $(dir $2) -o $(notdir $2) $1,dnl
-ifelse(ETC_INSTALLED(curl),TRUE,curl -fLo $2 --create-dirs $1))')
+ifelse(ETC_INSTALLED(aria2c),ETC_TRUE,aria2c -x 10 -s 10 -d $(dir $2) -o $(notdir $2) $1,dnl
+ifelse(ETC_INSTALLED(curl),ETC_TRUE,curl -fLo $2 --create-dirs $1))')
 
 
 dnl Usage: ETC_RETRIEVE(<path>)
 dnl Extract .tar.gz pointed by 'path' to the current directory.
 dnl
-define(ETC_EXTRACT_TGZ, `tar -xzf $1')
+define(ETC_EXTRACT_TGZ, `tar -xzf $1'
 
 #Hooks
 dnl Usage: ETC_HOOK([name],implementation)
@@ -119,7 +134,7 @@ dnl invocations would override the previous hook
 dnl If 'name' is not given, would use current module.
 dnl 
 define(ETC_HOOK,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_HOOK(ETC_MOD,$1)',dnl
+ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK(ETC_MOD,$1)',dnl
 `define(`__ETC_HOOK_$1__',$2)')')
 
 dnl Usage: ETC_HOOK_EVOLVE([name],implementation)
@@ -129,7 +144,7 @@ dnl invocations would override the previous evolve hook.
 dnl If 'name' is not given, would use current module.
 dnl
 define(ETC_HOOK_EVOLVE,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_HOOK_EVOLVE(ETC_MOD,$1)',dnl
+ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK_EVOLVE(ETC_MOD,$1)',dnl
 `define(__ETC_HOOK_EVOLVE_$1__,$2)')')
 
 dnl Usage: ETC_HOOK_CREMATE([name],implementation)
@@ -139,7 +154,7 @@ dnl invocations would override the previous cremate hook.
 dnl If 'name' is not given, would use current module.
 dnl
 define(ETC_HOOK_CREMATE,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_HOOK_CREMATE(ETC_MOD,$1)',dnl
+ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK_CREMATE(ETC_MOD,$1)',dnl
 `define(`__ETC_HOOK_CREMATE_$1__',$2)')')
 
 dnl Usage: ETC_HOOK_INSTALL([name],implementation)
@@ -149,7 +164,7 @@ dnl invocations would override the previous install hook.
 dnl If 'name' is not given, would use current module.
 dnl
 define(ETC_HOOK_INSTALL,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_HOOK_INSTALL(ETC_MOD,$1)',dnl
+ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK_INSTALL(ETC_MOD,$1)',dnl
 `define(__ETC_HOOK_INSTALL_$1__,$2)')')
 
 dnl Usage: ETC_HOOK_UPDATE([name],implementation)
@@ -159,7 +174,7 @@ dnl invocations would override the previous update hook.
 dnl If 'name' is not given, would use current module.
 dnl
 define(ETC_HOOK_UPDATE,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_HOOK_UPDATE(ETC_MOD,$1)',dnl
+ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK_UPDATE(ETC_MOD,$1)',dnl
 `define(__ETC_HOOK_UPDATE_$1__,$2)')')
 
 dnl Usage: ETC_UNHOOK([name])
@@ -167,7 +182,7 @@ dnl Undefine all hooks set using ETC_HOOK..() macros.
 dnl If 'name' is not given, would use current module.
 dnl 
 define(ETC_UNHOOK,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_UNHOOK(ETC_MOD,$1)',dnl
+ifelse(eval($# < 1),ETC_TRUE,`ETC_UNHOOK(ETC_MOD)',dnl
 `undefine(`__ETC_HOOK_$1__')'dnl
 `undefine(`__ETC_HOOK_EVOLVE_$1__')'dnl
 `undefine(`__ETC_HOOK_INSTALL_$1__')'dnl
@@ -181,27 +196,32 @@ dnl Usage: ETC_GEN_MAKE(name,install,update,remove)
 dnl Generates makefile rules for making current module for the given install, 
 dnl update dnl and removal command for 'name'
 dnl 
-define(ETC_GEN_MAKE, `dnl
-.PHONY: install_$1 update_$1 remove_$1
-install:: install_$1
-update:: update_$1
-remove:: remove_$1
+define(ETC_GEN_MAKE, `
+.PHONY: install_`'ETC_MOD update_`'ETC_MOD remove_`'ETC_MOD
+install:: install_`'ETC_MOD
+update:: update_`'ETC_MOD
+remove:: remove_`'ETC_MOD
 
-install_$1:: ETC_TARGET($1) 
-ETC_TARGET($1):: ifdef(`ETC_DEPENDENCY_$1_INSTALL',ETC_DEPENDENCY_$1_INSTALL)
-patsubst(`$2',NEWLINE,NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_INSTALL_$1__',__ETC_HOOK_INSTALL_$1__,),NEWLINE,NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_EVOLVE_$1__',__ETC_HOOK_EVOLVE_$1__,),NEWLINE,NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_$1__',__ETC_HOOK_$1__,),NEWLINE,NEWLINE	)
-update_$1:: ifdef(`ETC_DEPENDENCY_$1_UPDATE',ETC_DEPENDENCY_$1_UPDATE)
-patsubst(`$3',NEWLINE,NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_UPDATE_$1__',__ETC_HOOK_UPDATE_$1__,),NEWLINE,NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_EVOLVE_$1__',__ETC_HOOK_EVOLVE_$1__,),NEWLINE,NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_$1__',__ETC_HOOK_$1__,),NEWLINE,NEWLINE	)
-remove_$1:: ifdef(`ETC_DEPENDENCY_$1_REMOVE',ETC_DEPENDENCY_$1_REMOVE)
-patsubst(`$4',NEWLINE,NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_CREMATE_$1__',__ETC_HOOK_CREMATE_$1__,),NEWLINE,NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_$1__',__ETC_HOOK_$1__,),NEWLINE,NEWLINE	)
+install_`'ETC_MOD:: ETC_TARGET($1) 
+ETC_TARGET($1): ifdef(`ETC_DEPENDENCY_'ETC_MOD`_INSTALL',`ETC_DEPENDENCY_'ETC_MOD`_INSTALL')
+patsubst(`$2',ETC_NEWLINE,ETC_NEWLINE	)
+	patsubst(ifdef(`__ETC_HOOK_INSTALL_'ETC_MOD`__',`__ETC_HOOK_INSTALL_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	patsubst(ifdef(`__ETC_HOOK_EVOLVE_'ETC_MOD`__',_`_ETC_HOOK_EVOLVE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	ETC_MARK($1)
+	ETC_MARK_UPDATED($1)
+update_`'ETC_MOD:: ETC_TARGET($1).update
+ETC_TARGET($1).update: ifdef(`ETC_DEPENDENCY_'ETC_MOD`_UPDATE',`ETC_DEPENDENCY_'ETC_MOD`_UPDATE') ETC_TARGET($1)
+patsubst(`$3',ETC_NEWLINE,ETC_NEWLINE	)
+	patsubst(ifdef(`__ETC_HOOK_UPDATE_'ETC_MOD`__',`__ETC_HOOK_UPDATE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	patsubst(ifdef(`__ETC_HOOK_EVOLVE_'ETC_MOD`__',`__ETC_HOOK_EVOLVE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	ETC_MARK_UPDATED($1)
+remove_`'ETC_MOD:: ifdef(`ETC_DEPENDENCY_'ETC_MOD`_REMOVE',`ETC_DEPENDENCY_'ETC_MOD`_REMOVE')
+patsubst(`$4',ETC_NEWLINE,ETC_NEWLINE	)
+	patsubst(ifdef(`__ETC_HOOK_CREMATE_'ETC_MOD`__',`__ETC_HOOK_CREMATE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	ETC_UNMARK($1)
 ETC_UNHOOK
 ')
 
@@ -212,25 +232,26 @@ dnl If argument is obmitted, reset package manager selection to default.
 dnl If selected package manager isnt supported, would expand to an empty string
 dnl
 define(ETC_PKG_SELECT,`dnl
-ifelse(eval($#>0),TRUE,ifelse(ETC_INSTALLED($1),TRUE,dnl
-`pushdef(`ETC_PKG_MANAGER', $1)'TRUE,FALSE),`dnl
-ifelse(ETC_INSTALLED(brew),TRUE,`define(`ETC_PKG_MANAGER', brew)'TRUE,dnl
-ifelse(ETC_INSTALLED(apt-get),TRUE, `define(`ETC_PKG_MANAGER', apt-get)'TRUE,dnl
-ifelse(ETC_INSTALLED(apt-fast),TRUE, `define(`ETC_PKG_MANAGER', apt-fast)'TRUE,dnl
-FALSE)))')')
+ifelse(eval($#>0),ETC_TRUE,ifelse(ETC_INSTALLED($1),ETC_TRUE,dnl
+`pushdef(`ETC_PKG_MANAGER', $1)'ETC_TRUE,ETC_FALSE),`dnl
+ifelse(ETC_INSTALLED(brew),ETC_TRUE,`define(`ETC_PKG_MANAGER', brew)'ETC_TRUE,dnl
+ifelse(ETC_INSTALLED(apt-get),ETC_TRUE, `define(`ETC_PKG_MANAGER', apt-get)'ETC_TRUE,dnl
+ifelse(ETC_INSTALLED(apt-fast),ETC_TRUE, `define(`ETC_PKG_MANAGER', apt-fast)'ETC_TRUE,dnl
+ETC_FALSE)))')')
 
 dnl Usage: ETC_PKG_REFRESH
 dnl Expands to the command used to refresh the current package manager's index
 dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_REFRESH,`dnl
-install update::
+install update:: ETC_TARGET(`__pkg_'ETC_PKG_MANAGER`.update')
+ETC_TARGET(`__pkg_'ETC_PKG_MANAGER`.update'):
 	dnl
 ifdef(`ETC_PKG_REFRESH_'ETC_PKG_MANAGER,,
 ifelse(ETC_PKG_MANAGER,brew,brew update,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get update,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast update,)))
-`define(`ETC_PKG_REFRESH_'ETC_PKG_MANAGER,TRUE)')')
+`define(`ETC_PKG_REFRESH_'ETC_PKG_MANAGER,ETC_TRUE)')')
 
 dnl Usage: ETC_PKG_INSTALL(name)
 dnl Expands to the command used to install the package 'name' using the current
@@ -251,7 +272,7 @@ dnl selected package manager.
 dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_UPDATE,`dnl
-ifelse(ETC_PKG_MANAGER,brew,-brew upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,brew,brew upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade $1,dnl
@@ -280,18 +301,18 @@ dnl If the remove target is called, would remove package.
 dnl If the selected package manager is not installed, would expand to an empty
 dnl string.
 define(ETC_PKG,`dnl
-ifelse(eval($# < 2),TRUE,`ETC_PKG($1,ETC_PKG_MANAGER)',`dnl
-ifelse(ETC_PKG_SELECT($2),FALSE,,dnl
-ETC_GEN_MAKE(ETC_MOD,`dnl
+ifelse(eval($# < 2),ETC_TRUE,`ETC_PKG($1,ETC_PKG_MANAGER)',`dnl
+ifelse(ETC_PKG_SELECT($2),ETC_FALSE,,dnl
+ETC_GEN_MAKE(ETC_BASENAME($1),`dnl
 ETC_PKG_INSTALL($1)
-ETC_MARK',
+',
 `dnl
 ETC_PKG_UPDATE($1)
-ETC_MARK',
+',
 `dnl
 ETC_PKG_REMOVE($1)
-ETC_MARK')
-popdef(`ETC_PKG_MANAGER'))')')
+')
+`popdef(`ETC_PKG_MANAGER')')')')
 
 #Git
 dnl Usage: ETC_GIT_RETRIEVE('url', 'destination')
@@ -310,44 +331,44 @@ dnl Usage: ETC_GIT(<url>,<path>)
 dnl Maintain git repositiory at path using git repositiory pointed to by 'url'
 dnl 
 define(ETC_GIT,`dnl
-ETC_GEN_MAKE(ETC_MOD,`dnl
+ETC_GEN_MAKE(ETC_BASENAME($2),`dnl
 ETC_GIT_RETRIEVE($1,$2)
-ETC_MARK',
+',
 `dnl
 ETC_GIT_UPDATE($2)
-ETC_MARK',
+',
 `dnl
 rm -rf $2
-ETC_UNMARK')')
+')')
 
 #Remote Resource
 dnl Usage: ETC_RESOURCE(url, destination)
 dnl Maintain remote resource at 'destination' using resource located at 'url'
 dnl 
 define(ETC_RESOURCE,`dnl
-ETC_GEN_MAKE(ETC_MOD,`dnl
+ETC_GEN_MAKE(ETC_BASENAME($2),`dnl
 ETC_RETRIEVE($1,$2)
-ETC_MARK',
+',
 `dnl
 rm -rf $2
 ETC_RETRIEVE($1,$2)
-ETC_MARK',
+',
 `dnl
 rm -rf $2
-ETC_UNMARK')')
+')')
 
 #Local Hirarchy
 dnl Usage: ETC_HIERARCHY(from, to)
 dnl Maintain local path at 'to' using file hierarchy located at 'from'
 dnl 
 define(ETC_HIERARCHY,`dnl
-ETC_GEN_MAKE(ETC_MOD,`dnl
+ETC_GEN_MAKE(ETC_BASENAME($2),`dnl
 cp -avf $1 $2
-ETC_MARK',
+',
 `dnl
 rm -rf $2
 cp -avf $1 $2
-ETC_MARK',
+',
 `dnl
 rm -rf $2
 ETC_UNMARK')')
@@ -388,7 +409,7 @@ dnl If 'name' update target is called, would reinstall 'name' from source
 dnl If the remove target is called, would remove 'name' using source.
 dnl' 
 define(ETC_AUTL,`dnl
-ifelse(eval($# < 3),TRUE,`ETC_AUTL($1, $2, WORK_DIR/autl-$1)',dnl
+ifelse(eval($# < 3),ETC_TRUE,`ETC_AUTL($1, $2, ETC_WORK_DIR/autl-$1)',dnl
 .PHONY: install update remove
 install: ETC_TARGET($1)
 update:
@@ -413,9 +434,9 @@ undefine(`ETC_MOD')
 undefine(`ETC_PKG_MANAGER')
 
 #Include Protection
-define(ETC_M4,TRUE)
+define(ETC_M4,ETC_TRUE)
 ) dnl INCLUDE PROTECTION DO NOT REMOVE
 
 #Defaults
 ETC_PKG_SELECT
-divert(0)dnl
+)divert(0)dnl
