@@ -12,6 +12,7 @@ MACRO := etc.m4
 SOURCES := $(shell find . -name "?*.etc")
 PP_SOURCES := $(addprefix $(SOURCE_DIR)/,\
 	$(patsubst %.etc,%.mk,$(notdir $(SOURCES))))
+UPDATE_DELAY_DAYS := 10
 
 #Targets
 .PHONY: all install update remove clean
@@ -22,6 +23,7 @@ all: update
 install:: $(PP_SOURCES)
 
 update:: $(PP_SOURCES)
+	find $(MARK_DIR) -type f -iname "*.update" -mtime $(UPDATE_DELAY_DAYS) -exec rm {} +
 	
 remove:: $(PP_SOURCES)
 
