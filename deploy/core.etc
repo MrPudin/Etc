@@ -61,7 +61,6 @@ ETC_MODULE(zsh,`ETC_PKG(zsh)')
 ETC_MODULE_BEGIN(zsh_plug)
     ETC_HOOK_INSTALL(sh ~/.oh-my-zsh/tools/install.sh)
     ETC_HOOK_UPDATE(sh ~/.oh-my-zsh/tools/upgrade.sh)
-    ETC_HOOK_CREMATE(sh ~/.oh-my-zsh/tools/uninstall.sh)
     ETC_GIT(git://github.com/robbyrussell/oh-my-zsh.git,~/.oh-my-zsh)
 
     ETC_HOOK_INSTALL(sudo chsh -s /bin/zsh zzy)
