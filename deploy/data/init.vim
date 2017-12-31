@@ -175,12 +175,7 @@ call denite#custom#map('insert', '<C-t>', '<denite:do_action:tabopen>',
 nmap <leader>cc :call deoplete#toggle()<cr>
 
 "Neomake
-call neomake#configure#automake({
-\ 'TextChanged': {},
-\ 'InsertLeave': {},
-\ 'BufWritePost': {'delay': 0},
-\ 'BufWinEnter': {},
-\ }, 2000)
+call neomake#configure#automake('w')
 
 "Supertab
 let g:SuperTabDefaultCompletionType="context"
@@ -194,6 +189,7 @@ let g:UltiSnipsExpandTrigger="<C-x>"
 "Airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#tab_nr_type = 1
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_powerline_fonts = 1
 
