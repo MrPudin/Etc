@@ -70,7 +70,7 @@ nmap <Esc><Esc> :noh<cr>
 nmap <leader>/i :set ignorecase!<cr>
 nmap <leader>hl :setl background=light<cr>
 nmap <leader>hd :setl background=dark<cr>
-nmap <leader>\ :set colorcolumn=80!<cr>
+nmap <leader>\ :set colorcolumn=80<cr>
 
 "Plugin
 call plug#begin('~/.local/share/nvim/plugged')
