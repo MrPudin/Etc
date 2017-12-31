@@ -251,7 +251,8 @@ ifdef(`ETC_PKG_REFRESH_'ETC_PKG_MANAGER,,
 ifelse(ETC_PKG_MANAGER,brew,brew update,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get update,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast update,)))
-`define(`ETC_PKG_REFRESH_'ETC_PKG_MANAGER,ETC_TRUE)')')
+`define(`ETC_PKG_REFRESH_'ETC_PKG_MANAGER,ETC_TRUE)')
+	ETC_MARK(`__pkg_'ETC_PKG_MANAGER`.update')')
 
 dnl Usage: ETC_PKG_INSTALL(name)
 dnl Expands to the command used to install the package 'name' using the current
@@ -272,7 +273,7 @@ dnl selected package manager.
 dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_UPDATE,`dnl
-ifelse(ETC_PKG_MANAGER,brew,brew upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,brew,-brew upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade $1,dnl

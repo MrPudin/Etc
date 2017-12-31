@@ -16,7 +16,7 @@ do
 			shift
             ;;
         remove)
-            make -C ~/.etc remove
+            make -i -C ~/.etc remove
 			shift
             ;;
         *)
