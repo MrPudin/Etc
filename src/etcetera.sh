@@ -4,7 +4,9 @@
 # Etc CLI
 #
 
-WORK_DIR=~/.etc/.etc_work
+WORK_DIR="~/.etc/.etc_work"
+MAKE_ARG="-C ~/.etc"
+FORCE=false
 
 #Parse Options
 while getopts "hfl:d:" opt
@@ -23,7 +25,7 @@ do
 			exit 0;
 		 ;;
 		 f)
-		 	rm -rf ~/.etc/.etc_work/mark/*
+            FORCE=true
 		 ;;
 		 d)
 			sed -e "/UPDATE_DELAY/s/[0-9]\{1,\}$/$OPTARG/" ~/.etc/makefile >/tmp/etc_makefile
@@ -47,10 +49,27 @@ MODULES=""
 while [ $# -gt 0 ]
 do
     MODULES="$MODULES $1"
-    shift
+
 done
 
 MODULES=$(echo "$MODULES" | xargs) #Chomp whitespace
+
+#Preprocess Markers
+if $FORCE
+then
+    if [ $MODULES ]
+    then
+        for MODULE in $MODULES
+        do
+            rm -f $WORK_DIR/mark $MODULE*
+        done
+    else
+        rm -f $WORK_DIR/mark/*
+        MAKE_ARG="$MAKE_ARG UPDATE_DELAY:=0 UPDATE_COUNT:=999999"
+    fi
+fi
+
+shift
 
 #Parse Subcommand
 case $SUBCOMMAND in
@@ -60,10 +79,10 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                time make -C ~/.etc/ install_$MODULE
+                time make $MAKE_ARG install_$MODULE
             done
         else
-            time make -C ~/.etc install
+            time make $MAKE_ARG install
         fi
         printf "\033[1m\033[0;32m[etcetera]: INSTALL COMPLETE\033[0m\n"
 		;;
@@ -73,10 +92,10 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                time make -C ~/.etc/ update_$MODULE
+                time make $MAKE_ARG update_$MODULE
             done
         else
-            time make -C ~/.etc update
+            time make $MAKE_ARG update
         fi
 		printf "\033[1m\033[0;32m[etcetera]: UPDATE COMPLETE\033[0m\n"
 		;;
@@ -87,10 +106,10 @@ case $SUBCOMMAND in
             echo "HERE"
             for MODULE in $MODULES
             do
-                time make -C ~/.etc/ remove_$MODULE
+                time make -i $MAKE_ARG remove_$MODULE
             done
         else
-            time make -i -C ~/.etc remove
+            time make -i $MAKE_ARG remove
         fi
 		printf "\033[1m\033[0;32m[etcetera]: REMOVAL COMPLETE\033[0m\n"
 		;;
