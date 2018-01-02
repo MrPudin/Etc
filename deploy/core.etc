@@ -70,11 +70,13 @@ ETC_MODULE_END(zsh_plug)
 
 #Neovim Editor
 ETC_DEPEND(neovim,neovim_plug)
+ETC_DEPEND(neovim_python,neovim_plug)
 
 ETC_MODULE(neovim,`ETC_PKG(neovim)')
+ETC_MODULE(neovim_python,`ETC_PKG(neovim,pip3)')
+
 
 ETC_MODULE_BEGIN(neovim_plug)
-    ETC_PKG(neovim,pip3)
     ETC_PKG(jedi,pip3)
 
     ETC_HOOK_CREMATE(rm -rf ~/.local/share/nvim/plugged)
