@@ -9,15 +9,15 @@ ifdef(ETC_M4,,
 #Constants
 pushdef(ETC_TRUE, 1)
 pushdef(ETC_FALSE, 0)
-pushdef(ETC_WORK_DIR,.etc_work)
+pushdef(ETC_DIR_WORK,.etc_work)
 pushdef(ETC_CHOMP,`patsubst($1,`\s*',)')
 pushdef(ETC_NEWLINE,`
 ')
 
-dnl Usage: ETC_DEPLOYDIR
+dnl Usage: ETC_DIR_DEPLOY
 dnl Expands to the deploy directory, where user defined files can be referenced.
 dnl
-define(ETC_DEPLOYDIR,`deploy')
+define(ETC_DIR_DEPLOY,`deploy')
 
 #Operating System
 define(ETC_OS_MACOS,Darwin)
@@ -70,7 +70,7 @@ define(ETC_IF_INSTALLED,`ifelse(ETC_INSTALLED($1),ETC_TRUE,$2,$3)')
 dnl Usage: ETC_TARGET(<name>)
 dnl Expands to the marker path of 'name'.
 dnl
-define(ETC_TARGET,`ETC_WORK_DIR`/mark/'ETC_MOD`_$1'')
+define(ETC_TARGET,`ETC_DIR_WORK`/mark/'ETC_MOD`_$1'')
 
 dnl Usage: ETC_DEPEND(<dependency>,<dependent>)
 dnl Makes 'dependent' depend on 'dependency'
@@ -249,7 +249,7 @@ ETC_TARGET(ETC_PKG_MANAGER`.update'):
 ifelse(ETC_PKG_MANAGER,brew,brew update,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get update,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast update,)))
-	ETC_MARK(`__ETC_PKG_REFRESH__'ETC_PKG_MANAGER`.update')
+	ETC_MARK(`'ETC_PKG_MANAGER`.update')
 ETC_MODULE_END(`__ETC_PKG_REFRESH__')')
 
 dnl Usage: ETC_PKG_INSTALL(name)
@@ -408,7 +408,7 @@ dnl If 'name' update target is called, would reinstall 'name' from source
 dnl If the remove target is called, would remove 'name' using source.
 dnl' 
 define(ETC_AUTL,`dnl
-ifelse(eval($# < 3),ETC_TRUE,`ETC_AUTL($1, $2, ETC_WORK_DIR/autl-$1)',dnl
+ifelse(eval($# < 3),ETC_TRUE,`ETC_AUTL($1, $2, ETC_DIR_WORK/autl-$1)',dnl
 .PHONY: install update remove
 install: ETC_TARGET($1)
 update:

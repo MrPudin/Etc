@@ -65,7 +65,7 @@ ETC_MODULE_BEGIN(zsh_plug)
     ETC_GIT(git://github.com/robbyrussell/oh-my-zsh.git,~/.oh-my-zsh)
 
     ETC_HOOK_INSTALL(sudo chsh -s /bin/zsh zzy)
-    ETC_HIERARCHY(ETC_DEPLOYDIR/data/zshrc,~/.zshrc)
+    ETC_HIERARCHY(ETC_DIR_DEPLOY/data/zshrc,~/.zshrc)
 ETC_MODULE_END(zsh_plug)
 
 #Neovim Editor
@@ -83,7 +83,7 @@ ETC_MODULE_BEGIN(neovim_plug)
     ETC_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,~/.local/share/nvim/site/autoload/plug.vim)
 
     ETC_HOOK_EVOLVE(nvim +PlugUpdate +qa)
-    ETC_HIERARCHY(ETC_DEPLOYDIR/data/init.vim, ~/.config/nvim/init.vim)
+    ETC_HIERARCHY(ETC_DIR_DEPLOY/data/init.vim, ~/.config/nvim/init.vim)
 ETC_MODULE_END(neovim_plug)
 
 #Tmux Terminal Multiplexer
@@ -95,5 +95,5 @@ ETC_MODULE_BEGIN(tmux_plug)
 
     ETC_HOOK_INSTALL(sh ~/.tmux/plugins/tpm/bin/install_plugins)
     ETC_HOOK_EVOLVE(sh ~/.tmux/plugins/tpm/bin/update_plugins all; tmux source-file ~/.tmux.conf)
-    ETC_HIERARCHY(ETC_DEPLOYDIR/data/tmux.conf,~/.tmux.conf)
+    ETC_HIERARCHY(ETC_DIR_DEPLOY/data/tmux.conf,~/.tmux.conf)
 ETC_MODULE_END(tmux_plug)
