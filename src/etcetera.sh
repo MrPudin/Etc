@@ -43,13 +43,12 @@ shift $((OPTIND -1))
 SUBCOMMAND=$1
 shift
 
-
 #Read Modules 
 MODULES=""
 while [ $# -gt 0 ]
 do
     MODULES="$MODULES $1"
-
+    shift
 done
 
 MODULES=$(echo "$MODULES" | xargs) #Chomp whitespace
@@ -64,12 +63,12 @@ then
             rm -f $WORK_DIR/mark $MODULE*
         done
     else
-        rm -f $WORK_DIR/mark/*
+        rm -rf $WORK_DIR/mark
+        mkdir -p $WORK_DIR/mark
         MAKE_ARG="$MAKE_ARG UPDATE_DELAY:=0 UPDATE_COUNT:=999999"
     fi
 fi
 
-shift
 
 #Parse Subcommand
 case $SUBCOMMAND in
@@ -103,7 +102,6 @@ case $SUBCOMMAND in
 		printf "\033[1m\033[0;32m[etcetera]: REMOVAL BEGIN\033[0m\n"
         if [ $MODULES ]
         then
-            echo "HERE"
             for MODULE in $MODULES
             do
                 time make -i $MAKE_ARG remove_$MODULE
