@@ -22,7 +22,11 @@ set wildmode=longest,list,full
 set wildmenu
 set laststatus=2
 set completeopt=longest,menu,preview
+set smartcase
 set ignorecase
+set smarttab
+set magic
+set shortmess+=c
 
 "File Settings
 set encoding=utf8
@@ -39,20 +43,25 @@ colorscheme desert
 
 "Keyboard Bindings
 let g:mapleader = ","
-nmap <leader>H H
-nmap <leader>L L
-nmap <leader>M M
-nmap H <c-o>
-nmap L <c-i>
-nmap <leader>e :e
-nmap <leader>l :lnext<cr>
-nmap <leader>L :lNext<cr>
-nmap <leader>aa :argadd %<cr>
-nmap <leader>aq :argdelete %<cr>
-nmap <leader>an :next<cr>
-nmap <leader>aN :Next<cr>
+noremap zh H
+noremap zl L
+noremap zm M
+noremap H <c-o>
+noremap L <c-i>
+noremap <leader>sn ]s
+noremap <leader>sN [s
+noremap <leader>ss z=
+noremap <leader>p "+p
+nmap <leader>P :set paste!
+nmap <leader>e :e 
+nmap <leader>n :lnext<cr>
+nmap <leader>N :lNext<cr>
+nmap <leader>A :args 
+nmap <leader>aa :argadd 
+nmap <leader>ax :argdelete %<cr>
+nmap <leader>[ :next<cr>
+nmap <leader>] :Next<cr>
 nmap <leader>a: :argdo
-nmap <leader>b: :bufdo
 nmap <leader>ww :tabnew<cr>
 nmap <leader>wx :tabclose<cr>
 nmap <leader>w] :tabnext<cr>
@@ -62,50 +71,51 @@ nmap <leader>w0 :tabrewind<cr>
 nmap <leader>w$ :tablast<cr>
 nmap <leader>w{ :tabmove -1<cr>
 nmap <leader>w} :tabmove +1<cr>
-nmap <leader>ss :setl spell!<cr>
-nmap <leader>sn ]s
-nmap <leader>sN [s
-nmap <leader>S z=
+nmap <leader>S :setl spell!<cr>
 nmap <Esc><Esc> :noh<cr>
-nmap <leader>/i :set ignorecase!<cr>
+nmap <leader>/c :set ignorecase!<cr>
 nmap <leader>hl :setl background=light<cr>
 nmap <leader>hd :setl background=dark<cr>
 nmap <leader>\ :set colorcolumn=80<cr>
 
 "Plugin
 call plug#begin('~/.local/share/nvim/plugged')
+"Utility
 Plug 'Shougo/denite.nvim'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
-Plug 'Shougo/neoinclude.vim'
-Plug 'artur-shaik/vim-javacomplete2'
-Plug 'landaire/deoplete-swift'
-Plug 'zchee/deoplete-clang'
+Plug 'chemzqm/unite-location'
 Plug 'neoclide/denite-git'
 Plug 'chemzqm/denite-extra'
-Plug 'clojure-vim/async-clj-omni'
-Plug 'carlitux/deoplete-ternjs'
-Plug 'fszymanski/deoplete-abook'
-Plug 'Shougo/neco-syntax'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'sebastianmarkow/deoplete-rust'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'neomake/neomake'
 Plug 'mileszs/ack.vim'
-Plug 'chemzqm/unite-location'
-Plug 'tmux-plugins/tmux-resurrect'
+Plug 'tpope/vim-characterize'
+Plug 'coderifous/textobj-word-column.vim'
 Plug 'tpope/vim-obsession'
-Plug 'ervandew/supertab'
-Plug 'haya14busa/incsearch.vim'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-rsi'
+Plug 'tmux-plugins/tmux-resurrect'
+
+"Syntax
+Plug 'keith/swift.vim'
+
+"Completion
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neoinclude.vim'
+Plug 'zchee/deoplete-jedi'
+Plug 'artur-shaik/vim-javacomplete2'
+Plug 'landaire/deoplete-swift'
+Plug 'Rip-Rip/clang_complete'
+Plug 'Shougo/neco-syntax'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'ervandew/supertab'
+Plug 'haya14busa/incsearch.vim'
+
+"Appearance
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'tpope/vim-characterize'
-Plug 'coderifous/textobj-word-column.vim'
 call plug#end()
 
 "Plugin Configuration
@@ -121,18 +131,24 @@ call denite#custom#var('file_rec', 'command',
 	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 
 nmap <c-p> :Denite file_rec<cr>
-nmap <leader>/ :Denite grep<cr>
+nmap <leader>// :Denite grep<cr>
 nmap <leader>? :Denite outline<cr>
 nmap <leader>" :Denite register<cr>
-nmap <leader>l :Denite location_list<cr>`
+nmap <leader>' :Denite location_list<cr>
 nmap <leader>: :Denite command<cr>
-nmap <leader>g :Denite jumps<cr>
+nmap <leader>` :Denite jumps<cr>
 
 "Deoplete
-let g:deopleteA#enable_smart_case=1
+let g:deoplete#enable_smart_case=1
 let g:deoplete#auto_complete_delay=40
-let g:deoplete#sources#clang#libclang_path="/usr/local/Cellar/llvm/4.0.1/lib/libclang.dylib"
-let g:deoplete#sources#clang#clang_header="/usr/local/Cellar/llvm/4.0.1/include/clang"
+
+""Clang Complete
+let g:clang_library_path='/usr/local/opt/llvm/lib/libclang.dylib'
+"TODO: Make this portable to linux
+"let g:deoplete#sources#clang#libclang_path=
+            "\"/usr/local/opt/llvm/lib/libclang.dylib"
+
+"Denite
 call denite#custom#map('normal', '<Esc>', '<C-c>',
       \'noremap')
 call denite#custom#map('normal', 'i', '<denite:enter_mode:insert>',
@@ -191,6 +207,12 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#tab_nr_type = 1
 let g:airline#extensions#tabline#left_alt_sep = '|'
 let g:airline_powerline_fonts = 1
+
+"Incsearch
+let g:incsearch#magic = '\v'
+
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
 
 "Plugin Display Setting
 colorscheme solarized

@@ -48,6 +48,7 @@ ETC_MODULE(mit-scheme,`ETC_PKG(mit-scheme)')
 ETC_MODULE(gcc,`ETC_PKG(gcc)')
 ETC_MODULE(cmake,`ETC_PKG(cmake)')
 ETC_MODULE(doxygen,`ETC_PKG(doxygen)')
+ETC_MODULE(pkg_config,`ETC_PKG(pkg-config)')
 ETC_MODULE_BEGIN(clang)
     ETC_PKG(llvm)
     ETC_PKG(clang,apt-get)
@@ -73,6 +74,9 @@ ETC_DEPEND(neovim,neovim_plug)
 ETC_MODULE(neovim,`ETC_PKG(neovim)')
 
 ETC_MODULE_BEGIN(neovim_plug)
+    ETC_PKG(neovim,pip3)
+    ETC_PKG(jedi,pip3)
+
     ETC_HOOK_CREMATE(rm -rf ~/.local/share/nvim/plugged)
     ETC_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,~/.local/share/nvim/site/autoload/plug.vim)
 
