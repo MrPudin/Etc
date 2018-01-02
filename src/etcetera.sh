@@ -44,14 +44,7 @@ SUBCOMMAND=$1
 shift
 
 #Read Modules 
-MODULES=""
-while [ $# -gt 0 ]
-do
-    MODULES="$MODULES $1"
-    shift
-done
-
-MODULES=$(echo "$MODULES" | xargs) #Chomp whitespace
+MODULES="$*"
 
 #Preprocess Markers
 if $FORCE
@@ -74,7 +67,7 @@ fi
 case $SUBCOMMAND in
 	install)
         printf "\033[1m\033[0;32m[etcetera]: INSTALL BEGIN\033[0m\n"
-        if [ $MODULES ]
+        if [ "$MODULES" ]
         then
             for MODULE in $MODULES
             do
@@ -87,7 +80,7 @@ case $SUBCOMMAND in
 		;;
 	update)
 		printf "\033[1m\033[0;32m[etcetera]: UPDATE BEGIN\033[0m\n"
-        if [ $MODULES ]
+        if [ "$MODULES" ]
         then
             for MODULE in $MODULES
             do
@@ -100,7 +93,7 @@ case $SUBCOMMAND in
 		;;
 	remove)
 		printf "\033[1m\033[0;32m[etcetera]: REMOVAL BEGIN\033[0m\n"
-        if [ $MODULES ]
+        if [ "$MODULES" ]
         then
             for MODULE in $MODULES
             do
