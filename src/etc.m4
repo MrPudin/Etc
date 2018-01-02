@@ -67,12 +67,10 @@ dnl
 define(ETC_IF_INSTALLED,`ifelse(ETC_INSTALLED($1),ETC_TRUE,$2,$3)')
 
 #Make Macros
-dnl Usage: ETC_TARGET([<name>])
-dnl Expands to the marker path of 'name', if 'name' is obmitted, gives marker
-dnl path of current module.
+dnl Usage: ETC_TARGET(<name>)
+dnl Expands to the marker path of 'name'.
 dnl
-define(ETC_TARGET,`dnl
-ifelse(eval($# < 1),ETC_TRUE,`ETC_TARGET(ETC_MOD)',ETC_WORK_DIR/mark/$1)')
+define(ETC_TARGET,`ETC_WORK_DIR`/mark/'ETC_MOD`_$1'')
 
 dnl Usage: ETC_DEPEND(<dependency>,<dependent>)
 dnl Makes 'dependent' depend on 'dependency'
@@ -80,9 +78,9 @@ dnl
 define(ETC_DEPEND,`dnl
 ifelse(eval($# < 2),ETC_TRUE,`ETC_DEPEND($1,ETC_MOD)',`dnl
 define(`ETC_DEPENDENCY_$2_INSTALL',ifdef(`ETC_DEPENDENCY_$2_INSTALL',dnl
-ETC_DEPENDENCY_$2_INSTALL) ETC_TARGET($1))dnl
+ETC_DEPENDENCY_$2_INSTALL) install_$1)dnl
 define(`ETC_DEPENDENCY_$2_UPDATE',ifdef(`ETC_DEPENDENCY_$2_UPDATE',dnl
-ETC_DEPENDENCY_$2_UPDATE) ETC_TARGET($1))dnl
+ETC_DEPENDENCY_$2_UPDATE) update_$1)dnl
 define(`ETC_DEPENDENCY_$1_REMOVE',ifdef(`ETC_DEPENDENCY_$1_REMOVE',dnl
 ETC_DEPENDENCY_$1_REMOVE) remove_$2)dnl
 ')')
@@ -244,15 +242,15 @@ dnl Expands to the command used to refresh the current package manager's index
 dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_REFRESH,`dnl
-install update:: ETC_TARGET(`__pkg_'ETC_PKG_MANAGER`.update')
-ETC_TARGET(`__pkg_'ETC_PKG_MANAGER`.update'):
+ETC_MODULE_BEGIN(`__ETC_PKG_REFRESH__')
+install update:: ETC_TARGET(ETC_PKG_MANAGER`.update')
+ETC_TARGET(ETC_PKG_MANAGER`.update'):
 	dnl
-ifdef(`ETC_PKG_REFRESH_'ETC_PKG_MANAGER,,
 ifelse(ETC_PKG_MANAGER,brew,brew update,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get update,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast update,)))
-`define(`ETC_PKG_REFRESH_'ETC_PKG_MANAGER,ETC_TRUE)')
-	ETC_MARK(`__pkg_'ETC_PKG_MANAGER`.update')')
+	ETC_MARK(`__ETC_PKG_REFRESH__'ETC_PKG_MANAGER`.update')
+ETC_MODULE_END(`__ETC_PKG_REFRESH__')')
 
 dnl Usage: ETC_PKG_INSTALL(name)
 dnl Expands to the command used to install the package 'name' using the current
