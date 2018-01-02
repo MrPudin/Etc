@@ -91,7 +91,7 @@ dnl 'name'
 dnl
 define(ETC_MARK,`dnl
 ifelse(eval($# < 1),ETC_TRUE,`ETC_MARK(ETC_MOD)',dnl
-touch -f ETC_TARGET($1))')
+@touch -f ETC_TARGET($1))')
 
 dnl Usage: ETC_UNMARK([name])
 dnl Marks 'name' status as incomplete and unfullfills any dependency created by
@@ -99,14 +99,14 @@ dnl 'name'
 dnl
 define(ETC_UNMARK,`dnl
 ifelse(eval($# < 1),ETC_TRUE,`ETC_UNMARK(ETC_MOD)',dnl
-rm -f ETC_TARGET($1)); rm -f ETC_TARGET($1).update')
+@rm -f ETC_TARGET($1)); rm -f ETC_TARGET($1).update')
 
 dnl Usage: ETC_MARK_UPDATED([name])
 dnl Marks 'name' status as updated.
 dnl 
 define(ETC_MARK_UPDATED,`dnl
 ifelse(eval($# < 1),ETC_TRUE,`ETC_MARK(ETC_MOD)',dnl
-touch -f ETC_TARGET($1).update)')
+@touch -f ETC_TARGET($1).update)')
 
 #Fetch&ExtractMacros
 dnl Usage: ETC_RETRIEVE('url', 'destination')
