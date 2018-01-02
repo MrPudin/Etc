@@ -8,18 +8,22 @@ Automates the setting up a an (development) enviroment.
 Requirements;
 1. Operating System Independence (at least Unix like OS okay).
 2. Package manager independence. (apt-get, brew, pacman. I dont care)
-3. Ease of configuration and setup.
+3. Ease of configuration and setup - minimum duplicity.
 4. Dependecy managment (at a higher level than package manager to include 
-    stuff not supported by package managers)(eg. vim-plug, which is installed \
+    stuff not supported by package managers)(eg. vim-plug, which is installed 
     from git is dependent on neovim, which is installed on from the package 
     manager)
 5. Modular Configuaration possible. (neovim configuration can be independent of 
-    tmux configuration...
+    tmux configuration... all the neovim plugin configuration can be grouped 
+    together
+6. install, remove, update hooks
+
 Optional Requirements:
 1, Concurrency to speed things up where possible (eg. downloading stuff, 
     building software ...)
 2. Detects the software installed in the system and uses the fastest one where
     possible. (ie. aria2c instead of curl)
+3. Easy to add support for other package managers.
 
 [Project]
 Project Organisation
@@ -69,5 +73,18 @@ ETC_HIERARCHY(init.vim, ~/.config/nvim/init.vim)
 ETC_MODULE_END(neovim)
 - Defines dependencies between modules
 
-CLI
-etcetera (install|update|remove)
+~/.etc - main etcetera directory.
+~/.etc/.etc_work - etcetera working directory
+~/.etc/.etc_work/mark - etcetera working markers
+~/.etc/.etc_work/source - etcetera geneerated makefiles.
+
+Command Line Interface - CLI
+Usage: etcetera [-hfld] (install|update|remove) [modules]
+install - install deployment
+update - update deployment
+remove - remove deployment
+-h - Print usage infomation
+-f - Force action, regardless if already installed or updated
+-l <nmodules> - Limit of how many modules to update at one time.
+-d <ndays> - Check for updates only n days after last update.
+[modules] - Interact with these modules only
