@@ -42,8 +42,5 @@ fi
 export ARCHFLAGS="-arch x86_64"
 
 # SSH Key Path export SSH_KEY_PATH="~/.ssh/rsa_id"
-
 alias vim="nvim"
 alias py="python3"
-
-

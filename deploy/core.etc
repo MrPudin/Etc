@@ -20,7 +20,6 @@ ETC_MODULE(wget,`ETC_PKG(wget)')
 ETC_MODULE(aria2,`ETC_PKG(aria2)')
 
 #General Development
-ETC_MODULE(gdb,`ETC_PKG(gdb)')
 ETC_MODULE(ag,`ETC_PKG(ag)')
 ETC_MODULE(git,`ETC_PKG(git)')
 ETC_MODULE(opencv,`ETC_PKG(opencv)')
@@ -46,6 +45,7 @@ ETC_MODULE(mit-scheme,`ETC_PKG(mit-scheme)')
 
 #C/C++ Development
 ETC_MODULE(gcc,`ETC_PKG(gcc)')
+ETC_MODULE(gdb,`ETC_PKG(gdb)')
 ETC_MODULE(cmake,`ETC_PKG(cmake)')
 ETC_MODULE(doxygen,`ETC_PKG(doxygen)')
 ETC_MODULE(pkg_config,`ETC_PKG(pkg-config)')

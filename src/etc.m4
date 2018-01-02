@@ -370,7 +370,7 @@ cp -avf $1 $2
 ',
 `dnl
 rm -rf $2
-ETC_UNMARK')')
+')')
 
 ifelse(`
 #Autotools #TODO:test if working
