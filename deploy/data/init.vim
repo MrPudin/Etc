@@ -7,27 +7,28 @@
 " 
 
 "Editing Settings
-set autoread
-set ruler
-set number
-set smartcase
-set tabstop=4
-set shiftwidth=4
-set expandtab
 set autoindent
-set smartindent
-set noshowmode
-set showtabline=2
-set wildmode=longest,list,full
-set wildmenu
-set laststatus=2
+set autoread
 set completeopt=longest,menu,preview
-set smartcase
+set expandtab
+set hidden
 set ignorecase
-set smarttab
+set laststatus=2
 set magic
+set noshowmode
+set number
+set ruler
+set shiftwidth=4
 set shortmess+=c
-
+set showtabline=2
+set smartcase
+set smartcase
+set smartindent
+set smarttab
+set tabstop=4
+set wildmenu
+set wildmode=longest,list,full
+"
 "File Settings
 set encoding=utf8
 set path+=/usr/local/include/,/usr/local/include/c++/7.1.0/,/usr/include/
@@ -43,15 +44,19 @@ colorscheme desert
 
 "Keyboard Bindings
 let g:mapleader = ","
-noremap zh H
-noremap zl L
-noremap zm M
-noremap H <c-o>
-noremap L <c-i>
-noremap <leader>sn ]s
-noremap <leader>sN [s
-noremap <leader>ss z=
-noremap <leader>p "+p
+vnoremap * "*y/\V<c-r>*<cr><esc>
+vnoremap # "*y?\V<c-r>*<cr><esc>
+nnoremap & :&&<cr>
+vnoremap & :&&<cr>
+nnoremap zh H
+nnoremap zl L
+nnoremap zm M
+nnoremap H <c-o>
+nnoremap L <c-i>
+nnoremap <leader>sn ]s
+nnoremap <leader>sN [s
+nnoremap <leader>ss z=
+nnoremap <leader>p "+p
 nmap <leader>P :set paste!
 nmap <leader>e :e 
 nmap <leader>n :lnext<cr>
@@ -95,6 +100,7 @@ Plug 'tpope/vim-obsession'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-rsi'
 Plug 'tmux-plugins/tmux-resurrect'
+Plug 'tpope/vim-abolish'
 
 "Syntax
 Plug 'keith/swift.vim'
