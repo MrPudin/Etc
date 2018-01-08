@@ -59,8 +59,8 @@ nnoremap <leader>ss z=
 nnoremap <leader>p "+p
 nmap <leader>P :set paste!
 nmap <leader>e :e 
-nmap <leader>n :lnext<cr>
-nmap <leader>N :lNext<cr>
+nmap <leader>l :lnext<cr>
+nmap <leader>L :lNext<cr>
 nmap <leader>A :args 
 nmap <leader>aa :argadd 
 nmap <leader>ax :argdelete %<cr>
