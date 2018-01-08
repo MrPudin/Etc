@@ -54,6 +54,12 @@ ETC_MODULE_BEGIN(clang)
     ETC_PKG(clang,apt-get)
 ETC_MODULE_END(clang)
 
+#Microbit Development
+ETC_MODULE_BEGIN(mircobit)
+    ETC_PKG(screcord)
+    ETC_PKG(yotta,pip3)
+ETC_MODULE_END(mircobit)
+
 #Z Shell
 ETC_DEPEND(zsh,zsh_plug)
 

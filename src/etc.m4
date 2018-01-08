@@ -263,7 +263,7 @@ ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y install $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y install $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install $1,dnl
 ifelse(ETC_PKG_MANAGER,pip3,pip3 install $1,dnl
-ifelse(ETC_PKG_MANAGER,cpan,sudo cpanm -S --installdeps $1,))))))')
+ifelse(ETC_PKG_MANAGER,cpan,cpanm -S --installdeps $1,))))))')
 
 dnl Usage: ETC_PKG_UPDATE(<name>)
 dnl Expands to the command used to update the package 'name' using the current
