@@ -13,42 +13,59 @@ ETC_PKG_REFRESH
 
 #Core Programs
 #Utilities
-ETC_MODULE(htop,`ETC_PKG(htop)')
-ETC_MODULE(mutt,`ETC_PKG(mutt)')
-ETC_MODULE(w3m,`ETC_PKG(w3m)')
-ETC_MODULE(wget,`ETC_PKG(wget)')
-ETC_MODULE(aria2,`ETC_PKG(aria2)')
+ETC_MODULE_BEGIN(util)
+    ETC_PKG(htop)
+    ETC_PKG(mutt)
+    ETC_PKG(w3m)
+    ETC_PKG(wget)
+    ETC_PKG(aria2)
+ETC_MODULE_END(util)
 
 #General Development
-ETC_MODULE(ag,`ETC_PKG(ag)')
-ETC_MODULE(git,`ETC_PKG(git)')
-ETC_MODULE(opencv,`ETC_PKG(opencv)')
-ETC_MODULE(openssl,`ETC_PKG(openssl)')
-ETC_MODULE(sqlite,`ETC_PKG(sqlite)')
+ETC_MODULE_BEGIN(dev)
+    ETC_PKG(ag)
+    ETC_PKG(git)
+    ETC_PKG(opencv)
+    ETC_PKG(openssl)
+    ETC_PKG(sqlite)
+ETC_MODULE_END(dev)
+
 
 #Python Development
-ETC_MODULE(python,`ETC_PKG(python)')
-ETC_MODULE(python3,`ETC_PKG(python3)')
+ETC_MODULE_BEGIN(python)
+    ETC_PKG(python)
+    ETC_PKG(python3)
+    ETC_PKG(requests,pip)
+ETC_MODULE_END(python)
 
 #Perl Development
-ETC_MODULE(perl,`ETC_PKG(perl)')
-ETC_MODULE(perl6,`ETC_PKG(perl6)')
-ETC_MODULE_BEGIN(cpanm)
+ETC_DEPEND(perl,cpan)
+
+ETC_MODULE_BEGIN(perl)
+    ETC_PKG(perl)
+    ETC_PKG(perl6)
+ETC_MODULE_END(perl)
+
+ETC_MODULE_BEGIN(cpan)
     ETC_PKG(cpanm)
     ETC_PKG(App::cpanoutdated,cpan)
-ETC_MODULE_BEGIN(cpanm)
+ETC_MODULE_BEGIN(cpan)
 
 #Ruby Development
 ETC_MODULE(ruby,`ETC_PKG(ruby)')
+#
 #MIT-Scheme Development
 ETC_MODULE(mit-scheme,`ETC_PKG(mit-scheme)')
 
 #C/C++ Development
-ETC_MODULE(gcc,`ETC_PKG(gcc)')
-ETC_MODULE(gdb,`ETC_PKG(gdb)')
-ETC_MODULE(cmake,`ETC_PKG(cmake)')
-ETC_MODULE(doxygen,`ETC_PKG(doxygen)')
-ETC_MODULE(pkg_config,`ETC_PKG(pkg-config)')
+ETC_MODULE_BEGIN(c_cxx)
+    ETC_PKG(gcc)
+    ETC_PKG(gdb)
+    ETC_PKG(cmake)
+    ETC_PKG(doxygen)
+    ETC_PKG(pkg-config)
+ETC_MODULE_END(c_cxx)
+
 ETC_MODULE_BEGIN(clang)
     ETC_PKG(llvm)
     ETC_PKG(clang,apt-get)
