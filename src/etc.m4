@@ -42,7 +42,8 @@ dnl        <implementation>
 dnl        ETC_MODULE_END(<name>)
 dnl Define a multiline module.
 dnl
-define(ETC_MODULE_BEGIN,`pushdef(`ETC_MOD',$1)')
+define(ETC_MODULE_BEGIN,`ifdef(`ETC_MOD',`ETC_DEPEND(ETC_MOD,$1)')dnl 
+pushdef(`ETC_MOD',$1)')
 define(ETC_MODULE_END,`popdef(`ETC_MOD')')
 
 dnl Usage: ETC_MODULE(<name>,<implementation>)
