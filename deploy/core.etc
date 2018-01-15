@@ -19,6 +19,7 @@ ETC_MODULE_BEGIN(util)
     ETC_PKG(w3m)
     ETC_PKG(wget)
     ETC_PKG(aria2)
+    ETC_PKG(gawk)
 ETC_MODULE_END(util)
 
 #General Development
@@ -35,7 +36,8 @@ ETC_MODULE_END(dev)
 ETC_MODULE_BEGIN(python)
     ETC_PKG(python)
     ETC_PKG(python3)
-    ETC_PKG(requests,pip)
+    ETC_PKG(requests,pip3)
+    ETC_PKG(cryptography,pip3)
 ETC_MODULE_END(python)
 
 #Perl Development
@@ -55,7 +57,7 @@ ETC_MODULE_BEGIN(cpan)
 ETC_MODULE(ruby,`ETC_PKG(ruby)')
 #
 #MIT-Scheme Development
-ETC_MODULE(mit-scheme,`ETC_PKG(mit-scheme)')
+ETC_MODULE(mit_scheme,`ETC_PKG(mit-scheme)')
 
 #C/C++ Development
 ETC_MODULE_BEGIN(c_cxx)
@@ -72,10 +74,15 @@ ETC_MODULE_BEGIN(clang)
 ETC_MODULE_END(clang)
 
 #Microbit Development
-ETC_MODULE_BEGIN(mircobit)
+ETC_MODULE_BEGIN(microbit)
     ETC_PKG(screcord)
     ETC_PKG(yotta,pip3)
-ETC_MODULE_END(mircobit)
+ETC_MODULE_END(microbit)
+
+#Ardunio Development
+ETC_MODULE_BEGIN(arduino)
+    ETC_PKG(caskroom/cask/arduino,brew)
+ETC_MODULE_END(arduino)
 
 #Z Shell
 ETC_DEPEND(zsh,zsh_plug)
@@ -110,6 +117,7 @@ ETC_MODULE_BEGIN(neovim_plug)
 ETC_MODULE_END(neovim_plug)
 
 #Tmux Terminal Multiplexer
+ETC_DEPEND(tmux,tmux_plug)
 ETC_MODULE(tmux,`ETC_PKG(tmux)')
 
 ETC_MODULE_BEGIN(tmux_plug)
