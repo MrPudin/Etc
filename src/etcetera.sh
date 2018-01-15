@@ -53,13 +53,15 @@ then
     then
         for MODULE in $MODULES
         do
-            rm -f $WORK_DIR/mark $MODULE*
+            rm -f $WORK_DIR/mark/$MODULE*
         done
     else
         rm -rf $WORK_DIR/mark
         mkdir -p $WORK_DIR/mark
         MAKE_ARG="$MAKE_ARG UPDATE_DELAY:=0 UPDATE_COUNT:=999999"
     fi
+else
+    rm -f $WORK_DIR/mark/*
 fi
 
 

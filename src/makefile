@@ -24,7 +24,7 @@ all: update
 install:: $(PP_SOURCES)
 
 update:: $(PP_SOURCES)
-	find $(MARK_DIR) -type f -iname "*.update" -mtime $(UPDATE_DELAY) | head -n $(UPDATE_COUNT) | xargs rm -f
+	@find $(MARK_DIR) -type f -iname "*.update" -mtime $(UPDATE_DELAY) | head -n $(UPDATE_COUNT) | xargs rm -f
 	
 remove:: $(PP_SOURCES)
 
