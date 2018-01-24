@@ -14,12 +14,12 @@ ETC_PKG_REFRESH
 #Core Programs
 #Utilities
 ETC_MODULE_BEGIN(util)
-    ETC_PKG(htop)
     ETC_PKG(mutt)
     ETC_PKG(w3m)
     ETC_PKG(wget)
     ETC_PKG(aria2)
     ETC_PKG(gawk)
+    ETC_PKG(gpg)
 ETC_MODULE_END(util)
 
 #General Development
@@ -29,8 +29,8 @@ ETC_MODULE_BEGIN(dev)
     ETC_PKG(opencv)
     ETC_PKG(openssl)
     ETC_PKG(sqlite)
+    ETC_PKG(postgres)
 ETC_MODULE_END(dev)
-
 
 #Python Development
 ETC_MODULE_BEGIN(python)
@@ -41,21 +41,22 @@ ETC_MODULE_BEGIN(python)
 ETC_MODULE_END(python)
 
 #Perl Development
-ETC_DEPEND(perl,cpan)
-
 ETC_MODULE_BEGIN(perl)
     ETC_PKG(perl)
     ETC_PKG(perl6)
-ETC_MODULE_END(perl)
-
-ETC_MODULE_BEGIN(cpan)
     ETC_PKG(cpanm)
     ETC_PKG(App::cpanoutdated,cpan)
-ETC_MODULE_BEGIN(cpan)
+ETC_MODULE_END(perl)
 
 #Ruby Development
-ETC_MODULE(ruby,`ETC_PKG(ruby)')
-#
+ETC_DEPEND(ruby,util)
+ETC_MODULE_BEGIN(ruby)
+    ETC_PKG(ruby)
+
+    ETC_HOOK_INSTALL(gpg --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3; cat /tmp/make_rvm | bash -s stable --ruby)
+    ETC_RESOURCE(https://get.rvm.io, /tmp/make_rvm)
+ETC_MODULE_END(ruby)
+
 #MIT-Scheme Development
 ETC_MODULE(mit_scheme,`ETC_PKG(mit-scheme)')
 
@@ -75,7 +76,7 @@ ETC_MODULE_END(clang)
 
 #Microbit Development
 ETC_MODULE_BEGIN(microbit)
-    ETC_PKG(screcord)
+    ETC_PKG(srecord)
     ETC_PKG(yotta,pip3)
 ETC_MODULE_END(microbit)
 
@@ -83,6 +84,7 @@ ETC_MODULE_END(microbit)
 ETC_MODULE_BEGIN(arduino)
     ETC_PKG(caskroom/cask/arduino,brew)
 ETC_MODULE_END(arduino)
+
 
 #Z Shell
 ETC_DEPEND(zsh,zsh_plug)

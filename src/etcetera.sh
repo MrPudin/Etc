@@ -4,8 +4,8 @@
 # Etc CLI
 #
 
-WORK_DIR="~/.etc/.etc_work"
-MAKE_ARG="-C ~/.etc"
+WORK_DIR="$HOME/.etc/.etc_work"
+MAKE_ARG="-C $HOME/.etc"
 FORCE=false
 
 #Parse Options
@@ -28,12 +28,12 @@ do
             FORCE=true
 		 ;;
 		 d)
-			sed -e "/UPDATE_DELAY/s/[0-9]\{1,\}$/$OPTARG/" ~/.etc/makefile >/tmp/etc_makefile
-			mv -f /tmp/etc_makefile ~/.etc/makefile
+			sed -e "/UPDATE_DELAY/s/[0-9]\{1,\}$/$OPTARG/" $HOME/.etc/makefile >/tmp/etc_makefile
+			mv -f /tmp/etc_makefile $HOME/.etc/makefile
 		 ;;
 		 l)
-			sed -e "/UPDATE_COUNT/s/[0-9]\{1,\}$/$OPTARG/" ~/.etc/makefile >/tmp/etc_makefile
-			mv -f /tmp/etc_makefile ~/.etc/makefile
+			sed -e "/UPDATE_COUNT/s/[0-9]\{1,\}$/$OPTARG/" $HOME/.etc/makefile >/tmp/etc_makefile
+			mv -f /tmp/etc_makefile $HOME/.etc/makefile
 		 ;;
 	esac
 done
@@ -73,7 +73,10 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                time make $MAKE_ARG install_$MODULE
+                if $FORCE
+                then time make -i $MAKE_ARG install_$MODULE
+                else time make $MAKE_ARG install_$MODULE
+                fi
             done
         else
             time make $MAKE_ARG install
@@ -86,7 +89,10 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                time make $MAKE_ARG update_$MODULE
+                if $FORCE
+                then time make -i $MAKE_ARG update_$MODULE
+                else time make $MAKE_ARG update_$MODULE
+                fi
             done
         else
             time make $MAKE_ARG update
@@ -99,7 +105,10 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                time make -i $MAKE_ARG remove_$MODULE
+                if $FORCE
+                then time make -i $MAKE_ARG remove_$MODULE
+                else time make $MAKE_ARG remove_$MODULE
+                fi
             done
         else
             time make -i $MAKE_ARG remove
