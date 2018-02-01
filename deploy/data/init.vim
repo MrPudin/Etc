@@ -57,7 +57,7 @@ nnoremap <leader>sn ]s
 nnoremap <leader>sN [s
 nnoremap <leader>ss z=
 nnoremap <leader>p "+p
-nmap <leader>P :set paste!
+nmap <leader>P :set paste!<cr>
 nmap <leader>e :e 
 nmap <leader>l :lnext<cr>
 nmap <leader>L :lNext<cr>
