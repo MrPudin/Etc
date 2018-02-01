@@ -101,10 +101,11 @@ Plug 'wellle/targets.vim'
 Plug 'tpope/vim-rsi'
 Plug 'tmux-plugins/tmux-resurrect'
 Plug 'tpope/vim-abolish'
-Plug 'sirtaj/vim-openscad'
 
 "Syntax
 Plug 'keith/swift.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'sirtaj/vim-openscad'
 
 "Completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }

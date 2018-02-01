@@ -49,6 +49,8 @@ MODULES="$*"
 #Preprocess Markers
 if $FORCE
 then
+    MAKE_ARG="$MAKE_ARG -i"
+    
     if [ $MODULES ]
     then
         for MODULE in $MODULES
@@ -60,9 +62,10 @@ then
         mkdir -p $WORK_DIR/mark
         MAKE_ARG="$MAKE_ARG UPDATE_DELAY:=0 UPDATE_COUNT:=999999"
     fi
-else
-    rm -f $WORK_DIR/mark/*
 fi
+
+
+
 
 
 #Parse Subcommand
@@ -73,10 +76,7 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                if $FORCE
-                then time make -i $MAKE_ARG install_$MODULE
-                else time make $MAKE_ARG install_$MODULE
-                fi
+                time make $MAKE_ARG install_$MODULE
             done
         else
             time make $MAKE_ARG install
@@ -89,10 +89,8 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                if $FORCE
-                then time make -i $MAKE_ARG update_$MODULE
-                else time make $MAKE_ARG update_$MODULE
-                fi
+               time make $MAKE_ARG update_$MODULE
+                
             done
         else
             time make $MAKE_ARG update
@@ -105,13 +103,13 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                if $FORCE
-                then time make -i $MAKE_ARG remove_$MODULE
-                else time make $MAKE_ARG remove_$MODULE
-                fi
+                time make $MAKE_ARG remove_$MODULE
             done
         else
             time make -i $MAKE_ARG remove
+
+
+
         fi
 		printf "\033[1m\033[0;32m[etcetera]: REMOVAL COMPLETE\033[0m\n"
 		;;

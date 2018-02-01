@@ -278,7 +278,7 @@ ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade $1,dnl 
 ifelse(ETC_PKG_MANAGER,pip3,gem update $1,dnl 
-ifelse(ETC_PKG_MANAGER,cpan,cpan-outdated -p | cpanm $1))))))')
+ifelse(ETC_PKG_MANAGER,cpan,cpan-outdated -p | cpanm $1,)))))))')
 
 dnl Usage: ETC_PKG_UPDATE(<name>)
 dnl Expands to the command used to remove the package 'name' using the current
@@ -292,7 +292,7 @@ ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y remove $1,dnl
 ifelse(ETC_PKG_MANAGER,pip,pip uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,pip3,pip3 uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,pip3,gem uninstall $1,dnl
-ifelse(ETC_PKG_MANAGER,cpan,cpanm --uninstall $1)))))))')
+ifelse(ETC_PKG_MANAGER,cpan,cpanm --uninstall $1,)))))))')
 
 dnl Usage: ETC_PKG(<name>, [package manager])
 dnl Maintain package by 'name' using the 'package manager'. If package manager

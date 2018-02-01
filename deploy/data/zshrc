@@ -45,4 +45,3 @@ plugins=(
 ZSH_TMUX_AUTOSTART=true;
 DISABLE_AUTO_TITLE="true"
 source $ZSH/oh-my-zsh.sh
-
