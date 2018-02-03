@@ -34,8 +34,11 @@ set encoding=utf8
 set path+=/usr/local/include/,/usr/local/include/c++/7.1.0/,/usr/include/
 filetype plugin on
 filetype plugin indent on
-autocmd Filetype scheme set tabstop=2
-autocmd Filetype make set noexpandtab
+autocmd Filetype scheme setlocal tabstop=2
+autocmd Filetype make setlocal noexpandtab
+autocmd FileType crontab setlocal backupcopy=yes
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+autocmd FileType ruby setlocal tabstop=2
 
 "Display Settings
 set hlsearch
@@ -228,5 +231,3 @@ colorscheme solarized
 "Autocommands
 autocmd InsertLeave * pclose
 autocmd InsertEnter * call deoplete#enable()
-autocmd FileType crontab setl backupcopy=yes
-autocmd FileType java setlocal omnifunc=javacomplete#Complete

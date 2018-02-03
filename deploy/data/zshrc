@@ -1,11 +1,12 @@
-#
+
 # zshrc
 # ZSH Configuration file
 #
 
 #Paths
-export PATH=$HOME/bin:/usr/local/bin:$PATH
-export ZSH=/Users/zzy/.oh-my-zsh
+export PATH="$HOME/.rvm/bin:$HOME/bin:/usr/local/bin:$PATH"
+
+export ZSH="/Users/zzy/.oh-my-zsh"
 export MANPATH="/usr/local/man:$MANPATH"
 
 #Locale
@@ -41,7 +42,11 @@ plugins=(
     tmux
 )
 
-#Tmux Plugin
 ZSH_TMUX_AUTOSTART=true;
 DISABLE_AUTO_TITLE="true"
+
+#External Scripts
+source $HOME/.rvm/scripts/rvm #Ruby Version Manager
+
+#Oh My ZSH
 source $ZSH/oh-my-zsh.sh
