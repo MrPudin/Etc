@@ -93,22 +93,21 @@ Plug 'Shougo/denite.nvim'
 Plug 'chemzqm/unite-location'
 Plug 'neoclide/denite-git'
 Plug 'chemzqm/denite-extra'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
 Plug 'neomake/neomake'
 Plug 'mileszs/ack.vim'
+Plug 'tpope/vim-obsession'
+Plug 'tmux-plugins/tmux-resurrect'
+Plug 'christoomey/vim-tmux-navigator'
+
+"Editor
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
 Plug 'tpope/vim-characterize'
 Plug 'coderifous/textobj-word-column.vim'
-Plug 'tpope/vim-obsession'
 Plug 'wellle/targets.vim'
 Plug 'tpope/vim-rsi'
-Plug 'tmux-plugins/tmux-resurrect'
 Plug 'tpope/vim-abolish'
-
-"Syntax
-Plug 'keith/swift.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'sirtaj/vim-openscad'
+Plug 'haya14busa/incsearch.vim'
 
 "Completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -121,7 +120,12 @@ Plug 'Shougo/neco-syntax'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'ervandew/supertab'
-Plug 'haya14busa/incsearch.vim'
+
+"Syntax
+Plug 'keith/swift.vim'
+Plug 'leafgarland/typescript-vim'
+Plug 'sirtaj/vim-openscad'
+
 
 "Appearance
 Plug 'altercation/vim-colors-solarized'
@@ -225,9 +229,16 @@ let g:incsearch#magic = '\v'
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 
+
 "Plugin Display Setting
 colorscheme solarized
 
-"Autocommands
+"Tmux-Vim Navigator
+nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
+nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
+nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
+nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
+
+"Plugin Autocommands
 autocmd InsertLeave * pclose
 autocmd InsertEnter * call deoplete#enable()

@@ -55,7 +55,8 @@ ETC_MODULE_BEGIN(ruby)
 
     ETC_HOOK_INSTALL(gpg --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3; cat /tmp/make_rvm | bash -s stable --ruby)
     ETC_RESOURCE(https://get.rvm.io, /tmp/make_rvm)
-    
+
+    ETC_HOOK_INSTALL(bundle install)
     ETC_PKG(rails,gem)
 ETC_MODULE_END(ruby)
 

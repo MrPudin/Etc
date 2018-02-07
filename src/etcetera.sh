@@ -64,10 +64,6 @@ then
     fi
 fi
 
-
-
-
-
 #Parse Subcommand
 case $SUBCOMMAND in
 	install)
