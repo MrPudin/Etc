@@ -56,32 +56,32 @@ nnoremap zl L
 nnoremap zm M
 nnoremap H <c-o>
 nnoremap L <c-i>
-nmap <leader>S :setl spell!<cr>
-nnoremap <leader>sn ]s
-nnoremap <leader>sN [s
+nnoremap <leader>S :setl spell!<cr>
+nnoremap <leader>s[ ]s
+nnoremap <leader>s] [s
 nnoremap <leader>ss z=
 nnoremap <leader>p "+p
-nmap <leader>P :set paste!<cr>
-nmap <leader>e :e 
-nmap <leader>A :args 
-nmap <leader>aa :argadd 
-nmap <leader>ax :argdelete %<cr>
-nmap <leader>[ :next<cr>
-nmap <leader>] :Next<cr>
-nmap <leader>a: :argdo
-nmap <leader>ww :tabnew<cr>
-nmap <leader>wx :tabclose<cr>
-nmap <leader>w] :tabnext<cr>
-nmap <leader>w[ :tabNext<cr>
-nmap <leader>w[ :tabNext<cr>
-nmap <leader>w0 :tabrewind<cr>
-nmap <leader>w$ :tablast<cr>
-nmap <leader>w{ :tabmove -1<cr>
-nmap <leader>w} :tabmove +1<cr>
-nmap <silent> <Esc><Esc> :noh\|pclose<cr>
-nmap <leader>hl :setl background=light<cr>
-nmap <leader>hd :setl background=dark<cr>
-nmap <leader>\ :set colorcolumn=80<cr>
+nnoremap <leader>P :set paste!<cr>
+nnoremap <leader>e :e 
+nnoremap <leader>A :args 
+nnoremap <leader>aa :argadd 
+nnoremap <leader>ax :argdelete %<cr>
+nnoremap <leader>[ :next<cr>
+nnoremap <leader>] :Next<cr>
+nnoremap <leader>a: :argdo
+nnoremap <leader>ww :tabnew<cr>
+nnoremap <leader>wx :tabclose<cr>
+nnoremap <leader>w] :tabnext<cr>
+nnoremap <leader>w[ :tabNext<cr>
+nnoremap <leader>w[ :tabNext<cr>
+nnoremap <leader>w0 :tabrewind<cr>
+nnoremap <leader>w$ :tablast<cr>
+nnoremap <leader>w{ :tabmove -1<cr>
+nnoremap <leader>w} :tabmove +1<cr>
+nnoremap <leader>hl :setl background=light<cr>
+nnoremap <leader>hd :setl background=dark<cr>
+nnoremap <leader>\ :set colorcolumn=80<cr>
+nnoremap <silent> <Esc><Esc> :noh\|pclose\|cclose\|pclose<cr>
 
 "Plugin
 call plug#begin('~/.local/share/nvim/plugged')
@@ -142,13 +142,12 @@ call denite#custom#var('grep', 'final_opts', [])
 call denite#custom#var('file_rec', 'command',
 	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 
-nmap <c-p> :Denite file_rec<cr>
-nmap <leader>// :Denite grep<cr>
-nmap <leader>? :Denite outline<cr>
-nmap <leader>" :Denite register<cr>
-nmap <leader>ll :Denite location_list<cr>
-nmap <leader>: :Denite command<cr>
-nmap <leader>` :Denite jump<cr>
+nnoremap <c-p> :Denite file_rec<cr>
+nnoremap <c-g> :Denite grep<cr>
+nnoremap <c-;> :Denite outline<cr>
+nnoremap <c-l> :Denite location_list<cr>
+nnoremap <c-e> :Denite quickfix<cr>
+nnoremap <c-b> :Denite buffer<cr>
 
 "Deoplete
 let g:deoplete#enable_smart_case=1
@@ -161,27 +160,11 @@ let g:clang_library_path='/usr/local/opt/llvm/lib/libclang.dylib'
             "\"/usr/local/opt/llvm/lib/libclang.dylib"
 
 "Denite
-call denite#custom#map('normal', '<Esc>', '<C-c>',
-      \'noremap')
-call denite#custom#map('normal', 'i', '<denite:enter_mode:insert>',
+call denite#custom#map('normal', '<Esc>', '<denite:quit>',
       \'noremap')
 call denite#custom#map('normal', 'j', '<denite:move_to_next_line>',
       \'noremap')
 call denite#custom#map('normal', 'k', '<denite:move_to_previous_line>',
-      \'noremap')
-call denite#custom#map('normal', 'J', '<denite:jump_to_next_source>',
-      \'noremap')
-call denite#custom#map('normal', 'K', '<denite:jump_tp_previous_source>',
-      \'noremap')
-call denite#custom#map('normal', 'a', '<denite:append>',
-      \'noremap')
-call denite#custom#map('normal', 'A', '<denite:append_to_line>',
-      \'noremap')
-call denite#custom#map('normal', 'e', '<denite:move_caret_to_end_of_word>',
-      \'noremap')
-call denite#custom#map('normal', 'w', '<denite:move_caret_to_next_word>',
-      \'noremap')
-call denite#custom#map('normal', 'cc', '<denite:change_line>',
       \'noremap')
 call denite#custom#map('normal', 'cd', '<denite:change_path>',
       \'noremap')
@@ -199,19 +182,20 @@ call denite#custom#map('insert', '<C-x>', '<denite:do_action:split>',
       \'noremap')
 call denite#custom#map('insert', '<C-t>', '<denite:do_action:tabopen>',
       \'noremap')
-nmap <leader>cc :call deoplete#toggle()<cr>
+nnoremap <leader>cc :call deoplete#toggle()<cr>
 
 "Neomake
 call neomake#configure#automake('w')
+let g:neomake_highlight_lines = 1
 
 "Supertab
-let g:SuperTabDefaultCompletionType="context"
-let g:SuperTabContextDefaultCompletionType="<C-n>"
-let g:SuperTabLongestEnhanced=1
-let g:SuperTabCrMapping=1
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<C-n>"
+let g:SuperTabLongestEnhanced = 1
+let g:SuperTabCrMapping = 1
 
 "Ultisnips
-let g:UltiSnipsExpandTrigger="<C-x>"
+let g:UltiSnipsExpandTrigger = "<C-x>"
 
 "Airline
 let g:airline#extensions#tabline#enabled = 1
@@ -230,6 +214,8 @@ map ?  <Plug>(incsearch-backward)
 colorscheme solarized
 
 "Tmux-Vim Navigator
+let g:tmux_navigator_no_mappings = 1
+
 nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
 nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
 nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
