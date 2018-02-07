@@ -56,14 +56,13 @@ nnoremap zl L
 nnoremap zm M
 nnoremap H <c-o>
 nnoremap L <c-i>
+nmap <leader>S :setl spell!<cr>
 nnoremap <leader>sn ]s
 nnoremap <leader>sN [s
 nnoremap <leader>ss z=
 nnoremap <leader>p "+p
 nmap <leader>P :set paste!<cr>
 nmap <leader>e :e 
-nmap <leader>l :lnext<cr>
-nmap <leader>L :lNext<cr>
 nmap <leader>A :args 
 nmap <leader>aa :argadd 
 nmap <leader>ax :argdelete %<cr>
@@ -79,9 +78,7 @@ nmap <leader>w0 :tabrewind<cr>
 nmap <leader>w$ :tablast<cr>
 nmap <leader>w{ :tabmove -1<cr>
 nmap <leader>w} :tabmove +1<cr>
-nmap <leader>S :setl spell!<cr>
-nmap <Esc><Esc> :noh<cr>
-nmap <leader>/c :set ignorecase!<cr>
+nmap <silent> <Esc><Esc> :noh\|pclose<cr>
 nmap <leader>hl :setl background=light<cr>
 nmap <leader>hd :setl background=dark<cr>
 nmap <leader>\ :set colorcolumn=80<cr>
@@ -149,9 +146,9 @@ nmap <c-p> :Denite file_rec<cr>
 nmap <leader>// :Denite grep<cr>
 nmap <leader>? :Denite outline<cr>
 nmap <leader>" :Denite register<cr>
-nmap <leader>' :Denite location_list<cr>
+nmap <leader>ll :Denite location_list<cr>
 nmap <leader>: :Denite command<cr>
-nmap <leader>` :Denite jumps<cr>
+nmap <leader>` :Denite jump<cr>
 
 "Deoplete
 let g:deoplete#enable_smart_case=1
@@ -229,7 +226,6 @@ let g:incsearch#magic = '\v'
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 
-
 "Plugin Display Setting
 colorscheme solarized
 
@@ -240,5 +236,4 @@ nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
 nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
 
 "Plugin Autocommands
-autocmd InsertLeave * pclose
 autocmd InsertEnter * call deoplete#enable()
