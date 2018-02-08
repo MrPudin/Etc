@@ -82,13 +82,12 @@ nnoremap <leader>w} :tabmove +1<cr>
 nnoremap <leader>\ :set colorcolumn=80<cr>
 
 function! Binding_Unclutter()
-    noh
     pclose 
     cclose
     helpclose
 endfunction
 
-nnoremap <silent> <Esc><Esc> :call Binding_Unclutter()<cr>
+nnoremap <silent> <Esc><Esc> :noh\|call Binding_Unclutter()<cr>
 
 "Plugin
 call plug#begin('~/.local/share/nvim/plugged')
@@ -139,9 +138,9 @@ call plug#end()
 
 "Plugin Configuration
 "Plugin Display configuration
+colorscheme solarized
     " Usage: Display_Reload(('dark'|'light']))
 function! Display_Reload(mode)
-    colorscheme solarized
     if a:mode == 'dark'
         highlight SpellBad ctermfg=White ctermbg=Red
         highlight SpellCap ctermfg=White ctermbg=Yellow
