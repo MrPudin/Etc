@@ -56,6 +56,7 @@ nnoremap zl L
 nnoremap zm M
 nnoremap H <c-o>
 nnoremap L <c-i>
+nnoremap <leader>q :qa<cr>
 nnoremap <leader>S :setl spell!<cr>
 nnoremap <leader>s[ ]s
 nnoremap <leader>s] [s
@@ -78,10 +79,16 @@ nnoremap <leader>w0 :tabrewind<cr>
 nnoremap <leader>w$ :tablast<cr>
 nnoremap <leader>w{ :tabmove -1<cr>
 nnoremap <leader>w} :tabmove +1<cr>
-nnoremap <leader>hl :setl background=light<cr>
-nnoremap <leader>hd :setl background=dark<cr>
 nnoremap <leader>\ :set colorcolumn=80<cr>
-nnoremap <silent> <Esc><Esc> :noh\|pclose\|cclose\|pclose<cr>
+
+function! Binding_Unclutter()
+    noh
+    pclose 
+    cclose
+    helpclose
+endfunction
+
+nnoremap <silent> <Esc><Esc> :call Binding_Unclutter()<cr>
 
 "Plugin
 call plug#begin('~/.local/share/nvim/plugged')
@@ -131,6 +138,17 @@ Plug 'vim-airline/vim-airline-themes'
 call plug#end()
 
 "Plugin Configuration
+"Plugin Display configuration
+colorscheme solarized
+function! Display_Reload()
+    colorscheme solarized
+    highlight SpellBad ctermfg=white ctermbg=red
+    highlight SpellCap ctermfg=white ctermbg=yellow
+endfunction
+    
+nnoremap <leader>hl :setl background=light\|call Display_Reload()<cr>
+nnoremap <leader>hd :setl background=dark\|call Display_Reload()<cr>
+
 "Denite
 call denite#custom#var('grep', 'command', ['ag'])
 call denite#custom#var('grep', 'default_opts',
@@ -144,7 +162,7 @@ call denite#custom#var('file_rec', 'command',
 
 nnoremap <c-p> :Denite file_rec<cr>
 nnoremap <c-g> :Denite grep<cr>
-nnoremap <c-;> :Denite outline<cr>
+nnoremap <c-n> :Denite outline<cr>
 nnoremap <c-l> :Denite location_list<cr>
 nnoremap <c-e> :Denite quickfix<cr>
 nnoremap <c-b> :Denite buffer<cr>
@@ -167,8 +185,6 @@ call denite#custom#map('normal', 'j', '<denite:move_to_next_line>',
 call denite#custom#map('normal', 'k', '<denite:move_to_previous_line>',
       \'noremap')
 call denite#custom#map('normal', 'cd', '<denite:change_path>',
-      \'noremap')
-call denite#custom#map('normal', ',', '<denite:choose_action>',
       \'noremap')
 call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
       \'noremap')
@@ -210,8 +226,6 @@ let g:incsearch#magic = '\v'
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 
-"Plugin Display Setting
-colorscheme solarized
 
 "Tmux-Vim Navigator
 let g:tmux_navigator_no_mappings = 1
