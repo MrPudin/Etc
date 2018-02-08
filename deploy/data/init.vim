@@ -139,15 +139,21 @@ call plug#end()
 
 "Plugin Configuration
 "Plugin Display configuration
-colorscheme solarized
-function! Display_Reload()
+    " Usage: Display_Reload(('dark'|'light']))
+function! Display_Reload(mode)
     colorscheme solarized
-    highlight SpellBad ctermfg=white ctermbg=red
-    highlight SpellCap ctermfg=white ctermbg=yellow
+    if a:mode == 'dark'
+        highlight SpellBad ctermfg=White ctermbg=Red
+        highlight SpellCap ctermfg=White ctermbg=Yellow
+    elseif a:mode == 'light'
+        highlight SpellBad ctermfg=White ctermbg=DarkRed
+        highlight SpellCap ctermfg=White ctermbg=DarkYellow
+    endif
 endfunction
-    
-nnoremap <leader>hl :setl background=light\|call Display_Reload()<cr>
-nnoremap <leader>hd :setl background=dark\|call Display_Reload()<cr>
+
+call Display_Reload('dark')
+nnoremap <leader>hl :setl background=light\|call Display_Reload('light')<cr>
+nnoremap <leader>hd :setl background=dark\|call Display_Reload('dark')<cr>
 
 "Denite
 call denite#custom#var('grep', 'command', ['ag'])
@@ -202,6 +208,7 @@ nnoremap <leader>cc :call deoplete#toggle()<cr>
 
 "Neomake
 call neomake#configure#automake('w')
+let g:neomake_highlight_columns = 0
 let g:neomake_highlight_lines = 1
 
 "Supertab
