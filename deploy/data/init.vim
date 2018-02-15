@@ -192,7 +192,7 @@ call denite#custom#map('normal', 'j', '<denite:move_to_next_line>',
       \'noremap')
 call denite#custom#map('normal', 'k', '<denite:move_to_previous_line>',
       \'noremap')
-call denite#custom#map('insert', '<c-[>', '<denite:do_action:cd>',
+call denite#custom#map('insert', '<c-d>', '<denite:do_action:cd>',
       \'noremap')
 call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
       \'noremap')
