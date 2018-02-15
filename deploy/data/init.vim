@@ -80,6 +80,8 @@ nnoremap <leader>w$ :tablast<cr>
 nnoremap <leader>w{ :tabmove -1<cr>
 nnoremap <leader>w} :tabmove +1<cr>
 nnoremap <leader>\ :set colorcolumn=80<cr>
+nnoremap <leader>ju :cd -<cr>
+nnoremap <leader>jd :cd 
 
 function! Binding_Unclutter()
     pclose 
@@ -128,7 +130,7 @@ Plug 'ervandew/supertab'
 Plug 'keith/swift.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'sirtaj/vim-openscad'
-
+Plug 'vim-ruby/vim-ruby'
 
 "Appearance
 Plug 'altercation/vim-colors-solarized'
@@ -168,9 +170,10 @@ call denite#custom#var('file_rec', 'command',
 nnoremap <c-p> :Denite file_rec<cr>
 nnoremap <c-g> :Denite grep<cr>
 nnoremap <c-n> :Denite outline<cr>
-nnoremap <c-l> :Denite location_list<cr>
+nnoremap <c-s> :Denite location_list<cr>
 nnoremap <c-e> :Denite quickfix<cr>
 nnoremap <c-b> :Denite buffer<cr>
+nnoremap <c-l> :Denite directory_rec<cr>
 
 "Deoplete
 let g:deoplete#enable_smart_case=1
@@ -189,7 +192,7 @@ call denite#custom#map('normal', 'j', '<denite:move_to_next_line>',
       \'noremap')
 call denite#custom#map('normal', 'k', '<denite:move_to_previous_line>',
       \'noremap')
-call denite#custom#map('normal', 'cd', '<denite:change_path>',
+call denite#custom#map('insert', '<c-[>', '<denite:do_action:cd>',
       \'noremap')
 call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
       \'noremap')
