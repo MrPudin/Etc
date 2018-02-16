@@ -2,9 +2,6 @@
 " ~/etc/nvim/init.vim
 " NeoVim Configuration
 " 
-" Made by Zhu Zhan Yan
-" Copyright (c) 2017.
-" 
 
 "Editing Settings
 set autoindent
