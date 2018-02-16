@@ -48,11 +48,6 @@ vnoremap * "*y/\V<c-r>*<cr><esc>
 vnoremap # "*y?\V<c-r>*<cr><esc>
 nnoremap & :&&<cr>
 vnoremap & :&&<cr>
-nnoremap zh H
-nnoremap zl L
-nnoremap zm M
-nnoremap H <c-o>
-nnoremap L <c-i>
 nnoremap <leader>q :qa<cr>
 nnoremap <leader>S :setl spell!<cr>
 nnoremap <leader>s[ ]s
@@ -100,6 +95,7 @@ Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-obsession'
 Plug 'tmux-plugins/tmux-resurrect'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'roxma/vim-window-resize-easy'
 
 "Editor
 Plug 'tpope/vim-repeat'
