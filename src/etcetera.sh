@@ -4,7 +4,8 @@
 # Etc CLI
 #
 
-WORK_DIR="${ETC_DIR-"$HOME/.etc"}/.etc_work"
+ETC_DIR="${ETC_DIR-"$HOME/.etc"}"
+WORK_DIR="$ETC_DIR/.etc_work"
 MAKE_ARG="-C $WORK_DIR"
 FORCE=false
 
@@ -37,7 +38,7 @@ shift
 MODULES="$*"
 
 #Setup Workspace
-make -C $ETC_DIR install &>/dev/null
+make -C "$ETC_DIR" install &>/dev/null
 
 #Preprocess Markers
 if $FORCE
@@ -74,6 +75,11 @@ case $SUBCOMMAND in
 		;;
 	update)
 		printf "\033[1m\033[0;32m[etcetera]: UPDATE BEGIN\033[0m\n"
+
+        pushd "$ETC_DIR"
+        git pull -r
+        popd
+
         if [ "$MODULES" ]
         then
             for MODULE in $MODULES
