@@ -11,11 +11,18 @@ WORK_DIR := .etc_work/
 
 all: install docs
 
-install: src/etc.m4 src/makefile src/etcetera.sh deploy
+install: $(WORK_DIR)/src/etc.m4 $(WORK_DIR)/src/makefile /usr/local/bin/etcetera deploy
 	mkdir -p $(WORK_DIR)
-	cp -avf src/etc.m4 $(WORK_DIR)
-	cp -avf src/makefile $(WORK_DIR)
 	cp -avf deploy $(WORK_DIR)
+
+$(WORK_DIR)/src/etc.m4: $(WORK_DIR)
+	cp -avf src/etc.m4 $(WORK_DIR)
+$(WORK_DIR)/src/makefile: $(WORK_DIR)
+	cp -avf src/makefile $(WORK_DIR)
+$(WORK_DIR):
+	mkdir -p $(WORK_DIR)
+
+/usr/local/bin/etcetera:
 	cp -avf src/etcetera.sh /usr/local/bin/etcetera
 	chmod a+rx /usr/local/bin/etcetera
 
@@ -24,7 +31,7 @@ remove:
 
 clean:
 	rm -rf $(WORK_DIR)
-	rm docs/macro.txt
+	rm -f docs/macro.txt
 
 docs: docs/macro.txt
 

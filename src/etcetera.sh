@@ -5,7 +5,6 @@
 #
 
 WORK_DIR="${ETC_DIR-"$HOME/.etc"}/.etc_work"
-echo "$WORK_DIR"
 MAKE_ARG="-C $WORK_DIR"
 FORCE=false
 
@@ -36,6 +35,9 @@ shift
 
 #Read Modules 
 MODULES="$*"
+
+#Setup Workspace
+make -C $ETC_DIR install &>/dev/null
 
 #Preprocess Markers
 if $FORCE

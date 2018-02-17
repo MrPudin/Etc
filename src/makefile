@@ -29,12 +29,10 @@ clean:
 $(SOURCE_DIR)/%.mk: $(DEPLOY_DIR)/%.etc
 	m4 --include=. $< >$@
 
-$(PP_SOURCES): $(SOURCE_DIR) $(WORK_DIR) $(MARK_DIR)
+$(PP_SOURCES): $(SOURCE_DIR) $(MARK_DIR)
 
 $(SOURCE_DIR):
 	mkdir -p $(SOURCE_DIR)
-$(WORK_DIR):
-	mkdir -p $(WORK_DIR)
 $(MARK_DIR):
 	mkdir -p $(MARK_DIR)
 	
