@@ -100,14 +100,7 @@ dnl 'name'
 dnl
 define(ETC_UNMARK,`dnl
 ifelse(eval($# < 1),ETC_TRUE,`ETC_UNMARK(ETC_MOD)',dnl
-@rm -f ETC_TARGET($1)); rm -f ETC_TARGET($1).update')
-
-dnl Usage: ETC_MARK_UPDATED([name])
-dnl Marks 'name' status as updated.
-dnl 
-define(ETC_MARK_UPDATED,`dnl
-ifelse(eval($# < 1),ETC_TRUE,`ETC_MARK(ETC_MOD)',dnl
-@touch -f ETC_TARGET($1).update)')
+@rm -f ETC_TARGET($1))')
 
 #Fetch&ExtractMacros
 dnl Usage: ETC_RETRIEVE('url', 'destination')
@@ -207,14 +200,11 @@ patsubst(`$2',ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_EVOLVE_'ETC_MOD`__',_`_ETC_HOOK_EVOLVE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
 	ETC_MARK($1)
-	ETC_MARK_UPDATED($1)
-update_`'ETC_MOD:: ETC_TARGET($1).update
-ETC_TARGET($1).update: ifdef(`ETC_DEPENDENCY_'ETC_MOD`_UPDATE',`ETC_DEPENDENCY_'ETC_MOD`_UPDATE')
+update_`'ETC_MOD:: ifdef(`ETC_DEPENDENCY_'ETC_MOD`_UPDATE',`ETC_DEPENDENCY_'ETC_MOD`_UPDATE')
 patsubst(`$3',ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_UPDATE_'ETC_MOD`__',`__ETC_HOOK_UPDATE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_EVOLVE_'ETC_MOD`__',`__ETC_HOOK_EVOLVE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	ETC_MARK_UPDATED($1)
 remove_`'ETC_MOD:: ifdef(`ETC_DEPENDENCY_'ETC_MOD`_REMOVE',`ETC_DEPENDENCY_'ETC_MOD`_REMOVE')
 patsubst(`$4',ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_CREMATE_'ETC_MOD`__',`__ETC_HOOK_CREMATE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
@@ -243,13 +233,11 @@ dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_REFRESH,`dnl
 ETC_MODULE_BEGIN(`__ETC_PKG_REFRESH__')
-install update:: ETC_TARGET(ETC_PKG_MANAGER`.update')
-ETC_TARGET(ETC_PKG_MANAGER`.update'):
+install update:: 
 	dnl
 ifelse(ETC_PKG_MANAGER,brew,brew update,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get update,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast update,)))
-	ETC_MARK(`'ETC_PKG_MANAGER`.update')
 ETC_MODULE_END(`__ETC_PKG_REFRESH__')')
 
 dnl Usage: ETC_PKG_INSTALL(name)
@@ -391,7 +379,6 @@ make
 sudo make install
 popd')
 
-#TODO: Add support for checking last updated.
 
 dnl Usage: ETC_AUTL_REMOVE(<path>)
 dnl Expands to the commands used to remove the package 'name' using Autotools.
@@ -417,7 +404,6 @@ install: ETC_TARGET($1)
 update:
 	ETC_RETRIEVE($2, `$3/$1.tgz')
 	ETC_AUTL_INSTALL($3)
-	ETC_MARK($1)
 remove:
 	ETC_AUTL_REMOVE($3)
 	ETC_UNMARK($1)
@@ -425,7 +411,6 @@ ETC_TARGET($1):
 	@mkdir $3
 	ETC_RETRIEVE($2, `$3/$1.tgz')
 	ETC_AUTL_INSTALL($3)
-	ETC_MARK($1)
 )')
 
 ')

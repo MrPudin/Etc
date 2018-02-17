@@ -85,6 +85,9 @@ update - update deployment
 remove - remove deployment
 -h - Print usage infomation
 -f - Force action, regardless if already installed or updated
--l <nmodules> - Limit of how many modules to update at one time.
--d <ndays> - Check for updates only n days after last update.
 [modules] - Interact with these modules only
+
+[TODO]
+- self contained install system, no need for extra makefile
+- Parallel installations with make -j and file-locks for sycronisation
+- define package manager commands in a distinct, user configurable file
