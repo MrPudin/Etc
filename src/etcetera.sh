@@ -4,8 +4,9 @@
 # Etc CLI
 #
 
-WORK_DIR="$HOME/.etc/.etc_work"
-MAKE_ARG="-C $HOME/.etc"
+WORK_DIR="${ETC_DIR-"$HOME/.etc"}/.etc_work"
+echo "$WORK_DIR"
+MAKE_ARG="-C $WORK_DIR"
 FORCE=false
 
 #Parse Options
@@ -13,12 +14,12 @@ while getopts "hfl:d:" opt
 do
 	case $opt in
 		 h) 
-			echo "Usage: etcetera [-hfld] (install|update|remove) [modules]"
+			echo "Usage: etcetera [-hf] (install|update|remove) [modules]"
 			echo "install - install deployment"
 			echo "update - update deployment"
 			echo "remove - remove deployment"
 			echo "-h - Print usage infomation"
-			echo "-f - Force action, regardless if already action already completed"
+			echo "-f - Force action, regardless if already action already completed, or if there are any errors"
             echo "[modules] - Limit scope within modules only"
 			exit 0;
 		 ;;
@@ -89,7 +90,7 @@ case $SUBCOMMAND in
         then
             for MODULE in $MODULES
             do
-                time make $MAKE_ARG remove_$MODULE
+                time make -i $MAKE_ARG remove_$MODULE
             done
         else
             time make -i $MAKE_ARG remove

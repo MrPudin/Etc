@@ -65,7 +65,6 @@ ETC_MODULE_BEGIN(ruby)
     ETC_HOOK_INSTALL(gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3; cat /tmp/make_rvm | bash -s stable --ruby)
     ETC_RESOURCE(https://get.rvm.io, /tmp/make_rvm)
 
-    ETC_HOOK_INSTALL(bundle install)
     ETC_PKG(rails,gem)
 ETC_MODULE_END(ruby)
 
@@ -106,7 +105,7 @@ ETC_MODULE(zsh,`ETC_PKG(zsh)')
 
 ETC_MODULE_BEGIN(zsh_plug)
     ETC_HOOK_INSTALL(zsh /tmp/make_zplug)
-    ETC_HOOK_UPDATE(source ~/.zplug/init.zsh; zplug update)
+    ETC_HOOK_UPDATE(zsh -c "source ~/.zplug/init.zsh; zplug update")
     ETC_RESOURCE(https://raw.githubusercontent.com/zplug/installer/master/installer.zsh,/tmp/make_zplug)
 
     ETC_HIERARCHY(ETC_DIR_DEPLOY/data/zshrc,~/.zshrc)

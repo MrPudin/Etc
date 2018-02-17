@@ -9,7 +9,6 @@ ifdef(ETC_M4,,
 #Constants
 pushdef(ETC_TRUE, 1)
 pushdef(ETC_FALSE, 0)
-pushdef(ETC_DIR_WORK,.etc_work)
 pushdef(ETC_CHOMP,`patsubst($1,`\s*',)')
 pushdef(ETC_NEWLINE,`
 ')
@@ -71,7 +70,7 @@ define(ETC_IF_INSTALLED,`ifelse(ETC_INSTALLED($1),ETC_TRUE,$2,$3)')
 dnl Usage: ETC_TARGET(<name>)
 dnl Expands to the marker path of 'name'.
 dnl
-define(ETC_TARGET,`ETC_DIR_WORK`/mark/'ETC_MOD`_$1'')
+define(ETC_TARGET,``mark/'ETC_MOD`_$1'')
 
 dnl Usage: ETC_DEPEND(<dependency>,<dependent>)
 dnl Makes 'dependent' depend on 'dependency'
@@ -182,7 +181,6 @@ ifelse(eval($# < 1),ETC_TRUE,`ETC_UNHOOK(ETC_MOD)',dnl
 
 #Make Methods
 #Generics
-#TODO; Invergrate generic make generator into use in higher level macros below.
 dnl Usage: ETC_GEN_MAKE(name,install,update,remove)
 dnl Generates makefile rules for making current module for the given install, 
 dnl update dnl and removal command for 'name'
@@ -205,6 +203,7 @@ patsubst(`$3',ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_UPDATE_'ETC_MOD`__',`__ETC_HOOK_UPDATE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_EVOLVE_'ETC_MOD`__',`__ETC_HOOK_EVOLVE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
+	ETC_MARK($1)
 remove_`'ETC_MOD:: ifdef(`ETC_DEPENDENCY_'ETC_MOD`_REMOVE',`ETC_DEPENDENCY_'ETC_MOD`_REMOVE')
 patsubst(`$4',ETC_NEWLINE,ETC_NEWLINE	)
 	patsubst(ifdef(`__ETC_HOOK_CREMATE_'ETC_MOD`__',`__ETC_HOOK_CREMATE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
@@ -362,59 +361,6 @@ cp -avf $1 $2
 `dnl
 rm -rf $2
 ')')
-
-ifelse(`
-#Autotools #TODO:test if working
-#Autotools is disabled for the present being
-#TODO: Translate macro to use ETC_GEN_MAKE
-dnl Usage: ETC_AUTL_INSTALL(<path>)
-dnl Expands to the commands used to install the package 'name' using Autotools
-dnl from source to at 'path'
-dnl 
-define(ETC_AUTL_INSTALL,`dnl
-pushd $1
-ETC_EXTRACT_TGZ(*)
-./configure
-make
-sudo make install
-popd')
-
-
-dnl Usage: ETC_AUTL_REMOVE(<path>)
-dnl Expands to the commands used to remove the package 'name' using Autotools.
-dnl from source to at 'path'
-dnl 
-define(ETC_AUTL_REMOVE, `dnl
-pushd $1
-make uninstall
-popd
-rm -rf $1')
-
-dnl Usage: ETC_AUTL(<name>,<url>,[<path>])
-dnl Maintain 'name' using Autotool source pointed to by 'url'
-dnl If 'path' is not obmitted, move the source under 'path' directory
-dnl If 'name' is not installed, would install 'name' from source.
-dnl If 'name' update target is called, would reinstall 'name' from source
-dnl If the remove target is called, would remove 'name' using source.
-dnl' 
-define(ETC_AUTL,`dnl
-ifelse(eval($# < 3),ETC_TRUE,`ETC_AUTL($1, $2, ETC_DIR_WORK/autl-$1)',dnl
-.PHONY: install update remove
-install: ETC_TARGET($1)
-update:
-	ETC_RETRIEVE($2, `$3/$1.tgz')
-	ETC_AUTL_INSTALL($3)
-remove:
-	ETC_AUTL_REMOVE($3)
-	ETC_UNMARK($1)
-ETC_TARGET($1):
-	@mkdir $3
-	ETC_RETRIEVE($2, `$3/$1.tgz')
-	ETC_AUTL_INSTALL($3)
-)')
-
-')
-
 
 #Cleanup
 undefine(`ETC_MOD')
