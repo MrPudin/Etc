@@ -105,11 +105,10 @@ ETC_DEPEND(zsh,zsh_plug)
 ETC_MODULE(zsh,`ETC_PKG(zsh)')
 
 ETC_MODULE_BEGIN(zsh_plug)
-    ETC_HOOK_INSTALL(sh ~/.oh-my-zsh/tools/install.sh)
-    ETC_HOOK_UPDATE(sh ~/.oh-my-zsh/tools/upgrade.sh)
-    ETC_GIT(git://github.com/robbyrussell/oh-my-zsh.git,~/.oh-my-zsh)
+    ETC_HOOK_INSTALL(zsh /tmp/make_zplug)
+    ETC_HOOK_UPDATE(source ~/.zplug/init.zsh; zplug update)
+    ETC_RESOURCE(https://raw.githubusercontent.com/zplug/installer/master/installer.zsh,/tmp/make_zplug)
 
-    ETC_HOOK_INSTALL(sudo chsh -s /bin/zsh zzy)
     ETC_HIERARCHY(ETC_DIR_DEPLOY/data/zshrc,~/.zshrc)
 ETC_MODULE_END(zsh_plug)
 

@@ -4,13 +4,13 @@
 #
 
 #Paths
-export PATH="$HOME/.rvm/bin:$HOME/bin:/usr/local/bin:$PATH"
-
-export ZSH="/Users/zzy/.oh-my-zsh"
+export PATH="$HOME/.rvm/bin:$PATH"
+export PATH="$HOME/bin:/usr/local/bin:$PATH"
 export MANPATH="/usr/local/man:$MANPATH"
+export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 #Locale
-export LANG=en_US.UTF-8
+export LANG="en_US.UTF-8"
 
 #Programs
 if [[ -n $SSH_CONNECTION ]]; then
@@ -20,33 +20,46 @@ else
     export EDITOR='nvim'
     export VISUAL="nvim"
 fi
+alias vim="nvim"
+alias py="python3"
 
 # Compilation flags
 export ARCHFLAGS="-arch x86_64"
 
-# SSH Key Path export SSH_KEY_PATH="~/.ssh/rsa_id"
-alias vim="nvim"
-alias py="python3"
-
 #Plugin Configuration
-ZSH_THEME="robbyrussell"
-DISABLE_AUTO_UPDATE="true"
 HIST_STAMPS="dd/mm/yyyy"
+HISTSIZE=10000000
+SAVEHIST=10000000
+setopt inc_append_history
+setopt share_history
 
-plugins=(
-    vi-mode
-    git-fast
-    osx
-    perl
-    python
-    tmux
-)
+source ~/.zplug/init.zsh
+zplug "plugins/vi-mode", from:oh-my-zsh
+zplug "plugins/git-fast", from:oh-my-zsh
+zplug "plugins/tmux", from:oh-my-zsh
+zplug "mafredri/zsh-async"
+zplug "miekg/lean", as:theme, use:"lean.plugin.zsh"
 
-ZSH_TMUX_AUTOSTART=true;
-DISABLE_AUTO_TITLE="true"
+ZSH_TMUX_AUTOSTART=true
+
+#Lean Prompt Configuration
+prompt_lean_python_venv_status()
+{
+    if [ -n "$VIRTUAL_ENV" ]
+    then 
+        printf " venv "
+    fi
+}
+
+PROMPT_LEAN_TMUX=">"
+PROMPT_LEAN_VIMODE="1"
+PROMPT_LEAN_NOTITLE="1"
+PROMPT_LEAN_NOTITLE="1"
+PROMPT_LEAN_COLOR1="136"
+PROMPT_LEAN_COLOR2="61"
+PROMPT_LEAN_RIGHT="prompt_lean_python_venv_status"
+
+zplug load
 
 #External Scripts
 source $HOME/.rvm/scripts/rvm #Ruby Version Manager
-
-#Oh My ZSH
-source $ZSH/oh-my-zsh.sh

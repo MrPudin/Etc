@@ -18,22 +18,12 @@ do
 			echo "update - update deployment"
 			echo "remove - remove deployment"
 			echo "-h - Print usage infomation"
-			echo "-f - Force action, regardless if already installed or updated"
-			echo "-l <nmodules> - Limit of how many modules to update at one time."
-			echo "-d <ndays> - Check for updates only n days after last update."
-            echo "[modules] - Interact with these modules only"
+			echo "-f - Force action, regardless if already action already completed"
+            echo "[modules] - Limit scope within modules only"
 			exit 0;
 		 ;;
 		 f)
             FORCE=true
-		 ;;
-		 d)
-			sed -e "/UPDATE_DELAY/s/[0-9]\{1,\}$/$OPTARG/" $HOME/.etc/makefile >/tmp/etc_makefile
-			mv -f /tmp/etc_makefile $HOME/.etc/makefile
-		 ;;
-		 l)
-			sed -e "/UPDATE_COUNT/s/[0-9]\{1,\}$/$OPTARG/" $HOME/.etc/makefile >/tmp/etc_makefile
-			mv -f /tmp/etc_makefile $HOME/.etc/makefile
 		 ;;
 	esac
 done
@@ -103,9 +93,6 @@ case $SUBCOMMAND in
             done
         else
             time make -i $MAKE_ARG remove
-
-
-
         fi
 		printf "\033[1m\033[0;32m[etcetera]: REMOVAL COMPLETE\033[0m\n"
 		;;
