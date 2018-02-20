@@ -27,11 +27,12 @@ alias py="python3"
 export ARCHFLAGS="-arch x86_64"
 
 #Plugin Configuration
+HISTFILE="$HOME/.zsh_history"
 HIST_STAMPS="dd/mm/yyyy"
-HISTSIZE=10000000
-SAVEHIST=10000000
-setopt inc_append_history
+HISTSIZE=100000
+SAVEHIST=100000
 setopt share_history
+setopt inc_append_history
 
 source ~/.zplug/init.zsh
 zplug "plugins/vi-mode", from:oh-my-zsh
