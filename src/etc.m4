@@ -28,13 +28,18 @@ define(ETC_INSTALLED, `ifelse(ETC_CHOMP(esyscmd(command -v $1)),,ETC_FALSE,ETC_T
 define(ETC_EXISTS, `syscmd(test -e $1)ifelse(sysval,0,ETC_TRUE,ETC_FALSE)')
 define(ETC_BASENAME,`regexp($1,`[a-zA-Z0-9_\.\-]*$',`\&')')
 
-dnl Usage: ETC_SUDO
+dnl Usage: ETC_SUOD_SETUP
 dnl Expands to the makefile runs to setup the use of sudo for the process,
 dnl where sudo is required.
-define(ETC_SUDO,`dnl
+define(ETC_SUOD_SETUP,`dnl
 install update remove:: 
 	sudo printf "\033[1m\033[31mSUDO USE ENABLED.\033[0m\n"
 ')
+
+dnl Usage: ETC_SUDO
+dnl Expands to the sudo command with the approriate flags. 
+dnl Used when installing with sudo
+define(ETC_SUDO,`sudo -E')
 
 dnl Usage: ETC_MODULE_BEGIN(<name>)
 dnl        <implementation>
@@ -235,8 +240,8 @@ ETC_MODULE_BEGIN(`__ETC_PKG_REFRESH__')
 install update:: 
 	dnl
 ifelse(ETC_PKG_MANAGER,brew,brew update,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get update,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast update,)))
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO() apt-get update,dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO() apt-fast update,)))
 ETC_MODULE_END(`__ETC_PKG_REFRESH__')')
 
 dnl Usage: ETC_PKG_INSTALL(name)
@@ -246,10 +251,10 @@ dnl If selected package manager isnt supported, would expand to an empty string
 dnl
 define(ETC_PKG_INSTALL,`dnl
 ifelse(ETC_PKG_MANAGER,brew,brew install $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y install $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y install $1,dnl
-ifelse(ETC_PKG_MANAGER,pip,pip install $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,pip3 install $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO() apt-get -y install $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO() apt-fast -y install $1,dnl
+ifelse(ETC_PKG_MANAGER,pip,ETC_SUDO() pip install $1,dnl
+ifelse(ETC_PKG_MANAGER,pip3,ETC_SUDO() pip3 install $1,dnl
 ifelse(ETC_PKG_MANAGER,gem,gem install $1,dnl
 ifelse(ETC_PKG_MANAGER,cpan,cpanm -S --installdeps $1,)))))))')
 
@@ -260,10 +265,10 @@ dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_UPDATE,`dnl
 ifelse(ETC_PKG_MANAGER,brew,-brew upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade $1,dnl 
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO() apt-get -y upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO() apt-fast -y upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,pip,ETC_SUDO() pip install --upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,pip3,ETC_SUDO() pip3 install --upgrade $1,dnl 
 ifelse(ETC_PKG_MANAGER,gem,gem update $1,dnl 
 ifelse(ETC_PKG_MANAGER,cpan,cpan-outdated -p | cpanm $1,)))))))')
 
@@ -274,10 +279,10 @@ dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_REMOVE,`dnl
 ifelse(ETC_PKG_MANAGER,brew,brew uninstall $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,sudo apt-get -y remove $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,sudo apt-fast -y remove $1,dnl
-ifelse(ETC_PKG_MANAGER,pip,pip uninstall $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,pip3 uninstall $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO() apt-get -y remove $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO() apt-fast -y remove $1,dnl
+ifelse(ETC_PKG_MANAGER,pip,ETC_SUDO() pip uninstall $1,dnl
+ifelse(ETC_PKG_MANAGER,pip3,ETC_SUDO() pip3 uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,gem,gem uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,cpan,cpanm --uninstall $1,)))))))')
 
