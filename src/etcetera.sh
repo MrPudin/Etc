@@ -76,9 +76,9 @@ case $SUBCOMMAND in
 	update)
 		printf "\033[1m\033[0;32m[etcetera]: UPDATE BEGIN\033[0m\n"
 
-        pushd "$ETC_DIR"
+        pushd "$ETC_DIR">/dev/null
         git pull -r
-        popd
+        popd>/dev/null
 
         if [ "$MODULES" ]
         then
