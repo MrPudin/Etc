@@ -89,5 +89,6 @@ remove - remove deployment
 
 [TODO]
 - self contained install system, no need for extra makefile
+- self cleaning of the work directory when the etc respostiory updates
 - Parallel installations with make -j and file-locks for sycronisation
 - define package manager commands in a distinct, user configurable file
