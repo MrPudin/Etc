@@ -6,7 +6,7 @@
 include(etc.m4)
 
 #Use Sudo if Necessary
-ETC_SUDO
+ETC_SUDO_SETUP
 
 #Update Package Manager if Necessary
 ETC_PKG_REFRESH
