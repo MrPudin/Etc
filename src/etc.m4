@@ -39,7 +39,7 @@ install update remove::
 dnl Usage: ETC_SUDO
 dnl Expands to the sudo command with the approriate flags. 
 dnl Used when installing with sudo
-define(ETC_SUDO,`sudo -E')
+define(ETC_SUDO,`sudo -H -E')
 
 dnl Usage: ETC_MODULE_BEGIN(<name>)
 dnl        <implementation>
