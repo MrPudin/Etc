@@ -96,6 +96,7 @@ Plug 'tpope/vim-obsession'
 Plug 'tmux-plugins/tmux-resurrect'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'roxma/vim-window-resize-easy'
+Plug 'mbbill/undotree'
 
 "Editor
 Plug 'tpope/vim-repeat'
