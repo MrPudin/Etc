@@ -47,6 +47,7 @@ ZSH_TMUX_AUTOSTART=true
 #Lean Prompt Configuration
 prompt_lean_python_venv_status()
 {
+    # Support for Python Virtual Enviroment
     if [ -n "$VIRTUAL_ENV" ]
     then 
         printf " venv "
@@ -61,7 +62,41 @@ PROMPT_LEAN_COLOR1="136"
 PROMPT_LEAN_COLOR2="61"
 PROMPT_LEAN_RIGHT="prompt_lean_python_venv_status"
 
-zplug load
+zplug load #Load Plugins
+
+# Lazy Load Implmentation
+# Usage: lazy(load_cmd, activator, activators...)
+lazy_load()
+{
+    load_cmd="$1";shift
+    activator="$2";shift
+
+    for act_alias in $*
+    do
+        unalias "$act_alias"
+    done
+
+    eval " $load_cmd"
+    eval " $activator"
+}
+
+# Usage: lazy(load_cmd, activators...)
+# Mitigates the unnecessary overhead of the the 'load_cmd' on startup, only
+# runs the load command if the user touches any of the 'activators' aliases,
+# then which the lazy loader actually loads the load command.
+# activators is a space seperated string of activation alias that will cause
+# the load command to run, thereafter activator command will run.
+# 
+lazy()
+{
+    load_cmd="$1"
+    shift
+    for activator in $*
+    do
+        load_alias="`printf 'lazy_load "%s" "%s" %s\n' "$load_cmd" "$activator" "$*"`"
+        alias "$activator"="$load_alias"
+    done 
+}
 
 #External Scripts
-source $HOME/.rvm/scripts/rvm #Ruby Version Manager
+lazy "source $HOME/.rvm/scripts/rvm" rvm ruby
