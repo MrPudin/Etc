@@ -4,7 +4,7 @@
 # Etc CLI
 #
 
-ETC_DIR="${ETC_DIR-"$HOME/.etc"}"
+ETC_DIR="${ETC_DIR-$HOME/.etc}"
 WORK_DIR="$ETC_DIR/.etc_work"
 MAKE_ARG="-C $WORK_DIR"
 FORCE=false
@@ -77,9 +77,12 @@ case $SUBCOMMAND in
 		printf "\033[1m\033[0;32m[etcetera]: UPDATE BEGIN\033[0m\n"
 
         pushd "$ETC_DIR">/dev/null
-        git pull -r
+        git pull -r || 
+            printf "Updating from upsteam failed. Continuing without updating...\n" 
         popd>/dev/null
-
+        
+        rm -f "$WORK_DIR"/source/* # Remove outdated generated sources to.
+            
         if [ "$MODULES" ]
         then
             for MODULE in $MODULES

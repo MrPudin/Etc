@@ -25,7 +25,8 @@ set smarttab
 set tabstop=4
 set wildmenu
 set wildmode=longest,list,full
-"
+set cursorline
+
 "File Settings
 set encoding=utf8
 set path+=/usr/local/include/,/usr/local/include/c++/7.1.0/,/usr/include/
@@ -107,6 +108,7 @@ Plug 'wellle/targets.vim'
 Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-abolish'
 Plug 'haya14busa/incsearch.vim'
+Plug 'tpope/vim-unimpaired'
 
 "Completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
