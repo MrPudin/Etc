@@ -51,12 +51,9 @@ nnoremap & :&&<cr>
 vnoremap & :&&<cr>
 nnoremap <leader>q :qa<cr>
 nnoremap <leader>S :setl spell!<cr>
-nnoremap <leader>s[ ]s
-nnoremap <leader>s] [s
 nnoremap <leader>ss z=
 nnoremap <leader>p "+p
 nnoremap <leader>P :set paste!<cr>
-nnoremap <leader>e :e 
 nnoremap <leader>A :args 
 nnoremap <leader>aa :argadd 
 nnoremap <leader>ax :argdelete %<cr>
@@ -114,6 +111,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-jedi'
+Plug 'dcarlitux/eoplete-ternjs'
 Plug 'artur-shaik/vim-javacomplete2'
 Plug 'landaire/deoplete-swift'
 Plug 'Rip-Rip/clang_complete'
@@ -175,7 +173,7 @@ nnoremap <c-l> :Denite directory_rec<cr>
 let g:deoplete#enable_smart_case=1
 let g:deoplete#auto_complete_delay=40
 
-""Clang Complete
+"Clang Complete
 let g:clang_library_path='/usr/local/opt/llvm/lib/libclang.dylib'
 "TODO: Make this portable to linux
 "let g:deoplete#sources#clang#libclang_path=
