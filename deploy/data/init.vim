@@ -69,7 +69,8 @@ nnoremap <leader>w0 :tabrewind<cr>
 nnoremap <leader>w$ :tablast<cr>
 nnoremap <leader>w{ :tabmove -1<cr>
 nnoremap <leader>w} :tabmove +1<cr>
-nnoremap <leader>\ :set colorcolumn=80<cr>
+nnoremap <leader>\ :set colorcolumn=80<cr> :set cursorline<cr>
+nnoremap <leader>\| :set colorcolumn=0<cr> :set nocursorline<cr>
 nnoremap <leader>ju :cd -<cr>
 nnoremap <leader>jd :cd 
 
