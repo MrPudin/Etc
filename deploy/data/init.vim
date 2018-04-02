@@ -164,7 +164,7 @@ call denite#custom#map('normal', 'j', '<denite:move_to_next_line>',
       \'noremap')
 call denite#custom#map('normal', 'k', '<denite:move_to_previous_line>',
       \'noremap')
-call denite#custom#map('insert', '<c-d>', '<denite:do_action:cd>',
+call denite#custom#map('insert', 'gd', '<denite:do_action:cd>',
       \'noremap')
 call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
       \'noremap')
@@ -185,6 +185,32 @@ nnoremap <c-l> :Denite location_list<cr>
 nnoremap <c-k> :Denite quickfix<cr>
 nnoremap <c-b> :Denite buffer<cr>
 nnoremap <c-j> :Denite directory_rec<cr>
+
+" Denite Git
+nnoremap <leader>vv :Denite gitstatus
+nnoremap <leader>vl :Denite gitlog
+nnoremap <leader>vb :Denite gitbranch
+call denite#custom#map(
+      \ 'normal',
+      \ 'mm',
+      \ '<denite:do_action:add>',
+      \ 'noremap'
+      \)
+
+" Actually git diff
+call denite#custom#map(
+      \ 'normal',
+      \ 'p',
+      \ '<denite:do_action:delete>',
+      \ 'noremap'
+      \)
+
+call denite#custom#map(
+      \ 'normal',
+      \ 'EE',
+      \ '<denite:do_action:reset>',
+      \ 'noremap'
+      \) 
 
 "Deoplete
 nnoremap <leader>cc :call deoplete#toggle()<cr>
