@@ -83,8 +83,7 @@ call plug#begin('~/.local/share/nvim/plugged')
 "Utility
 Plug 'Shougo/denite.nvim'
 Plug 'chemzqm/unite-location'
-Plug 'neoclide/denite-git'
-Plug 'chemzqm/denite-extra'
+Plug 'tpope/vim-fugitive'
 Plug 'neomake/neomake'
 Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-obsession'
@@ -110,6 +109,7 @@ Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-jedi'
 Plug 'carlitux/deoplete-ternjs'
 Plug 'artur-shaik/vim-javacomplete2'
+
 Plug 'landaire/deoplete-swift'
 Plug 'Rip-Rip/clang_complete'
 Plug 'Shougo/neco-syntax'
@@ -185,32 +185,6 @@ nnoremap <c-l> :Denite location_list<cr>
 nnoremap <c-k> :Denite quickfix<cr>
 nnoremap <c-b> :Denite buffer<cr>
 nnoremap <c-j> :Denite directory_rec<cr>
-
-" Denite Git
-nnoremap <leader>vv :Denite gitstatus<cr>
-nnoremap <leader>vl :Denite gitlog<cr>
-nnoremap <leader>vb :Denite gitbranch<cr>
-call denite#custom#map(
-      \ 'normal',
-      \ 'mm',
-      \ '<denite:do_action:add>',
-      \ 'noremap'
-      \)
-
-" Actually git diff
-call denite#custom#map(
-      \ 'normal',
-      \ 'p',
-      \ '<denite:do_action:delete>',
-      \ 'noremap'
-      \)
-
-call denite#custom#map(
-      \ 'normal',
-      \ 'EE',
-      \ '<denite:do_action:reset>',
-      \ 'noremap'
-      \) 
 
 "Deoplete
 nnoremap <leader>cc :call deoplete#toggle()<cr>
