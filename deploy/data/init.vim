@@ -25,6 +25,7 @@ set tabstop=4
 set wildmenu
 set wildmode=longest,list,full
 set lazyredraw
+set splitbelow
 
 "File Settings
 set encoding=utf8
