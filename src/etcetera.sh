@@ -38,7 +38,7 @@ shift
 MODULES="$*"
 
 #Update & Setup Workspace
-( cd "$ETC_DIR" && git pull -r ) || 
+( cd "$ETC_DIR" && git pull -r && rm "$WORK_DIR/source/core.mk") || 
     printf "Updating from upsteam failed. Continuing without updating...\n" 
 make -C "$ETC_DIR" work
 
