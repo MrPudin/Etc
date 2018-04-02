@@ -19,13 +19,12 @@ set shiftwidth=4
 set shortmess+=c
 set showtabline=2
 set smartcase
-set smartcase
 set smartindent
 set smarttab
 set tabstop=4
 set wildmenu
 set wildmode=longest,list,full
-set cursorline
+set lazyredraw
 
 "File Settings
 set encoding=utf8
@@ -71,15 +70,12 @@ nnoremap <leader>w{ :tabmove -1<cr>
 nnoremap <leader>w} :tabmove +1<cr>
 nnoremap <leader>\ :set colorcolumn=80<cr> :set cursorline<cr>
 nnoremap <leader>\| :set colorcolumn=0<cr> :set nocursorline<cr>
-nnoremap <leader>ju :cd -<cr>
-nnoremap <leader>jd :cd 
 
 function! Binding_Unclutter()
     pclose 
     cclose
     helpclose
 endfunction
-
 nnoremap <silent> <Esc><Esc> :noh\|call Binding_Unclutter()<cr>
 
 "Plugin
@@ -162,25 +158,6 @@ call denite#custom#var('grep', 'final_opts', [])
 call denite#custom#var('file_rec', 'command',
 	\ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
 
-nnoremap <c-p> :Denite file_rec<cr>
-nnoremap <c-g> :Denite grep<cr>
-nnoremap <c-n> :Denite outline<cr>
-nnoremap <c-s> :Denite location_list<cr>
-nnoremap <c-e> :Denite quickfix<cr>
-nnoremap <c-b> :Denite buffer<cr>
-nnoremap <c-l> :Denite directory_rec<cr>
-
-"Deoplete
-let g:deoplete#enable_smart_case=1
-let g:deoplete#auto_complete_delay=40
-
-"Clang Complete
-let g:clang_library_path='/usr/local/opt/llvm/lib/libclang.dylib'
-"TODO: Make this portable to linux
-"let g:deoplete#sources#clang#libclang_path=
-            "\"/usr/local/opt/llvm/lib/libclang.dylib"
-
-"Denite
 call denite#custom#map('normal', '<Esc>', '<denite:quit>',
       \'noremap')
 call denite#custom#map('normal', 'j', '<denite:move_to_next_line>',
@@ -201,7 +178,25 @@ call denite#custom#map('insert', '<C-x>', '<denite:do_action:split>',
       \'noremap')
 call denite#custom#map('insert', '<C-t>', '<denite:do_action:tabopen>',
       \'noremap')
+
+nnoremap <c-p> :Denite file_rec<cr>
+nnoremap <c-n> :Denite outline<cr>
+nnoremap <c-l> :Denite location_list<cr>
+nnoremap <c-k> :Denite quickfix<cr>
+nnoremap <c-b> :Denite buffer<cr>
+nnoremap <c-j> :Denite directory_rec<cr>
+
+"Deoplete
 nnoremap <leader>cc :call deoplete#toggle()<cr>
+let g:deoplete#enable_smart_case=1
+let g:deoplete#auto_complete_delay=40
+
+"Clang Complete
+let g:clang_library_path='/usr/local/opt/llvm/lib/libclang.dylib'
+"TODO: Make this portable to linux
+"let g:deoplete#sources#clang#libclang_path=
+            "\"/usr/local/opt/llvm/lib/libclang.dylib"
+
 
 "Neomake
 call neomake#configure#automake('w')
@@ -226,18 +221,20 @@ let g:airline_powerline_fonts = 1
 
 "Incsearch
 let g:incsearch#magic = '\v'
-
 map /  <Plug>(incsearch-forward)
 map ?  <Plug>(incsearch-backward)
 
 
 "Tmux-Vim Navigator
 let g:tmux_navigator_no_mappings = 1
+nnoremap <silent> <M-w>h :TmuxNavigateLeft<cr>
+nnoremap <silent> <M-w>j :TmuxNavigateDown<cr>
+nnoremap <silent> <M-w>k :TmuxNavigateUp<cr>
+nnoremap <silent> <M-w>l :TmuxNavigateRight<cr>
 
-nnoremap <silent> <C-w>h :TmuxNavigateLeft<cr>
-nnoremap <silent> <C-w>j :TmuxNavigateDown<cr>
-nnoremap <silent> <C-w>k :TmuxNavigateUp<cr>
-nnoremap <silent> <C-w>l :TmuxNavigateRight<cr>
+" Ack - Ag grep
+let g:ackprg='ag --vimgrep'
+nnoremap <c-g> :Ack! 
 
 "Plugin Autocommands
 autocmd InsertEnter * call deoplete#enable()
