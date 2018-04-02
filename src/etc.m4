@@ -253,8 +253,8 @@ define(ETC_PKG_INSTALL,`dnl
 ifelse(ETC_PKG_MANAGER,brew,brew install $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO apt-get -y install $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO apt-fast -y install $1,dnl
-ifelse(ETC_PKG_MANAGER,pip,ETC_SUDO pip install $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,ETC_SUDO pip3 install $1,dnl
+ifelse(ETC_PKG_MANAGER,pip,pip install $1,dnl
+ifelse(ETC_PKG_MANAGER,pip3,pip3 install $1,dnl
 ifelse(ETC_PKG_MANAGER,gem,gem install $1,dnl
 ifelse(ETC_PKG_MANAGER,cpan,cpanm -S --installdeps $1,)))))))')
 
@@ -267,8 +267,8 @@ define(ETC_PKG_UPDATE,`dnl
 ifelse(ETC_PKG_MANAGER,brew,-brew upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO apt-get -y upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO apt-fast -y upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,pip,ETC_SUDO pip install --upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,ETC_SUDO pip3 install --upgrade $1,dnl 
+ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade $1,dnl 
 ifelse(ETC_PKG_MANAGER,gem,gem update $1,dnl 
 ifelse(ETC_PKG_MANAGER,cpan,cpan-outdated -p | cpanm $1,)))))))')
 
@@ -279,10 +279,10 @@ dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_REMOVE,`dnl
 ifelse(ETC_PKG_MANAGER,brew,brew uninstall $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO() apt-get -y remove $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO() apt-fast -y remove $1,dnl
-ifelse(ETC_PKG_MANAGER,pip,ETC_SUDO() pip uninstall $1,dnl
-ifelse(ETC_PKG_MANAGER,pip3,ETC_SUDO() pip3 uninstall $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO apt-get -y remove $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO apt-fast -y remove $1,dnl
+ifelse(ETC_PKG_MANAGER,pip,pip uninstall $1,dnl
+ifelse(ETC_PKG_MANAGER,pip3,pip3 uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,gem,gem uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,cpan,cpanm --uninstall $1,)))))))')
 
