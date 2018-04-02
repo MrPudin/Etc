@@ -37,8 +37,10 @@ shift
 #Read Modules 
 MODULES="$*"
 
-#Setup Workspace
-make -C "$ETC_DIR" install &>/dev/null
+#Update & Setup Workspace
+( cd "$ETC_DIR" && git pull -r ) || 
+    printf "Updating from upsteam failed. Continuing without updating...\n" 
+make -C "$ETC_DIR" work
 
 #Preprocess Markers
 if $FORCE
@@ -76,13 +78,6 @@ case $SUBCOMMAND in
 	update)
 		printf "\033[1m\033[0;32m[etcetera]: UPDATE BEGIN\033[0m\n"
 
-        pushd "$ETC_DIR">/dev/null
-        git pull -r || 
-            printf "Updating from upsteam failed. Continuing without updating...\n" 
-        popd>/dev/null
-        
-        rm -f "$WORK_DIR"/source/* # Remove outdated generated sources to.
-            
         if [ "$MODULES" ]
         then
             for MODULE in $MODULES
