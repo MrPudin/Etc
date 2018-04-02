@@ -108,7 +108,7 @@ Plug 'tpope/vim-unimpaired'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-jedi'
-Plug 'dcarlitux/eoplete-ternjs'
+Plug 'carlitux/deoplete-ternjs'
 Plug 'artur-shaik/vim-javacomplete2'
 Plug 'landaire/deoplete-swift'
 Plug 'Rip-Rip/clang_complete'
@@ -187,9 +187,9 @@ nnoremap <c-b> :Denite buffer<cr>
 nnoremap <c-j> :Denite directory_rec<cr>
 
 " Denite Git
-nnoremap <leader>vv :Denite gitstatus
-nnoremap <leader>vl :Denite gitlog
-nnoremap <leader>vb :Denite gitbranch
+nnoremap <leader>vv :Denite gitstatus<cr>
+nnoremap <leader>vl :Denite gitlog<cr>
+nnoremap <leader>vb :Denite gitbranch<cr>
 call denite#custom#map(
       \ 'normal',
       \ 'mm',
