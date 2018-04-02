@@ -236,5 +236,11 @@ nnoremap <silent> <M-w>l :TmuxNavigateRight<cr>
 let g:ackprg='ag --vimgrep'
 nnoremap <c-g> :Ack! 
 
+" Fugitive - Git
+nnoremap <leader>vv :Gstatus<cr>
+nnoremap <leader>vl :Glog<cr>
+nnoremap <leader>vr :Gread<cr>
+nnoremap <leader>vb :Gblame -MMM<cr>
+
 "Plugin Autocommands
 autocmd InsertEnter * call deoplete#enable()
