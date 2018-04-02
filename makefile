@@ -15,9 +15,9 @@ work:
 	mkdir -p $(WORK_DIR)
 	cp -avf deploy $(WORK_DIR)
 
-$(WORK_DIR)/src/etc.m4: $(WORK_DIR)
+$(WORK_DIR)/etc.m4: $(WORK_DIR)
 	cp -avf src/etc.m4 $(WORK_DIR)
-$(WORK_DIR)/src/makefile: $(WORK_DIR)
+$(WORK_DIR)/makefile: $(WORK_DIR)
 	cp -avf src/makefile $(WORK_DIR)
 $(WORK_DIR):
 	mkdir -p $(WORK_DIR)
