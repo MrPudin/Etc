@@ -26,6 +26,7 @@ set wildmenu
 set wildmode=longest,list,full
 set lazyredraw
 set splitbelow
+set history=1000
 
 "File Settings
 set encoding=utf8

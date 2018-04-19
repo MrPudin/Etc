@@ -85,6 +85,11 @@ ETC_MODULE_BEGIN(clang)
     ETC_PKG(clang,apt-get)
 ETC_MODULE_END(clang)
 
+#Scala Development
+ETC_MODULE_BEGIN(scala)
+    ETC_PKG(scala)
+ETC_MODULE_END(scala)
+
 #Microbit Development
 ETC_MODULE_BEGIN(microbit)
     ETC_PKG(srecord)
