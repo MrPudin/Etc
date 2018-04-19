@@ -38,6 +38,8 @@ autocmd Filetype make setlocal noexpandtab
 autocmd FileType crontab setlocal backupcopy=yes
 autocmd FileType java setlocal omnifunc=javacomplete#Complete
 autocmd FileType ruby setlocal tabstop=2|setlocal shiftwidth=2
+autocmd BufNewFile,BufRead *.sc setf scala
+autocmd BufNewFile,BufRead *.etc setf m4
 
 "Display Settings
 set hlsearch
