@@ -201,7 +201,6 @@ let g:clang_library_path='/usr/local/opt/llvm/lib/libclang.dylib'
 "let g:deoplete#sources#clang#libclang_path=
             "\"/usr/local/opt/llvm/lib/libclang.dylib"
 
-
 "Neomake
 call neomake#configure#automake('w')
 let g:neomake_highlight_columns = 0
@@ -236,15 +235,18 @@ nnoremap <silent> <M-w>j :TmuxNavigateDown<cr>
 nnoremap <silent> <M-w>k :TmuxNavigateUp<cr>
 nnoremap <silent> <M-w>l :TmuxNavigateRight<cr>
 
-" Ack - Ag grep
+"Ack - Ag grep
 let g:ackprg='ag --vimgrep'
 nnoremap <c-g> :Ack! 
 
-" Fugitive - Git
+"Fugitive - Git
 nnoremap <leader>vv :Gstatus<cr>
 nnoremap <leader>vl :Glog<cr>
-nnoremap <leader>vr :Gread<cr>
+nnoremap <leader>ve :Gread<cr>
 nnoremap <leader>vb :Gblame -MMM<cr>
+
+"Undotree
+nnoremap <leader>uu :UndotreeToggle<cr>
 
 "Plugin Autocommands
 autocmd InsertEnter * call deoplete#enable()
