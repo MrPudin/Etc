@@ -1,14 +1,15 @@
-[Etc 2.0 specifications]
+[Etc 2.1 specifications]
 Etc - etcetera
-Design document for Etc 2.0
-System Configuration Deployment System 2.0
-Automates the setting up a an (development) enviroment.
+Design document for Etc 2.1
+System Configuration Deployment System 2.1
+Automates the setting up/update/removal terminal enviroment
 
 [Requirements]
 Requirements;
 1. Operating System Independence (at least Unix like OS okay).
 2. Package manager independence. (apt-get, brew, pacman. I dont care)
-3. Ease of configuration and setup - minimum duplicity.
+3. Ease of configuration and setup - minimum duplicity
+    - core.etc, only
 4. Dependecy managment (at a higher level than package manager to include 
     stuff not supported by package managers)(eg. vim-plug, which is installed 
     from git is dependent on neovim, which is installed on from the package 
@@ -28,38 +29,46 @@ Optional Requirements:
 [Project]
 Project Organisation
 src/ - source code
-src/etc.m4 - m4 macros for use to create deployments. See: docs/macro.txt
+src/etc.m4 - m4 macros for use to create deployments. See: docs/etc_macros.txt
 docs/ - documentation for the project.
-makefile - makefile for building the project
-    Targets: 
+makefile - makefile to install the etcetera command line tool and generate docs
+    Targets:
         all - make everything
-        install - install etc.
+        install - install etcetera command line tool
         docs - make docs
         clean - remove make generated files
+        uninstall - remove etcetera command line tool
 
 [Design]
 Deployment
 make + m4 + git system 
 - make provides dependecy system, target system.
 - m4 provides make with useful macros, which speed up setup & configuration
-- git provides upstream update support, as well as updating upstream support.
+- git provides upstream update support, as well as updating upstream support
+    - TODO 2.1: make this dependency optional;
 
 File "etc.m4"
-- Defines the etc macros for use to defining the deployment
-- see "docs/macro.txt" for documentation
+    - Defines the etc macros for use to defining the deployment
+    - see "docs/macro.txt" for documentation
 
-File "makefile" 
+File "pkg.m4" -- NEW: TODO: 2.1
+    - seperate configuration file in m4 to allow the user to use alternative
+        package managers
+File "makefile" -- TODO 2.1 possible to merge this into "etc.m4"
+-- generate this completely from the etc.m4
 - Bootstrap makefile
 - Bootstraps actual deployment process
     - finds *.etc files.
     - expands m4 macros for these files
 - Include *.etc files for running their deployment 
 
+
 File "*.etc"
 - Defines deployment through etc macros or makefile rules.
 - Defines modules of deployment - module is a user defined singular entity that
     defines a particular setup for example the neovim module may contain
     commands to install neovim, install the configuration Example:
+
 ETC_MODULE_BEGIN(neovim)
 
 ETC_PKG(neovim)
@@ -75,7 +84,7 @@ ETC_MODULE_END(neovim)
 
 ~/.etc - main etcetera directory.
 ~/.etc/.etc_work - etcetera working directory
-~/.etc/.etc_work/mark - etcetera working markers
+~/.etc/.etc_work/mark - etcetera installation markers
 ~/.etc/.etc_work/source - etcetera geneerated makefiles.
 
 Command Line Interface - CLI
