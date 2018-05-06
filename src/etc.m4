@@ -6,41 +6,8 @@ ifdef(ETC_M4,,
 # Etc Deployment System
 # 
 
-#Constants
-pushdef(ETC_TRUE, 1)
-pushdef(ETC_FALSE, 0)
-pushdef(ETC_CHOMP,`patsubst($1,`\s*',)')
-pushdef(ETC_NEWLINE,`
-')
-
-dnl Usage: ETC_DIR_DEPLOY
-dnl Expands to the deploy directory, where user defined files can be referenced.
-dnl
-define(ETC_DIR_DEPLOY,`deploy')
-
-#Operating System
-define(ETC_OS_MACOS,Darwin)
-define(ETC_OS_LINUX,Linux)
-define(ETC_OS, `ETC_CHOMP(esyscmd(uname -s))')
-
-#Uility Macros
-define(ETC_INSTALLED, `ifelse(ETC_CHOMP(esyscmd(command -v $1)),,ETC_FALSE,ETC_TRUE)')
-define(ETC_EXISTS, `syscmd(test -e $1)ifelse(sysval,0,ETC_TRUE,ETC_FALSE)')
-define(ETC_BASENAME,`regexp($1,`[a-zA-Z0-9_\.\-]*$',`\&')')
-
-dnl Usage: ETC_SUDO_SETUP
-dnl Expands to the makefile runs to setup the use of sudo for the process,
-dnl where sudo is required.
-define(ETC_SUDO_SETUP,`dnl
-install update remove:: 
-	sudo printf "\033[1m\033[31mSUDO USE ENABLED.\033[0m\n"
-')
-
-dnl Usage: ETC_SUDO
-dnl Expands to the sudo command with the approriate flags. 
-dnl Used when installing with sudo
-define(ETC_SUDO,`sudo -H -E')
-
+include(`etc_util.m4')
+# Modules
 dnl Usage: ETC_MODULE_BEGIN(<name>)
 dnl        <implementation>
 dnl        ETC_MODULE_END(<name>)
@@ -58,18 +25,6 @@ ETC_MODULE_BEGIN($1)
 $2
 ETC_MODULE_END($1)
 ')
-
-#Conditionals
-dnl Usage: ETC_IF_OS(<OS>,<ETC_TRUE>,<ETC_FALSE>)
-dnl Expands to 'ETC_TRUE' if current Operating System is indeed 'OS', else expands
-dnl to 'ETC_FALSE'.
-dnl
-define(ETC_IF_OS,`ifelse(ETC_OS,$1,$2,$3)')
-
-dnl Usage: ETC_IF_OS(<OS>,<ETC_TRUE>,<ETC_FALSE>)
-dnl Expands to 'ETC_TRUE' if 'name' is installed else expands to 'ETC_FALSE'.
-dnl
-define(ETC_IF_INSTALLED,`ifelse(ETC_INSTALLED($1),ETC_TRUE,$2,$3)')
 
 #Make Macros
 dnl Usage: ETC_TARGET(<name>)
