@@ -5,6 +5,7 @@
 
 #Paths
 export PATH="$HOME/.rvm/bin:$PATH"
+export PATH="/usr/local/miniconda3/bin:$PATH"
 export PATH="$HOME/bin:/usr/local/bin:$PATH"
 export MANPATH="/usr/local/man:$MANPATH"
 export SSH_KEY_PATH="~/.ssh/rsa_id"
@@ -100,4 +101,4 @@ lazy()
 }
 
 #External Scripts
-lazy "source $HOME/.rvm/scripts/rvm" rvm ruby
+lazy "source $HOME/.rvm/scripts/rvm" rvm
