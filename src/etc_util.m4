@@ -14,8 +14,8 @@ define(ETC_OS_LINUX,`Linux') dnl Operation System name for Linux OSs
 
 # Utilities
 dnl Usage: ETC_CHOMP(<expr>)
-dnl Expands to the given 'expr' with the trailing whitespace removed
-define(ETC_CHOMP,`patsubst($1,`\s*$',)')
+dnl Expands to the given 'expr' with the trailing and lead whitespace removed
+define(ETC_CHOMP,`patsubst(patsubst(`$1',`^\s*',),`\s*$',)')
 
 dnl Usage: ETC_BASENAME(<path>)
 dnl Expands to the filename portion of path.
@@ -27,6 +27,20 @@ dnl This indentation is needed for makefile target building commands
 define(ETC_MAKE_INDENT,`patsubst($1,`
 ',`
 	')')
+
+dnl Usage: ETC_FILTER_COMMENT(<expr>)
+dnl Expands to the given expression 'expr' without comments.
+dnl Comments are defined are strings that begin with '#' and end with '\n'
+define(ETC_FILTER_COMMENT, `patsubst(`$1',`#.*
+',)')
+
+dnl Usage: ETC_GREP(<pattern>,<expr>)
+dnl Expands to the first line that matches the pattern in the given expression
+define(ETC_GREP, `esyscmd(printf "`$2'" | grep "$1" | head -n 1)')
+
+dnl Usage ETC_SLICE(<delmiter>,<nfield>,<expr)
+dnl Expands to the the 'nfield' field delimted by 'delmiter' in expression 'expr'
+define(ETC_SLICE, `esyscmd(printf "`$3'" | cut -f $2 -d "`$1'")')
 
 dnl Usage: ETC_IS_INSTALLED(<cmd>)f
 dnl Check if the given 'cmd' is installed and accessible using the current PATH.

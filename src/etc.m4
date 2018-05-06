@@ -25,12 +25,12 @@ ETC_RETRIEVE($2)dnl
 ')dnl
 
 ETC_MAKE_UPDATE_TARGET(ETC_TARGET(),`dnl
-ETC_RUN_NORM(`rm -rf $1')
+ETC_RUN(`rm -rf $1')
 ETC_RETRIEVE($2)dnl
 ')dnl
 
 ETC_MAKE_REMOVE_TARGET(ETC_TARGET(),`dnl
-ETC_RUN_NORM(`rm -rf $1')dnl
+ETC_RUN(`rm -rf $1')dnl
 ')dnl
 ')
 
