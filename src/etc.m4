@@ -1,175 +1,37 @@
 divert(-1)dnl
-ifdef(ETC_M4,,
+ifdef(`ETC_M4',,
 #
 # etc.m4
-# Core Definitions 
-# Etc Deployment System
+# Etcetera Macros
+# Etcetera Deployment System
 # 
 
 include(`etc_util.m4')
-# Modules
-dnl Usage: ETC_MODULE_BEGIN(<name>)
-dnl        <implementation>
-dnl        ETC_MODULE_END(<name>)
-dnl Define a multiline module.
+include(`etc_make.m4')
+include(`etc_pkg.m4')
+
+# Generator Macros
+dnl Shorthand macros that generate the rules for generating the makefile rules
+dnl for a given methodology specific to the macro, such as remove fetching,
+dnl package manager. etc.
+
+dnl Usage: ETC_REMOTE_RESOURCE(<destination>, <src_url>)
+dnl Maintain remote resource at 'destination' using resource located at 'url'
 dnl
-define(ETC_MODULE_BEGIN,`ifdef(`ETC_MOD',`ETC_DEPEND(ETC_MOD,$1)')dnl 
-pushdef(`ETC_MOD',$1)')
-define(ETC_MODULE_END,`popdef(`ETC_MOD')')
+define(ETC_REMOTE_RESOURCE, `dnl
+pushdef(`ETC_TARGET',`ETC_BASENAME($1)')dnl
+ETC_MAKE_INSTALL_TARGET(ETC_TARGET(),`dnl
+ETC_RETRIEVE($2)dnl
+')dnl
 
-dnl Usage: ETC_MODULE(<name>,<implementation>)
-dnl Define a short module
-dnl 
-define(ETC_MODULE,`dnl
-ETC_MODULE_BEGIN($1)
-$2
-ETC_MODULE_END($1)
-')
+ETC_MAKE_UPDATE_TARGET(ETC_TARGET(),`dnl
+ETC_RUN_NORM(`rm -rf $1')
+ETC_RETRIEVE($2)dnl
+')dnl
 
-#Make Macros
-dnl Usage: ETC_TARGET(<name>)
-dnl Expands to the marker path of 'name'.
-dnl
-define(ETC_TARGET,``mark/'ETC_MOD`_$1'')
-
-dnl Usage: ETC_DEPEND(<dependency>,<dependent>)
-dnl Makes 'dependent' depend on 'dependency'
-dnl
-define(ETC_DEPEND,`dnl
-ifelse(eval($# < 2),ETC_TRUE,`ETC_DEPEND($1,ETC_MOD)',`dnl
-define(`ETC_DEPENDENCY_$2_INSTALL',ifdef(`ETC_DEPENDENCY_$2_INSTALL',dnl
-ETC_DEPENDENCY_$2_INSTALL) install_$1)dnl
-define(`ETC_DEPENDENCY_$2_UPDATE',ifdef(`ETC_DEPENDENCY_$2_UPDATE',dnl
-ETC_DEPENDENCY_$2_UPDATE) update_$1)dnl
-define(`ETC_DEPENDENCY_$1_REMOVE',ifdef(`ETC_DEPENDENCY_$1_REMOVE',dnl
-ETC_DEPENDENCY_$1_REMOVE) remove_$2)dnl
-')')
-
-dnl Usage: ETC_MARK([name])
-dnl Marks 'name' status as completed and fullfills any dependency created by
-dnl 'name'
-dnl
-define(ETC_MARK,`dnl
-ifelse(eval($# < 1),ETC_TRUE,`ETC_MARK(ETC_MOD)',dnl
-@touch -f ETC_TARGET($1))')
-
-dnl Usage: ETC_UNMARK([name])
-dnl Marks 'name' status as incomplete and unfullfills any dependency created by
-dnl 'name'
-dnl
-define(ETC_UNMARK,`dnl
-ifelse(eval($# < 1),ETC_TRUE,`ETC_UNMARK(ETC_MOD)',dnl
-@rm -f ETC_TARGET($1))')
-
-#Fetch&ExtractMacros
-dnl Usage: ETC_RETRIEVE('url', 'destination')
-dnl Attempts to retrieve the resource pointed to at 'url' to the filepath at
-dnl 'destination' using the most optimal retrieval program.
-dnl
-define(ETC_RETRIEVE,`dnl
-ifelse(ETC_INSTALLED(aria2c),ETC_TRUE,aria2c -x 10 -s 10 -d $(dir $2) -o $(notdir $2) $1,dnl
-ifelse(ETC_INSTALLED(curl),ETC_TRUE,curl -fLo $2 --create-dirs $1))')
-
-dnl Usage: ETC_EXTRACT_TGZ(<path>)
-dnl Extract .tar.gz pointed by 'path' to the current directory.
-dnl
-define(ETC_EXTRACT_TGZ, `tar -xzf $1'
-
-#Hooks
-dnl Usage: ETC_HOOK([name],implementation)
-dnl Define a hook  to be run after 'name'  changes or is modified in 
-dnl some way, whether that is an install, update or removal. 
-dnl Only one hook for a 'name' can be defined at a given time, further 
-dnl invocations would override the previous hook
-dnl If 'name' is not given, would use current module.
-dnl 
-define(ETC_HOOK,`dnl
-ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK(ETC_MOD,$1)',dnl
-`define(`__ETC_HOOK_$1__',$2)')')
-
-dnl Usage: ETC_HOOK_EVOLVE([name],implementation)
-dnl Define a hook  to be run after 'name' is installed or updated, (ie evolve)
-dnl Only one evolve hook for a 'name' can be defined at a given time, further 
-dnl invocations would override the previous evolve hook.
-dnl If 'name' is not given, would use current module.
-dnl
-define(ETC_HOOK_EVOLVE,`dnl
-ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK_EVOLVE(ETC_MOD,$1)',dnl
-`define(__ETC_HOOK_EVOLVE_$1__,$2)')')
-
-dnl Usage: ETC_HOOK_CREMATE([name],implementation)
-dnl Define a hook to be run after 'name' is removed,
-dnl Only one cremate hook for a 'name' can be defined at a given time, further 
-dnl invocations would override the previous cremate hook.
-dnl If 'name' is not given, would use current module.
-dnl
-define(ETC_HOOK_CREMATE,`dnl
-ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK_CREMATE(ETC_MOD,$1)',dnl
-`define(`__ETC_HOOK_CREMATE_$1__',$2)')')
-
-dnl Usage: ETC_HOOK_INSTALL([name],implementation)
-dnl Define a hook  to be run after 'name' is installed.
-dnl Only one install hook for a 'name' can be defined at a given time, further 
-dnl invocations would override the previous install hook.
-dnl If 'name' is not given, would use current module.
-dnl
-define(ETC_HOOK_INSTALL,`dnl
-ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK_INSTALL(ETC_MOD,$1)',dnl
-`define(__ETC_HOOK_INSTALL_$1__,$2)')')
-
-dnl Usage: ETC_HOOK_UPDATE([name],implementation)
-dnl Define a hook  to be run after 'name' is updated.
-dnl Only one update hook for a 'name' can be defined at a given time, further 
-dnl invocations would override the previous update hook.
-dnl If 'name' is not given, would use current module.
-dnl
-define(ETC_HOOK_UPDATE,`dnl
-ifelse(eval($# < 2),ETC_TRUE,`ETC_HOOK_UPDATE(ETC_MOD,$1)',dnl
-`define(__ETC_HOOK_UPDATE_$1__,$2)')')
-
-dnl Usage: ETC_UNHOOK([name])
-dnl Undefine all hooks set using ETC_HOOK..() macros.
-dnl If 'name' is not given, would use current module.
-dnl 
-define(ETC_UNHOOK,`dnl
-ifelse(eval($# < 1),ETC_TRUE,`ETC_UNHOOK(ETC_MOD)',dnl
-`undefine(`__ETC_HOOK_$1__')'dnl
-`undefine(`__ETC_HOOK_EVOLVE_$1__')'dnl
-`undefine(`__ETC_HOOK_INSTALL_$1__')'dnl
-`undefine(`__ETC_HOOK_UPDATE_$1__')'dnl
-`undefine(`__ETC_HOOK_CREMATE_$1__')')')
-
-#Make Methods
-#Generics
-dnl Usage: ETC_GEN_MAKE(name,install,update,remove)
-dnl Generates makefile rules for making current module for the given install, 
-dnl update dnl and removal command for 'name'
-dnl 
-define(ETC_GEN_MAKE, `
-.PHONY: install_`'ETC_MOD update_`'ETC_MOD remove_`'ETC_MOD
-install:: install_`'ETC_MOD
-update:: update_`'ETC_MOD
-remove:: remove_`'ETC_MOD
-
-install_`'ETC_MOD:: ETC_TARGET($1) 
-ETC_TARGET($1): ifdef(`ETC_DEPENDENCY_'ETC_MOD`_INSTALL',`ETC_DEPENDENCY_'ETC_MOD`_INSTALL')
-patsubst(`$2',ETC_NEWLINE,ETC_NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_INSTALL_'ETC_MOD`__',`__ETC_HOOK_INSTALL_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_EVOLVE_'ETC_MOD`__',_`_ETC_HOOK_EVOLVE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	ETC_MARK($1)
-update_`'ETC_MOD:: ifdef(`ETC_DEPENDENCY_'ETC_MOD`_UPDATE',`ETC_DEPENDENCY_'ETC_MOD`_UPDATE')
-patsubst(`$3',ETC_NEWLINE,ETC_NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_UPDATE_'ETC_MOD`__',`__ETC_HOOK_UPDATE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_EVOLVE_'ETC_MOD`__',`__ETC_HOOK_EVOLVE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	ETC_MARK($1)
-remove_`'ETC_MOD:: ifdef(`ETC_DEPENDENCY_'ETC_MOD`_REMOVE',`ETC_DEPENDENCY_'ETC_MOD`_REMOVE')
-patsubst(`$4',ETC_NEWLINE,ETC_NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_CREMATE_'ETC_MOD`__',`__ETC_HOOK_CREMATE_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	patsubst(ifdef(`__ETC_HOOK_'ETC_MOD`__',`__ETC_HOOK_'ETC_MOD`__',),ETC_NEWLINE,ETC_NEWLINE	)
-	ETC_UNMARK($1)
-ETC_UNHOOK
+ETC_MAKE_REMOVE_TARGET(ETC_TARGET(),`dnl
+ETC_RUN_NORM(`rm -rf $1')dnl
+')dnl
 ')
 
 #Package Manager 
@@ -195,8 +57,8 @@ ETC_MODULE_BEGIN(`__ETC_PKG_REFRESH__')
 install update:: 
 	dnl
 ifelse(ETC_PKG_MANAGER,brew,brew update,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO apt-get update,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO apt-fast update,)))
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_RUN_USER(`root',`apt-get update'),dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_RUN_USER(`root',`apt-fast update'),)))
 ETC_MODULE_END(`__ETC_PKG_REFRESH__')')
 
 dnl Usage: ETC_PKG_INSTALL(name)
@@ -206,8 +68,8 @@ dnl If selected package manager isnt supported, would expand to an empty string
 dnl
 define(ETC_PKG_INSTALL,`dnl
 ifelse(ETC_PKG_MANAGER,brew,brew install $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO apt-get -y install $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO apt-fast -y install $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_RUN_USER(`root',`apt-get -y install $1'),dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_RUN_USER(`root',`apt-fast -y install $1'),dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install $1,dnl
 ifelse(ETC_PKG_MANAGER,pip3,pip3 install $1,dnl
 ifelse(ETC_PKG_MANAGER,gem,gem install $1,dnl
@@ -220,8 +82,8 @@ dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_UPDATE,`dnl
 ifelse(ETC_PKG_MANAGER,brew,-brew upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO apt-get -y upgrade $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO apt-fast -y upgrade $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_RUN_USER(`root',`apt-get -y upgrade $1'),dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_RUN_USER(`root',`apt-fast -y upgrade $1'),dnl
 ifelse(ETC_PKG_MANAGER,pip,pip install --upgrade $1,dnl
 ifelse(ETC_PKG_MANAGER,pip3,pip3 install --upgrade $1,dnl 
 ifelse(ETC_PKG_MANAGER,gem,gem update $1,dnl 
@@ -234,8 +96,8 @@ dnl If selected package manager isnt supported, would expand to an empty string
 dnl 
 define(ETC_PKG_REMOVE,`dnl
 ifelse(ETC_PKG_MANAGER,brew,brew uninstall $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-get,ETC_SUDO apt-get -y remove $1,dnl
-ifelse(ETC_PKG_MANAGER,apt-fast,ETC_SUDO apt-fast -y remove $1,dnl
+ifelse(ETC_PKG_MANAGER,apt-get,ETC_RUN_USER(`root',`apt-get -y remove $1'),dnl
+ifelse(ETC_PKG_MANAGER,apt-fast,ETC_RUN_USER(`root',`apt-fast -y remove $1'),dnl
 ifelse(ETC_PKG_MANAGER,pip,pip uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,pip3,pip3 uninstall $1,dnl
 ifelse(ETC_PKG_MANAGER,gem,gem uninstall $1,dnl
@@ -323,11 +185,11 @@ rm -rf $2
 ')')
 
 #Cleanup
-undefine(`ETC_MOD')
+undefine(`ETC_CURRENT_MODULE')
 undefine(`ETC_PKG_MANAGER')
 
 #Include Protection
-define(ETC_M4,ETC_TRUE)
+define(`ETC_M4',ETC_TRUE)
 ) dnl INCLUDE PROTECTION DO NOT REMOVE
 
 #Defaults

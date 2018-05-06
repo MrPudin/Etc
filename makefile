@@ -11,6 +11,7 @@ WORK_DIR := .etc_work/
 
 all: install docs
 
+#TODO: 2.1 move this to  etc.m4
 work:
 	mkdir -p $(WORK_DIR)
 	cp -avf deploy $(WORK_DIR)
@@ -21,6 +22,8 @@ $(WORK_DIR)/makefile: $(WORK_DIR)
 	cp -avf src/makefile $(WORK_DIR)
 $(WORK_DIR):
 	mkdir -p $(WORK_DIR)
+
+# END
 
 install: 
 	cp -avf src/etcetera.sh /usr/local/bin/etcetera
