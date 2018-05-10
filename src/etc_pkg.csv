@@ -1,0 +1,18 @@
+#
+# src/pkg.csv
+# Excetera deployment system
+#
+# Flags:
+# m - macos dependency
+# l - linux dependency
+# s - system package manager
+# r - super user permissions required
+#<cmd>, <install>, <update>, <remove>, <flags>
+# System Package Managers
+brew, install, update, remove, ms
+apt-get, install -y, update -y, uninstall -y, lsr
+
+# Platform Package Managers
+pip, install, install --upgrade, uninstall, #no flags
+pip3, install, install --upgrade, uninstall,
+gem, install, update, uninstall,
