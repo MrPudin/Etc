@@ -22,6 +22,8 @@ dnl and remove the module respectively. They are made the dependency of
 dnl the deployment targets install/update/remove so that the module is
 dnl installed, updated or removed when the deployment is installed, updated or 
 dnl removed
+dnl full_install/update/remove run the install/update/remove target for the module
+dnl and the any hooks that are attached.
 
 dnl Usage: ETC_MAKE_ATTACH_MODULE(<module>)
 dnl Attach the given 'module' to the to run on the 'install'/'update'/'remove' 
@@ -29,13 +31,37 @@ dnl makefile targets.
 dnl Internally makes install depend on install__<module>
 dnl update depend on update__<module>
 dnl remove depend on remove__<module>
+dnl And setups the execution of hooks
 define(ETC_MAKE_ATTACH_MODULE,`
 .PHONY: install__$1 update__$1 remove__$1 
-install:: install__$1
-update:: update__$1
-remove:: remove__$1
-')
+.PHONY: full_install__$1 full_update__$1 full_remove__$1
+.PHONY: hook_setup__$1 hook_upgrade__$1 hook_teardown__$1
 
+install:: full_install__$1
+update:: full_update__$1
+remove:: full_remove__$1
+
+ETC_TARGET_MARKER($1): install__$1
+	ETC_MARK($1)
+
+update__$1::
+	ETC_MARK($1)
+
+remove__$1::
+	ETC_UNMARK($1)
+
+full_install__$1: hook_setup__$1
+dnl Runs in desired sequence install__module -> hook_setup 
+hook_setup__$1:: ETC_TARGET_MARKER($1)
+
+full_update__$1:: hook_upgrade__$1
+dnl Runs in desired sequence update_module -> hook_upgrade 
+hook_upgrade__$1:: update__$1
+
+full_remove__$1:: remove__$1
+dnl Runs in desired sequence hook_teardown -> remove__module
+remove__$1:: hook_teardown__$1
+')
 
 dnl Usage: ETC_MODULE_BEGIN(<name>)
 dnl        <implementation>
@@ -58,6 +84,50 @@ $2
 ETC_MODULE_END($1)
 ')
 
+dnl Usage: ETC_MAKE_DEPEND(<depender>,<dependent>)
+dnl Generates the makefile rules to make the module 'depender' dependent on 
+dnl the module 'dependent'
+dnl Ensures that the dependent will be installed/updated before the depender
+dnl and that the depender will be removed before the depender is removed
+define(ETC_MODULE_DEPEND,`dnl
+install__$1:: install__$2
+
+update__$1:: update__$2
+
+remove__$2:: remove__$1
+')
+
+# Hooks
+dnl Usage: ETC_SETUP_HOOK(<module>,<implementation>)
+dnl Setup Hooks run after the entire module of has finished installing,
+dnl when which the provided implementation is executed.
+dnl If 'module' is not specifed, will assume that hooks belong to the current module
+define(ETC_SETUP_HOOK,`ifelse(eval($# < 2),1,`ETC_SETUP_HOOK(ETC_CURRENT_MODULE(),`$1')',`dnl
+hook_setup__$1:: 
+	ETC_MAKE_INDENT(`$2')
+')')
+
+
+dnl Usage: ETC_UPGRADE_HOOK(<module>,<implementation>)
+dnl Setup Hooks run after the entire module of has finished upgrading,
+dnl when which the provided implementation is executed.
+dnl If 'module' is not specifed, will assume that hooks belong to the current module
+define(ETC_UPGRADE_HOOK,`ifelse(eval($# < 2),1,`ETC_UPGRADE_HOOK(ETC_CURRENT_MODULE(),`$1')',`dnl
+hook_upgrade__$1:: 
+	ETC_MAKE_INDENT(`$2')
+')')
+
+
+dnl Usage: ETC_TEARDOWN_HOOK(<module>,<implementation>)
+dnl Teardown hooks run before the module is removed,
+dnl when which the provided implementation is executed.
+dnl If 'module' is not specifed, will assume that hooks belong to the current module
+define(ETC_TEARDOWN_HOOK,`ifelse(eval($# < 2),1,`ETC_TEARDOWN_HOOK(ETC_CURRENT_MODULE(),`$1')',`dnl
+hook_teardown__$1::
+	ETC_MAKE_INDENT(`$2')
+')')
+
+
 # Target Macros
 dnl Each target will also generate makefile rules to target:
 dnl install__<target>, update__<target> and remove__<target>to install, update 
@@ -76,8 +146,7 @@ define(ETC_MAKE_INSTALL_TARGET,`
 install__`'ETC_CURRENT_MODULE():: install__$1
 
 install__$1: `$2'
-	ETC_MAKE_INDENT($3)
-	ETC_MARK($1)dnl Indent \t to statify makefile syntax requirement
+	ETC_MAKE_INDENT(`$3')dnl Indent \t to statify makefile syntax requirement
 ')
 
 dnl Usage: ETC_MAKE_UPDATE_TARGET(<target>, <dep_target>, <implementation>)
@@ -90,8 +159,7 @@ define(ETC_MAKE_UPDATE_TARGET,`
 update__`'ETC_CURRENT_MODULE():: update__$1
 
 update__$1: `$2'
-	ETC_MAKE_INDENT($3)
-	ETC_MARK($1)dnl Indent \t to statify makefile syntax requirement
+	ETC_MAKE_INDENT(`$3')dnl Indent \t to statify makefile syntax requirement
 ')
 
 dnl Usage: ETC_MAKE_REMOVE_TARGET(<target>, <dep_target>, <implementation>)
@@ -104,23 +172,8 @@ define(ETC_MAKE_REMOVE_TARGET,`dnl
 remove__`'ETC_CURRENT_MODULE():: remove__$1
 
 remove__$1: `$2'
-	ETC_MAKE_INDENT($3)
-	ETC_UNMARK($1)dnl Indent \t to statify makefile syntax requirement
+	ETC_MAKE_INDENT(`$3')dnl Indent \t to statify makefile syntax requirement
 ')
-
-dnl Usage: ETC_MAKE_DEPEND(<depender>,<dependent>)
-dnl Generates the makefile rules to make the module 'depender' dependent on 
-dnl the module 'dependent'
-dnl Ensures that the dependent will be installed/updated before the depender
-dnl and that the depender will be removed before the depender is removed
-define(ETC_MAKE_DEPEND,`dnl
-install__$1:: install__$2
-
-update__$1:: update__$2
-
-remove__$2:: remove__$1
-')
-
 define(`ETC_MAKE_M4',1)
 ')dnl Include Proctection
 divert(0)dnl
