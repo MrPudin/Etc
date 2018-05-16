@@ -1,5 +1,8 @@
 divert(-1)dnl
-ifdef(`ETC_MAKE_M4',, dnl Include Protection
+
+include(`etc_util.m4')
+
+ifdef(`ETC_MAKE_M4',,`dnl Include Protection
 dnl 
 dnl src/etc_make.m4
 dnl Make Macros
@@ -11,7 +14,6 @@ dnl 3 targets: install/update/remove, to install, update and remove the deployme
 dnl respectively.
 dnl Build process:
 dnl deployment <- modules <- targets
-include(`etc_util.m4')
 
 # Module Macros
 dnl Each module will generate makefile rules to build the module:
@@ -64,42 +66,61 @@ dnl the deployment targets install/update/remove so that the target is
 dnl installed, updated or removed when the module is installed, updated or 
 dnl removed
 
-dnl Usage: ETC_MAKE_INSTALL_TARGET(<target>, <implementation>)
+dnl Usage: ETC_MAKE_INSTALL_TARGET(<target>, <dep_target>, <implementation>)
 dnl Generates the makefile rules to update 'target' for the current module 
 dnl using 'implementation'
 dnl Makes install__<module> depend on install__<target>
 define(ETC_MAKE_INSTALL_TARGET,`
+.PHONY: install__$1
+
 install__`'ETC_CURRENT_MODULE():: install__$1
 
-install__$1:
-	ETC_MAKE_INDENT($2)
-	ETC_MARK($1) dnl Indent \t to statify makefile syntax requirement
+install__$1: `$2'
+	ETC_MAKE_INDENT($3)
+	ETC_MARK($1)dnl Indent \t to statify makefile syntax requirement
 ')
 
-dnl Usage: ETC_MAKE_UPDATE_TARGET(<target>, <implementation>)
+dnl Usage: ETC_MAKE_UPDATE_TARGET(<target>, <dep_target>, <implementation>)
 dnl Generates the makefile rules to update 'target' for the current module 
 dnl using 'implementation'
 dnl Makes update__<module> depend on update__<target>
 define(ETC_MAKE_UPDATE_TARGET,`
-update___`'ETC_CURRENT_MODULE():: update__$1
+.PHONY: update__$1
 
-update__$1:
-	ETC_MAKE_INDENT($2)
-	ETC_MARK($1) dnl Indent \t to statify makefile syntax requirement
+update__`'ETC_CURRENT_MODULE():: update__$1
+
+update__$1: `$2'
+	ETC_MAKE_INDENT($3)
+	ETC_MARK($1)dnl Indent \t to statify makefile syntax requirement
 ')
 
-dnl Usage: ETC_MAKE_REMOVE_TARGET(<target>, <implementation>)
+dnl Usage: ETC_MAKE_REMOVE_TARGET(<target>, <dep_target>, <implementation>)
 dnl Generates the makefile rules to remove 'target' for the current module
 dnl using 'implementation'
 dnl Makes remove__<module> depend on remove__<target>
-define(ETC_MAKE_REMOVE_TARGET,`
+define(ETC_MAKE_REMOVE_TARGET,`dnl
+.PHONY: remove__$1
+
 remove__`'ETC_CURRENT_MODULE():: remove__$1
 
-remove__$1:
-	ETC_MAKE_INDENT($2)
-	ETC_UNMARK($1) dnl Indent \t to statify makefile syntax requirement
+remove__$1: `$2'
+	ETC_MAKE_INDENT($3)
+	ETC_UNMARK($1)dnl Indent \t to statify makefile syntax requirement
 ')
 
-define(`ETC_MAKE_M4',ETC_TRUE)
-)dnl Include Proctection
+dnl Usage: ETC_MAKE_DEPEND(<depender>,<dependent>)
+dnl Generates the makefile rules to make the module 'depender' dependent on 
+dnl the module 'dependent'
+dnl Ensures that the dependent will be installed/updated before the depender
+dnl and that the depender will be removed before the depender is removed
+define(ETC_MAKE_DEPEND,`dnl
+install__$1:: install__$2
+
+update__$1:: update__$2
+
+remove__$2:: remove__$1
+')
+
+define(`ETC_MAKE_M4',1)
+')dnl Include Proctection
 divert(0)dnl
