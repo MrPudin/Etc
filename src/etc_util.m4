@@ -10,6 +10,7 @@ dnl
 #Constants
 define(`ETC_TRUE',1)
 define(`ETC_FALSE',0)
+define(`ETC_DEPLOY_DIR',`./deploy')
 
 # Utilities
 dnl Usage: ETC_CHOMP(<expr>)

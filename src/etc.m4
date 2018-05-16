@@ -17,7 +17,7 @@ dnl Usage: ETC_REMOTE_RESOURCE(<destination>, <src_url>)
 dnl Maintain remote resource at 'destination' using resource located at 'url'
 dnl
 define(ETC_REMOTE_RESOURCE, `dnl
-pushdef(`ETC_TARGET',`ETC_BASENAME($1)')dnl
+pushdef(`ETC_TARGET',`ETC_BASENAME($2)')dnl
 
 ETC_MAKE_INSTALL_TARGET(ETC_TARGET(),,`dnl
 ETC_RETRIEVE($2)dnl
@@ -68,47 +68,50 @@ popdef(`ETC_PKGMAN')dnl
 ')
 
 #Git
-dnl Usage: ETC_GIT_RETRIEVE('url', 'destination')
-dnl Expands to the command retrieve the git repositiory pointed to at 'url'
-dnl to the 'destination' filepath.
-dnl
-define(ETC_GIT_RETRIEVE, `git clone $1 $2')
-
-
-dnl Usage: ETC_GIT_UPDATE(path)
-dnl Expands to the command used to update the git repository at 'path'
-dnl
-define(ETC_GIT_UPDATE, `pushd $1; git pull -r $1; popd')
-
 dnl Usage: ETC_GIT(<url>,<path>)
-dnl Maintain git repositiory at path using git repositiory pointed to by 'url'
+dnl Maintain git repositiory at 'path' using remote git repositiory pointed to by 'url'
 dnl 
 define(ETC_GIT,`dnl
-ETC_GEN_MAKE(ETC_BASENAME($2),`dnl
-ETC_GIT_RETRIEVE($1,$2)
-',
-`dnl
-ETC_GIT_UPDATE($2)
-',
-`dnl
-rm -rf $2
-')')
+pushdef(`ETC_TARGET',`ETC_BASENAME($2)')dnl
 
-#Local Hirarchy
-dnl Usage: ETC_HIERARCHY(from, to)
-dnl Maintain local path at 'to' using file hierarchy located at 'from'
+ETC_MAKE_INSTALL_TARGET(ETC_TARGET(),,`dnl
+ETC_RUN(`git clone "$1" "$2"')
+')dnl
+
+ETC_MAKE_UPDATE_TARGET(ETC_TARGET(),,`dnl
+ETC_RUN(`git -C "$2" pull')
+')dnl
+
+ETC_MAKE_REMOVE_TARGET(ETC_TARGET(),,`dnl
+ETC_RUN(`rm -rf $2')dnl
+')dnl
+
+popdef(`ETC_TARGET')dnl
+')
+
+
+#Deploy
+dnl Usage: ETC_DEPLOY(from, dest)
+dnl Mantain file/directory hierarchy with the filepath "DEPLOYMENT_DIRECTORY/from" to
+dnl destination. Useful for deploying configuration files
 dnl 
-define(ETC_HIERARCHY,`dnl
-ETC_GEN_MAKE(ETC_BASENAME($2),`dnl
-cp -avf $1 $2
-',
-`dnl
-rm -rf $2
-cp -avf $1 $2
-',
-`dnl
-rm -rf $2
-')')
+define(ETC_DEPLOY,`dnl
+pushdef(`ETC_TARGET',`ETC_BASENAME($2)')dnl
+
+ETC_MAKE_INSTALL_TARGET(ETC_TARGET(),,`dnl
+ETC_RUN(`cp -af "ETC_DEPLOY_DIR()/$1" "$2"')
+')dnl
+
+ETC_MAKE_UPDATE_TARGET(ETC_TARGET(),,`dnl
+ETC_RUN(`cp -af "ETC_DEPLOY_DIR()/$1" "$2"')
+')dnl
+
+ETC_MAKE_REMOVE_TARGET(ETC_TARGET(),,`dnl
+ETC_RUN(`rm -rf "ETC_DEPLOY_DIR()/$1" "$2"')
+')dnl
+
+popdef(`ETC_TARGET')dnl
+')
 
 #Include Protection
 define(`ETC_M4',1)
