@@ -90,12 +90,12 @@ popdef(`ETC_TARGET')dnl
 ')
 
 
-#Deploy
-dnl Usage: ETC_DEPLOY(from, dest)
+#Deploy Hierchy
+dnl Usage: ETC_DEPLOY_COPY(from, dest)
 dnl Mantain file/directory hierarchy with the filepath "DEPLOYMENT_DIRECTORY/from" to
 dnl destination. Useful for deploying configuration files
 dnl 
-define(ETC_DEPLOY,`dnl
+define(ETC_DEPLOY_COPY,`dnl
 pushdef(`ETC_TARGET',`ETC_BASENAME($2)')dnl
 
 ETC_MAKE_INSTALL_TARGET(ETC_TARGET(),,`dnl

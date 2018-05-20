@@ -6,20 +6,24 @@ dnl src/etc_pkg.m4
 dnl Package Macros
 dnl Etcetera Deployment System
 dnl
-dnl Package system works by extract package manager infomation from pkg.csv,
+dnl Package system works by extract package manager infomation deploy/etc_pkg.etc
 dnl a semicolon(;) seperated value file defining how to use a specific package manager
 dnl to install, update and remove package
 dnl
 
 dnl Usage: ETC_PKG_CONFIG(<pkg_manager>)
-dnl Expands to the line of the etc_pkg.csv package manager infomation config
+dnl Expands to the line of the package manager infomation config
 dnl that describes the given package manager specified by 'pkg_manager' as name.
 dnl 
 define(ETC_PKG_CONFIG,`dnl
-ifelse(ETC_EXISTS(`etc_pkg.csv'),ETC_TRUE,dnl Check if etc_pkg.csv exists
-ETC_GREP(`$1',ETC_FILTER_COMMENT(ETC_READ(`etc_pkg.csv'))),
+ifelse(ETC_EXISTS(ETC_PKG_CONFIG_PATH),ETC_TRUE,dnl Check if package infomation file exists
+ETC_GREP(`$1',ETC_FILTER_COMMENT(ETC_READ(ETC_PKG_CONFIG_PATH))),
 `')dnl Empty return if file not found 
 ')
+
+dnl Usage: ETC_PKG_CONFIG_PATH
+dnl Expands to the filepath of the package manager infomation config
+define(ETC_PKG_CONFIG_PATH,`deploy/etc_pkg.csv')
 
 dnl Usage: ETC_PKG_CHECK_FLAG(<pkg_manager>,<flag>)
 dnl Checks whether the given flag is for the package manager given by name 
@@ -71,10 +75,13 @@ ETC_PKG_EXPAND_FLAGS(`$1',`$1' ETC_CHOMP(ETC_SLICE(`;',4,ETC_PKG_CONFIG(`$1'))) 
 
 dnl Usage: ETC_PKG_REFRESH(<pkg_manager>)
 dnl Expands the refresh command for the given package manager name 'pkg_manager'
-dnl to refresh the package manager's internal listsings
+dnl to refresh the package manager's internal listings.
+dnl If the package does not have a refresh command, will expand to empty string ''
 dnl The refresh command is defined to be the fifth field.
 define(ETC_PKG_REFRESH,`dnl
-ETC_PKG_EXPAND_FLAGS(`$1',`$1' ETC_CHOMP(ETC_SLICE(`;',5,ETC_PKG_CONFIG(`$1')))) dnl
+pushdef(`REFRESH_CMD',ETC_CHOMP(ETC_SLICE(`;',5,ETC_PKG_CONFIG(`$1'))))
+ifelse(REFRESH_CMD,,`',ETC_PKG_EXPAND_FLAGS(`$1',`$1' REFRESH_CMD)) dnl
+popdef(`REFRESH_CMD')dnl
 ')
 
 dnl Usage: ETC_SYSTEM_PKG_MANAGER
@@ -82,7 +89,7 @@ dnl Expands to the default system package manager.
 dnl By default, etcetera will automatically select a system package manager to
 dnl when which package manager to use is not specified.
 define(ETC_SYSTEM_PKG_MANAGER,`dnl
-pushdef(`PKG_CONFIG_CONTENT',ETC_FILTER_EMPTY_LINE(ETC_FILTER_COMMENT(ETC_READ(`etc_pkg.csv'))))dnl
+pushdef(`PKG_CONFIG_CONTENT',ETC_FILTER_EMPTY_LINE(ETC_FILTER_COMMENT(ETC_READ(ETC_PKG_CONFIG_PATH))))dnl
 ETC_CHOMP(ifelse(eval($# < 1),1,`ETC_SYSTEM_PKG_MANAGER(ETC_LINE_COUNT(PKG_CONFIG_CONTENT))',`dnl
 ifelse(eval($1 < 1),1,`',`dnl Empty string: no available system package manager
 pushdef(`CANIDATE_SYS_PKG_MAN',ETC_CHOMP(ETC_SLICE(`;',1,ETC_LINE($1,PKG_CONFIG_CONTENT))))dnl

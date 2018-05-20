@@ -7,16 +7,18 @@ dnl Core Utilties
 dnl Etcetera deployment system 
 dnl 
 
-#Constants
-define(`ETC_TRUE',1)
-define(`ETC_FALSE',0)
-define(`ETC_DEPLOY_DIR',`./deploy')
 
 # Utilities
 dnl Usage: ETC_CHOMP(<expr>)
 dnl Expands to the given 'expr' with the trailing and lead whitespace removed
 define(ETC_CHOMP,`patsubst(patsubst(`$1',`^\s*',),`\s*$',)')
 
+#Constants
+define(`ETC_TRUE',1)
+define(`ETC_FALSE',0)
+define(`ETC_DEPLOY_DIR',`./deploy')
+
+# Utils cont.
 dnl Usage: ETC_BASENAME(<path>)
 dnl Expands to the filename portion of path.
 define(ETC_BASENAME,`patsubst($1,`^.*/',)')dnl remove until last '/'

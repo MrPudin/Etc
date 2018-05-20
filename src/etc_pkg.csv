@@ -9,7 +9,7 @@
 # r - requres superuser permissions
 # e - continue deployment on non zero return code
 # refresh refers to the command for the package manager to update its listings
-#<cmd>; <install>; <update>; <remove>;<refresh>;<flags>
+#<cmd>; <install>; <update>;<remove>;[refresh];[flags]
 # System Package Managers
 brew; install; upgrade; remove; update; mse
 apt-get; install -y; upgrade -y; uninstall -y; update; lsr
