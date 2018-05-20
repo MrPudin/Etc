@@ -33,8 +33,10 @@ dnl update depend on update__<module>
 dnl remove depend on remove__<module>
 dnl And setups the execution of hooks
 define(ETC_MAKE_ATTACH_MODULE,`
-.PHONY: install__$1 update__$1 remove__$1 
+ETC_MAKE_SETUP()
+
 .PHONY: full_install__$1 full_update__$1 full_remove__$1
+.PHONY: install__$1 update__$1 remove__$1 
 .PHONY: hook_setup__$1 hook_upgrade__$1 hook_teardown__$1
 
 install:: full_install__$1
@@ -62,6 +64,30 @@ full_remove__$1:: remove__$1
 dnl Runs in desired sequence hook_teardown -> remove__module
 remove__$1:: hook_teardown__$1
 ')
+
+# Setup Macros
+dnl Usage: ETC_MAKE_SETUP
+dnl Expands to the makefile rules that will setup the core targets
+dnl (install/update/remove). Also expands to the makefile rules that 
+dnl will setup the working directory. Only expands once, so subsequent
+dnl expansions will expand into an empty string
+define(ETC_MAKE_SETUP,`dnl
+ifdef(`ETC_MAKE_SETUP_COMPLETE',`',`dnl
+.PHONY: install update remove
+
+install:: setup_work_dirs
+update:: setup_work_dirs
+remove:: setup_work_dirs
+
+setup_work_dirs:
+	@mkdir -p ETC_WORK_DIR()
+	@mkdir -p ETC_WORK_DIR()`/mark'
+
+define(`ETC_MAKE_SETUP_COMPLETE',1)
+')')
+
+
+# Module Macros cont.
 
 dnl Usage: ETC_MODULE_BEGIN(<name>)
 dnl        <implementation>
@@ -98,6 +124,8 @@ remove__$2:: remove__$1
 ')
 
 # Hooks
+dnl Note: Hooks are tied to the modules, not the targets
+
 dnl Usage: ETC_SETUP_HOOK(<module>,<implementation>)
 dnl Setup Hooks run after the entire module of has finished installing,
 dnl when which the provided implementation is executed.

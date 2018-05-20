@@ -23,7 +23,7 @@ ETC_GREP(`$1',ETC_FILTER_COMMENT(ETC_READ(ETC_PKG_CONFIG_PATH))),
 
 dnl Usage: ETC_PKG_CONFIG_PATH
 dnl Expands to the filepath of the package manager infomation config
-define(ETC_PKG_CONFIG_PATH,`deploy/etc_pkg.csv')
+define(ETC_PKG_CONFIG_PATH,`ETC_DEPLOY_DIR()/etc_pkg.csv')
 
 dnl Usage: ETC_PKG_CHECK_FLAG(<pkg_manager>,<flag>)
 dnl Checks whether the given flag is for the package manager given by name 
@@ -110,7 +110,7 @@ define(ETC_MAKE_PKG_REFRESH,`dnl
 ifdef(`ETC_MAKE_PKG_REFRESH_FLAG__$1',`',`dnl
 .PHONY: refresh__$1
 refresh__$1:
-	ETC_PKG_REFRESH($1)
+	ETC_MAKE_INDENT(ETC_PKG_REFRESH($1))
 define(`ETC_MAKE_PKG_REFRESH_FLAG__$1',1)dnl
 ')')
 

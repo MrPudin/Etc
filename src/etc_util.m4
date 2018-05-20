@@ -17,6 +17,7 @@ define(ETC_CHOMP,`patsubst(patsubst(`$1',`^\s*',),`\s*$',)')
 define(`ETC_TRUE',1)
 define(`ETC_FALSE',0)
 define(`ETC_DEPLOY_DIR',`./deploy')
+define(`ETC_WORK_DIR',`./.work')
 
 # Utils cont.
 dnl Usage: ETC_BASENAME(<path>)
@@ -78,7 +79,7 @@ define(ETC_EXISTS,`dnl
 syscmd(test -e $1)dnl
 ifelse(sysval,0,ETC_TRUE,ETC_FALSE)')
 
-define(ETC_OS,`ETC_CHOMP(esyscmd(`uname -s'))')
+define(`ETC_OS',ETC_CHOMP(esyscmd(`uname -s')))
 
 # User Permissions
 dnl Usage: ETC_REAL_USER
@@ -125,7 +126,7 @@ define(ETC_RETRIEVE,`ETC_RUN_NORM(`curl -fLo $2 --create-dirs $1')')
 dnl Usage: ETC_TARGET_MARKER(<name>)
 dnl Expands to the target marker file path of the target 'name': 
 dnl  <current module name>__<name of target>
-define(ETC_TARGET_MARKER,``mark/'ETC_CURRENT_MODULE()`__$1'')
+define(ETC_TARGET_MARKER,`ETC_WORK_DIR()`/mark/'ETC_CURRENT_MODULE()`__$1'')
 
 dnl Usage: ETC_MARK(<name>)
 dnl Marks 'name' status as completed and fullfills any dependency created by

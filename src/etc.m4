@@ -45,7 +45,7 @@ dnl If the specified package manager is not installed, would expand to an empty
 dnl string.
 define(ETC_PKG,`dnl
 ifelse(eval($# < 2),1,`ETC_PKG($1,ETC_SYSTEM_PKG_MANAGER)',`dnl
-ifelse(ETC_IS_INSTALLED($2),ETC_TRUE,`dnl
+ifelse(ETC_IS_INSTALLED(`$2'),ETC_TRUE,`dnl
 pushdef(`ETC_TARGET',ETC_CHOMP($1))dnl
 pushdef(`ETC_PKGMAN',`$2')dnl
 ETC_MAKE_PKG_REFRESH(ETC_PKGMAN)
