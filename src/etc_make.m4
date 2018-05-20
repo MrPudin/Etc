@@ -43,18 +43,18 @@ install:: full_install__$1
 update:: full_update__$1
 remove:: full_remove__$1
 
-ETC_TARGET_MARKER($1): install__$1
-	ETC_MARK($1)
+ETC_MODULE_MARKER($1): install__$1
+	ETC_MARK(ETC_MODULE_MARKER($1))
 
 update__$1::
-	ETC_MARK($1)
+	ETC_MARK(ETC_MODULE_MARKER($1))
 
 remove__$1::
-	ETC_UNMARK($1)
+	ETC_UNMARK(ETC_MODULE_MARKER($1))
 
 full_install__$1: hook_setup__$1
 dnl Runs in desired sequence install__module -> hook_setup 
-hook_setup__$1:: ETC_TARGET_MARKER($1)
+hook_setup__$1:: ETC_MODULE_MARKER($1)
 
 full_update__$1:: hook_upgrade__$1
 dnl Runs in desired sequence update_module -> hook_upgrade 
@@ -88,7 +88,6 @@ define(`ETC_MAKE_SETUP_COMPLETE',1)
 
 
 # Module Macros cont.
-
 dnl Usage: ETC_MODULE_BEGIN(<name>)
 dnl        <implementation>
 dnl        ETC_MODULE_END(<name>)
@@ -158,23 +157,26 @@ hook_teardown__$1::
 
 # Target Macros
 dnl Each target will also generate makefile rules to target:
-dnl install__<target>, update__<target> and remove__<target>to install, update 
-dnl and remove te target respectively. They are made the dependency of 
-dnl the deployment targets install/update/remove so that the target is
-dnl installed, updated or removed when the module is installed, updated or 
-dnl removed
+dnl install__<module>__<target>, update__<module>__<target> and 
+dnl remove__<module>__<target>to install, update and remove te target 
+dnl respectively. They are made the dependency of the deployment targets 
+dnl install/update/remove so that the target is installed, updated or 
+dnl removed when the module is installed, updated or removed
 
 dnl Usage: ETC_MAKE_INSTALL_TARGET(<target>, <dep_target>, <implementation>)
 dnl Generates the makefile rules to update 'target' for the current module 
 dnl using 'implementation'
 dnl Makes install__<module> depend on install__<target>
 define(ETC_MAKE_INSTALL_TARGET,`
-.PHONY: install__$1
+.PHONY: install__`'ETC_CURRENT_MODULE()`'__$1
 
-install__`'ETC_CURRENT_MODULE():: install__$1
+install__`'ETC_CURRENT_MODULE():: install__`'ETC_CURRENT_MODULE()`'__$1
 
-install__$1: `$2'
+install__`'ETC_CURRENT_MODULE()`'__$1: ETC_TARGET_MARKER($1)
+
+ETC_TARGET_MARKER($1): `$2'
 	ETC_MAKE_INDENT(`$3')dnl Indent \t to statify makefile syntax requirement
+	ETC_MARK(ETC_TARGET_MARKER($1))
 ')
 
 dnl Usage: ETC_MAKE_UPDATE_TARGET(<target>, <dep_target>, <implementation>)
@@ -182,12 +184,13 @@ dnl Generates the makefile rules to update 'target' for the current module
 dnl using 'implementation'
 dnl Makes update__<module> depend on update__<target>
 define(ETC_MAKE_UPDATE_TARGET,`
-.PHONY: update__$1
+.PHONY: update__`'ETC_CURRENT_MODULE()`'__$1
 
-update__`'ETC_CURRENT_MODULE():: update__$1
+update__`'ETC_CURRENT_MODULE():: update__`'ETC_CURRENT_MODULE()`'__$1
 
-update__$1: `$2'
+update__`'ETC_CURRENT_MODULE()`'__$1: `$2'
 	ETC_MAKE_INDENT(`$3')dnl Indent \t to statify makefile syntax requirement
+	ETC_MARK(ETC_TARGET_MARKER($1))
 ')
 
 dnl Usage: ETC_MAKE_REMOVE_TARGET(<target>, <dep_target>, <implementation>)
@@ -195,12 +198,13 @@ dnl Generates the makefile rules to remove 'target' for the current module
 dnl using 'implementation'
 dnl Makes remove__<module> depend on remove__<target>
 define(ETC_MAKE_REMOVE_TARGET,`dnl
-.PHONY: remove__$1
+.PHONY: remove__`'ETC_CURRENT_MODULE()`'__$1
 
-remove__`'ETC_CURRENT_MODULE():: remove__$1
+remove__`'ETC_CURRENT_MODULE():: remove__`'ETC_CURRENT_MODULE()`'__$1
 
-remove__$1: `$2'
+remove__`'ETC_CURRENT_MODULE()`'__$1: `$2'
 	ETC_MAKE_INDENT(`$3')dnl Indent \t to statify makefile syntax requirement
+	ETC_UNMARK(ETC_TARGET_MARKER($1))
 ')
 define(`ETC_MAKE_M4',1)
 ')dnl Include Proctection

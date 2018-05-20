@@ -79,7 +79,7 @@ define(ETC_EXISTS,`dnl
 syscmd(test -e $1)dnl
 ifelse(sysval,0,ETC_TRUE,ETC_FALSE)')
 
-define(`ETC_OS',ETC_CHOMP(esyscmd(`uname -s')))
+define(ETC_OS,`ETC_CHOMP(esyscmd(`uname -s'))')
 
 # User Permissions
 dnl Usage: ETC_REAL_USER
@@ -128,16 +128,21 @@ dnl Expands to the target marker file path of the target 'name':
 dnl  <current module name>__<name of target>
 define(ETC_TARGET_MARKER,`ETC_WORK_DIR()`/mark/'ETC_CURRENT_MODULE()`__$1'')
 
-dnl Usage: ETC_MARK(<name>)
-dnl Marks 'name' status as completed and fullfills any dependency created by
-dnl 'name'
-dnl
-define(ETC_MARK,`ETC_RUN_NORM(`touch -f ETC_TARGET_MARKER($1)')')
+dnl Usage: ETC_MODULE_MARKER(<name>)
+dnl Expands to the module marker file path of the given module specified by 
+dnl the given 'name'
+define(ETC_MODULE_MARKER,`ETC_WORK_DIR()`/mark/'$1')
 
-dnl Usage: ETC_UNMARK([name])
-dnl Marks 'name' status as incomplete and unfullfills any dependency created by
-dnl 'name'
-define(ETC_UNMARK,`ETC_RUN_NORM(`rm -f ETC_TARGET_MARKER($1)')')
+dnl Usage: ETC_MARK(<marker>)
+dnl Marks 'marker' status as completed and fullfills any dependency created by
+dnl 'marker'
+dnl
+define(ETC_MARK,`ETC_RUN_NORM(`touch -f $1')')
+
+dnl Usage: ETC_UNMARK(<marker>)
+dnl Marks 'marker' status as incomplete and unfullfills any dependency created by
+dnl 'marker'
+define(ETC_UNMARK,`ETC_RUN_NORM(`rm -f $1')')
 
 define(`ETC_UTIL_M4',1)
 ')dnl Include Proctection
