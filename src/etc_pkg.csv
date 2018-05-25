@@ -17,4 +17,4 @@ apt-get; install -y; upgrade -y; uninstall -y; update; lsr
 # no refresh command and flags
 pip; install; install --upgrade; uninstall;; 
 pip3; install; install --upgrade; uninstall;;
-gem; install; update; uninstall;;
+gem; install; update; uninstall; update --system;

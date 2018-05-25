@@ -122,28 +122,6 @@ dnl Attempts to retrieve the resource pointed to at 'url' to the filepath at
 dnl 'destination' using the most optimal retrieval program.
 define(ETC_RETRIEVE,`ETC_RUN_NORM(`curl -fLo $2 --create-dirs $1')')
 
-# Target Markers
-dnl Usage: ETC_TARGET_MARKER(<name>)
-dnl Expands to the target marker file path of the target 'name': 
-dnl  <current module name>__<name of target>
-define(ETC_TARGET_MARKER,`ETC_WORK_DIR()`/mark/'ETC_CURRENT_MODULE()`__$1'')
-
-dnl Usage: ETC_MODULE_MARKER(<name>)
-dnl Expands to the module marker file path of the given module specified by 
-dnl the given 'name'
-define(ETC_MODULE_MARKER,`ETC_WORK_DIR()`/mark/'$1')
-
-dnl Usage: ETC_MARK(<marker>)
-dnl Marks 'marker' status as completed and fullfills any dependency created by
-dnl 'marker'
-dnl
-define(ETC_MARK,`ETC_RUN_NORM(`touch -f $1')')
-
-dnl Usage: ETC_UNMARK(<marker>)
-dnl Marks 'marker' status as incomplete and unfullfills any dependency created by
-dnl 'marker'
-define(ETC_UNMARK,`ETC_RUN_NORM(`rm -f $1')')
-
 define(`ETC_UTIL_M4',1)
 ')dnl Include Proctection
 divert(0)dnl
