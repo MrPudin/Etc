@@ -17,9 +17,21 @@ dnl that describes the given package manager specified by 'pkg_manager' as name.
 dnl 
 define(ETC_PKG_CONFIG,`dnl
 ifelse(ETC_EXISTS(ETC_PKG_CONFIG_PATH),ETC_TRUE,dnl Check if package infomation file exists
-ETC_GREP(`$1',ETC_FILTER_COMMENT(ETC_READ(ETC_PKG_CONFIG_PATH))),
+ETC_GREP(`$1',ETC_FILTER_COMMENT(ETC_PKG_CONFIG_CONTENT)),
 `')dnl Empty return if file not found 
 ')
+
+dnl Usage: ETC_PKG_CONFIG_CONTENT
+dnl Expands to the contents of the package configuration infomation file
+dnl Used as on optimaisation, only reads the file once.
+define(ETC_PKG_CONFIG_CONTENT,`dnl
+ifelse(ETC_EXISTS(ETC_PKG_CONFIG_PATH),ETC_TRUE,` dnl Check if package infomation file exists
+ifdef(`__ETC_PKG_CONFIG_CONTENT__',,`dnl
+define(`__ETC_PKG_CONFIG_CONTENT__',ETC_READ(ETC_PKG_CONFIG_PATH))')
+__ETC_PKG_CONFIG_CONTENT__ dnl
+',`')
+')
+
 
 dnl Usage: ETC_PKG_CONFIG_PATH
 dnl Expands to the filepath of the package manager infomation config
@@ -89,7 +101,7 @@ dnl Expands to the default system package manager.
 dnl By default, etcetera will automatically select a system package manager to
 dnl when which package manager to use is not specified.
 define(ETC_SYSTEM_PKG_MANAGER,`dnl
-pushdef(`PKG_CONFIG_CONTENT',ETC_FILTER_EMPTY_LINE(ETC_FILTER_COMMENT(ETC_READ(ETC_PKG_CONFIG_PATH))))dnl
+pushdef(`PKG_CONFIG_CONTENT',ETC_FILTER_EMPTY_LINE(ETC_FILTER_COMMENT(ETC_PKG_CONFIG_PATH)))dnl
 ETC_CHOMP(ifelse(eval($# < 1),1,`ETC_SYSTEM_PKG_MANAGER(ETC_LINE_COUNT(PKG_CONFIG_CONTENT))',`dnl
 ifelse(eval($1 < 1),1,`',`dnl Empty string: no available system package manager
 pushdef(`CANIDATE_SYS_PKG_MAN',ETC_CHOMP(ETC_SLICE(`;',1,ETC_LINE($1,PKG_CONFIG_CONTENT))))dnl
