@@ -96,7 +96,7 @@ dnl Define a one line module
 dnl 
 define(ETC_MODULE,`dnl
 ETC_MODULE_BEGIN($1)
-`$2'
+$2
 ETC_MODULE_END($1)
 ')
 

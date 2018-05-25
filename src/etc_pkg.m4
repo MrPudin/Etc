@@ -96,24 +96,30 @@ ifelse(REFRESH_CMD,,`',ETC_PKG_EXPAND_FLAGS(`$1',`$1' REFRESH_CMD)) dnl
 popdef(`REFRESH_CMD')dnl
 ')
 
-dnl Usage: ETC_SYSTEM_PKG_MANAGER
-dnl Expands to the default system package manager.
+dnl Usage: ETC_FIND_SYSTEM_PKG_MANAGER
+dnl Finds and expands the system package manager
 dnl By default, etcetera will automatically select a system package manager to
 dnl when which package manager to use is not specified.
-define(ETC_SYSTEM_PKG_MANAGER,`dnl
-pushdef(`PKG_CONFIG_CONTENT',ETC_FILTER_EMPTY_LINE(ETC_FILTER_COMMENT(ETC_PKG_CONFIG_PATH)))dnl
-ETC_CHOMP(ifelse(eval($# < 1),1,`ETC_SYSTEM_PKG_MANAGER(ETC_LINE_COUNT(PKG_CONFIG_CONTENT))',`dnl
+define(ETC_FIND_SYSTEM_PKG_MANAGER,`dnl
+pushdef(`PKG_CONFIG_CONTENT',ETC_FILTER_EMPTY_LINE(ETC_FILTER_COMMENT(ETC_PKG_CONFIG_CONTENT)))dnl
+ETC_CHOMP(ifelse(eval($# < 1),1,`ETC_FIND_SYSTEM_PKG_MANAGER(ETC_LINE_COUNT(PKG_CONFIG_CONTENT))',`dnl
 ifelse(eval($1 < 1),1,`',`dnl Empty string: no available system package manager
 pushdef(`CANIDATE_SYS_PKG_MAN',ETC_CHOMP(ETC_SLICE(`;',1,ETC_LINE($1,PKG_CONFIG_CONTENT))))dnl
-ifelse(ETC_PKG_CHECK_FLAG(CANIDATE_SYS_PKG_MAN,`s'),ETC_FALSE,`ETC_SYSTEM_PKG_MANAGER(eval($1 - 1))',`dnl
+ifelse(ETC_PKG_CHECK_FLAG(CANIDATE_SYS_PKG_MAN,`s'),ETC_FALSE,`ETC_FIND_SYSTEM_PKG_MANAGER(eval($1 - 1))',`dnl
 ifelse(ETC_PKG_CHECK_FLAG(CANIDATE_SYS_PKG_MAN,`m'),ETC_TRUE,`dnl
-ifelse(ETC_OS,`Darwin',CANIDATE_SYS_PKG_MAN,`ETC_SYSTEM_PKG_MANAGER(eval($1 - 1))')',`dnl
+ifelse(ETC_OS,`Darwin',CANIDATE_SYS_PKG_MAN,`ETC_FIND_SYSTEM_PKG_MANAGER(eval($1 - 1))')',`dnl
 ifelse(ETC_PKG_CHECK_FLAG(CANIDATE_SYS_PKG_MAN,`l'),ETC_TRUE,`dnl
-ifelse(ETC_OS,`Linux',CANIDATE_SYS_PKG_MAN,`ETC_SYSTEM_PKG_MANAGER(eval($1 - 1))')', dnl
+ifelse(ETC_OS,`Linux',CANIDATE_SYS_PKG_MAN,`ETC_FIND_SYSTEM_PKG_MANAGER(eval($1 - 1))')', dnl
 CANIDATE_SYS_PKG_MAN)')') dnl
 popdef(`CANIDATE_SYS_PKG_MAN')dnl
 popdef(`PKG_CONFIG_CONTENT')dnl
 ')'))')
+
+dnl Usage: ETC_SYSTEM_PKG_MANAGER
+dnl Expands to the system package manager
+dnl Extra constant is defined for optimisation, prevent recompuation of
+dnl system package manager every time.
+define(`ETC_SYSTEM_PKG_MANAGER',ETC_FIND_SYSTEM_PKG_MANAGER)
 
 dnl Usage: ETC_MAKE_PKG_REFRESH(<pkg_manager>)
 dnl Expands to the makefile rules refresh the package manager, for the first
