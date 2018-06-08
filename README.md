@@ -1,17 +1,24 @@
 #  **etcetra** - _Terminal Enviroment Deployment_. 
-etcetra unifies and simplies the deployment of a terminal enviroment. 
+Etcetra unifies and simplies the deployment of a terminal enviroment across POSIX systems.
 
-### Examples
-To define a deployment for wget via using the system package manager.
+Etcetra allows you to write deployment specification, then proceed to deploy across 
+different POSIX-compatible systems with ease.
+
+What you write
 ```m4
-ETC_MODULE(wget,`ETC_PKG(wget)')
+ETC_PKG(wget)
+```
+What is executed on macos with brew installed
+```sh
+brew install wget
 ```
 
-To define a deployment for requests _python module_:
-```m4
-ETC_MODULE(python_requests,`ETC_PKG(requests,pip3)')
+What is executed on Debian with apt-get installed
+```sh
+sudo apt-get install wget
 ```
 
+### Example
 To define a compound deployment module for C/C++ development
 ```m4
 ETC_MODULE_BEGIN(C_CXX)
@@ -21,47 +28,51 @@ ETC_MODULE_BEGIN(C_CXX)
     ETC_PKG(doxygen)
 ETC_MODULE_END(C_CXX)
 ```
-
-Sneakly inject code into a deployment with hooks:
+Copy your dotfiles for neovim and update your plugins using hooks
+Sneakly inject shell commands using hooks
 ```m4
-ETC_HOOK_UPDATE(sh ~/.oh-my-zsh/tools/upgrade.sh)
-ETC_GIT(git://github.com/robbyrussell/oh-my-zsh.git,~/.oh-my-zsh)
-```
-
-To define a deployment for both neovim and its plugins and make its plugins
-depend on having neovim:
-```m4
-ETC_DEPEND(neovim,neovim_plug)
-
-ETC_MODULE(neovim,`ETC_PKG(neovim)')
-
 ETC_MODULE_BEGIN(neovim_plug)
+    ETC_PKG(neovim,pip3)
     ETC_PKG(jedi,pip3)
-
-    ETC_HOOK_CREMATE(rm -rf ~/.local/share/nvim/plugged)
-    ETC_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,~/.local/share/nvim/site/autoload/plug.vim)
-
-    ETC_HOOK_EVOLVE(nvim +PlugUpdate +qa)
-    ETC_HIERARCHY(ETC_DIR_DEPLOY/data/init.vim, ~/.config/nvim/init.vim)
+    ETC_REMOTE_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,$(HOME)/.local/share/nvim/site/autoload/plug.vim)
+    ETC_DEPLOY_COPY(dotfiles/init.vim,$(HOME)/.config/nvim/init.vim)
+    
+    ETC_UPGRADE_HOOK(`
+        ETC_RUN_NORM(nvim +PlugUpdate +qa)
+    ')
+    ETC_TEARDOWN_HOOK(`
+        ETC_RUN_NORM(rm -rf $(HOME)/.local/share/nvim/plugged)
+    ')
 ETC_MODULE_END(neovim_plug)
 ```
 
-### Setup/Installation
-_Documentation for the ETC... Macros can be generated via `make docs`_
-
-1. Retrieve this repositiory, either using git or downloading the zip.
-2. Open a terminal and `cd` into the repositiory directory.
-3. Write your deployment specification in the 'deploy' directory and save as `<name>.etc`
-The 'deploy' directory is copied together with the deployment specification during installation
-and can be used to hold installation files.
-The 'deploy' directory can be referenced in the deployment using the macro `ETC_DIR_DEPLOY`  
-For example this deployment specification refenreces data/init.vim in the 'deploy'  directory
+Make your zsh plugins dependent on having zsh already installed:
 ```m4
-ETC_HIERARCHY(ETC_DIR_DEPLOY/data/init.vim, ~/.config/nvim/init.vim)
-```
-4. Run 'make install'
+ETC_MODULE_DEPEND(zsh_plug,zsh)
 
-#### etcetra is now installed with deployment specifications
+ETC_MODULE(zsh,ETC_PKG(zsh))
+
+ETC_MODULE_BEGIN(zsh_plug)
+    ETC_REMOTE_RESOURCE(https://raw.githubusercontent.com/zplug/installer/master/installer.zsh,/tmp/make_zplug)
+    ETC_DEPLOY_COPY(dotfiles/zshrc,$(HOME)/.zshrc)
+
+    ETC_SETUP_HOOK(`
+       ETC_RUN_NORM(zsh /tmp/make_zplug)
+    ')
+    ETC_UPGRADE_HOOK(`
+        ETC_RUN_NORM(zsh -c "source $(HOME)/.zshrc; source $(HOME)/.zplug/init.zsh; zplug update")
+    ')
+    ETC_TEARDOWN_HOOK(`
+        ETC_RUN_NORM(rm -rf $(HOME)/.zplug)
+    ')
+ETC_MODULE_END(zsh_plug)
+
+```
+### Setup/Installation
+1. `git clone https://github.com/mrzzy/etcetra ~/.etc`
+2. Write your deployment specification in the 'deploy' in '~/.etc' directory 
+and naming it as "deployment.m4"
+3. Run `sudo make install` to install the etcetera command line tool.
 
 ### Usage
 Once the etcetra and the deployment specifcation are installed:

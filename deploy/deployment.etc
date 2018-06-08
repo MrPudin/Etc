@@ -105,7 +105,6 @@ ETC_MODULE_BEGIN(zsh_plug)
     ')
 ETC_MODULE_END(zsh_plug)
 
-#TEST
 #Neovim Editor
 ETC_MODULE_DEPEND(neovim_plug,neovim)
 

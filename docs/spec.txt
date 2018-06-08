@@ -33,7 +33,7 @@ src/etc.m4 - m4 macros for use to create deployments. See: docs/etc_macros.txt
 src/etc_util.m4 - utilities for etcetera
 src/etc_make.m4 - macros that generate makefile rules
 src/etc_pkg.m4 - macros that generate package manager rules
-TODO: merger with etc.m4
+
 makefile - makefile to install the etcetera command line tool and generate docs
     Targets:
         all - make everything
@@ -41,66 +41,46 @@ makefile - makefile to install the etcetera command line tool and generate docs
         clean - remove make generated files
         uninstall - remove etcetera command line tool
 
+deploy/ - directory where the contents of the users deployment are kept
+
 [Design]
 Deployment
 make + m4 + git system 
 - make provides dependecy system, target system.
 - m4 provides make with useful macros, which speed up setup & configurationm
 - git provides upstream update support, as well as updating upstream support
-    - TODO 2.1: make this dependency optional
 
-File "*.m4"
-    - Defines the etc macros for use to defining the deployment
-
-File "makefile" -- TODO 2.1 possible to merge this into "etc.m4"
--- generate this completely from the etc.m4
-- Bootstrap makefile
-- Bootstraps actual deployment process
-    - finds *.etc files.
-    - expands m4 macros for these files
-- Include *.etc files for running their deployment 
-
-File "*.etc"
+File "deploy/deployment.etc"
 - Defines deployment through etc macros.
 - Defines modules of deployment - module is a user defined singular entity that
     defines a particular setup for example the neovim module may contain
     commands to install neovim, install the configuration Example:
-
-
-"deploy" 
-    - directory to source files from, to be used elsewhere
-    - see etc deploy
-
 Modular Configiration
 ETC_MODULE_BEGIN(neovim)
 
-ETC_PKG(neovim)
-ETC_PKG(neovim,pip3)
+    ETC_PKG(neovim)
+    ETC_PKG(neovim,pip3)
 
-ETC_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,~/.local/share/nvim/site/autoload/plug.vim)
+        ETC_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,~/.local/share/nvim/site/autoload/plug.vim)
 
-ETC_HOOK_EVOLVE(`nvim +PlugUpdate +qa')
-ETC_HIERARCHY(init.vim, ~/.config/nvim/init.vim)
-
+        ETC_SETUP_HOOK(`
+            ETC_RUN_NORM(nvim +PlugUpdate +qa)
+        ')
+    ETC_DEPLOY_COPY(dotfiles/init.vim, ~/.config/nvim/init.vim)
 ETC_MODULE_END(neovim)
-- Defines dependencies between modules
 
 ~/.etc - main etcetera directory.
-~/.etc/.etc_work - etcetera working directory
-~/.etc/.etc_work/mark - etcetera installation markers
-~/.etc/.etc_work/source - etcetera geneerated makefiles.
 
 Command Line Interface - CLI
-Usage: etcetera [-hfld] (install|update|remove) [modules]
+Usage: etcetera [-hi] [-d <deployment>] (install|update|remove) [modules]
 install - install deployment
 update - update deployment
 remove - remove deployment
 -h - Print usage infomation
--f - Force action, regardless if already installed or updated
-[modules] - Interact with these modules only
+-i - Ignore any errors, just continue
+-d - specify the deployment file to use, otherwise uses '~/.etc/deploy/deployment.etc'
+[modules] - Limit deployment scope to within these modules only
 
 [TODO]
-- self contained install system, no need for extra makefile
-- self cleaning of the work directory when the etc respostiory updates
 - Parallel installations with make -j and file-locks for sycronisation
 - define package manager commands in a distinct, user configurable file
