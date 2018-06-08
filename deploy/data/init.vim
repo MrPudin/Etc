@@ -126,6 +126,7 @@ Plug 'keith/swift.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'sirtaj/vim-openscad'
 Plug 'vim-ruby/vim-ruby'
+Plug 'fatih/vim-go'
 
 "Appearance
 Plug 'altercation/vim-colors-solarized'
@@ -248,5 +249,11 @@ nnoremap <leader>vb :Gblame -MMM<cr>
 "Undotree
 nnoremap <leader>uu :UndotreeToggle<cr>
 
+" Vim Go
+let g:go_fmt_command="goimports"
+let g:go_metalinter_autosave=1
+let g:go_gocode_unimported_packages=1
+
 "Plugin Autocommands
 autocmd InsertEnter * call deoplete#enable()
+
