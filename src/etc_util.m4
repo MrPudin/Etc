@@ -16,8 +16,9 @@ define(ETC_CHOMP,`patsubst(patsubst(`$1',`^\s*',),`\s*$',)')
 #Constants
 define(`ETC_TRUE',1)
 define(`ETC_FALSE',0)
-define(`ETC_DEPLOY_DIR',`./deploy')
-define(`ETC_WORK_DIR',`./.work')
+define(`ETC_DIR',`esyscmd(`printf "$ETC_DIR"')')
+define(`ETC_DEPLOY_DIR',`ETC_DIR()/deploy')
+define(`ETC_WORK_DIR',`ETC_DIR()/.work')
 
 # Utils cont.
 dnl Usage: ETC_BASENAME(<path>)

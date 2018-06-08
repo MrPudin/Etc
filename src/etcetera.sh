@@ -6,7 +6,7 @@
 
 # Etcetera directory is define as ~/.etc by default if not already specified as
 # enviromental variable
-ETC_DIR="${ETC_DIR-$HOME/.etc}"
+export ETC_DIR="${ETC_DIR-$HOME/.etc}"
 DEPLOYMENT_PATH="$ETC_DIR/deploy/deployment.etc"
 MAKE_ARG=""
 FORCE=false
