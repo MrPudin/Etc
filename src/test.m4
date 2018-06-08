@@ -1,0 +1,152 @@
+#
+# core.etc
+# Core Deployment
+# 
+
+include(etc.m4)
+
+#Core Programs
+#Utilities
+ETC_MODULE_BEGIN(util)
+    ETC_PKG(mutt)
+    ETC_PKG(w3m)
+    ETC_PKG(wget)
+    ETC_PKG(aria2)
+    ETC_PKG(gawk)
+    ETC_PKG(gpg)
+ETC_MODULE_END(util)
+
+
+#General Development
+ETC_MODULE_BEGIN(dev)
+    ETC_PKG(ag)
+    ETC_PKG(git)
+    ETC_PKG(opencv)
+    ETC_PKG(openssl)
+    ETC_PKG(sqlite)
+    ETC_PKG(postgres)
+ETC_MODULE_END(dev)
+
+#Python Development
+ETC_MODULE_BEGIN(python)
+    ETC_PKG(python3)
+    ETC_PKG(ipython)
+    ETC_PKG(virtualenv,pip3)
+    ETC_PKG(cryptography,pip3)
+    ETC_PKG(numpy,pip3)
+    ETC_PKG(scipy,pip3)
+    ETC_PKG(scikit-learn,pip3)
+    ETC_PKG(pandas,pip3)
+ETC_MODULE_END(python)
+
+#Perl Development
+ETC_MODULE_BEGIN(perl)
+    ETC_PKG(perl)
+    ETC_PKG(perl6)
+    ETC_PKG(cpanm)
+ETC_MODULE_END(perl)
+
+#Ruby Development
+ETC_MODULE_BEGIN(ruby)
+    ETC_PKG(ruby)
+    ETC_PKG(rails,gem)
+ETC_MODULE_END(ruby)
+
+#MIT-Scheme Development
+ETC_MODULE(mit_scheme,ETC_PKG(mit-scheme))
+
+#C/C++ Development
+ETC_MODULE_BEGIN(c_cxx)
+    ETC_PKG(gcc)
+    ETC_PKG(gdb)
+    ETC_PKG(cmake)
+    ETC_PKG(doxygen)
+    ETC_PKG(cppunit)
+    ETC_PKG(pkg-config)
+    ETC_PKG(llvm)
+    ETC_PKG(clang,apt-get)
+ETC_MODULE_END(c_cxx)
+
+
+#Scala Development
+ETC_MODULE_BEGIN(scala)
+    ETC_PKG(scala)
+ETC_MODULE_END(scala)
+
+dnl #Microbit Development
+dnl ETC_MODULE_BEGIN(microbit)
+dnl     ETC_PKG(srecord)
+dnl     ETC_PKG(yotta,pip3)
+dnl ETC_MODULE_END(microbit)
+dnl 
+#Ardunio Development
+ETC_MODULE_BEGIN(arduino)
+    ETC_PKG(caskroom/cask/arduino,brew)
+ETC_MODULE_END(arduino)
+
+
+#Z Shell
+ETC_MODULE_DEPEND(zsh_plug,zsh)
+
+ETC_MODULE(zsh,ETC_PKG(zsh))
+
+ETC_MODULE_BEGIN(zsh_plug)
+    ETC_REMOTE_RESOURCE(https://raw.githubusercontent.com/zplug/installer/master/installer.zsh,/tmp/make_zplug)
+    ETC_SETUP_HOOK(`
+       ETC_RUN_NORM(zsh /tmp/make_zplug)
+    ')
+    ETC_UPGRADE_HOOK(`
+        ETC_RUN_NORM(zsh -c "source $(HOME)/.zplug/init.zsh")
+        ETC_RUN_NORM(zplug update)
+    ')
+    ETC_TEARDOWN_HOOK(`
+        ETC_RUN_NORM(rm -rf $(HOME)/.zplug)
+    ')
+    ETC_DEPLOY_COPY(data/zshrc,$(HOME)/.zshrc)
+ETC_MODULE_END(zsh_plug)
+
+#Neovim Editor
+ETC_MODULE_DEPEND(neovim_plug,neovim)
+
+ETC_MODULE_BEGIN(neovim)
+    ETC_PKG(neovim)
+ETC_MODULE_END(neovim)
+
+
+ETC_MODULE_BEGIN(neovim_plug)
+    ETC_PKG(neovim,pip3)
+    ETC_PKG(jedi,pip3)
+    ETC_REMOTE_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,$(HOME)/.local/share/nvim/site/autoload/plug.vim)
+    
+    ETC_DEPLOY_COPY(data/init.vim,$(HOME)/.config/nvim/init.vim)
+    
+    ETC_UPGRADE_HOOK(`
+        ETC_RUN_NORM(nvim +PlugUpdate +qa)
+    ')
+    ETC_TEARDOWN_HOOK(`
+        ETC_RUN_NORM(rm -rf $(HOME)/.local/share/nvim/plugged)
+    ')
+ETC_MODULE_END(neovim_plug)
+
+
+#Tmux Terminal Multiplexer
+ETC_MODULE_DEPEND(tmux_plug,tmux)
+ETC_MODULE_BEGIN(tmux)
+    ETC_PKG(tmux)
+ETC_MODULE_END(tmux)
+
+ETC_MODULE_BEGIN(tmux_plug)
+    ETC_DEPLOY_COPY(data/tmux.conf,$(HOME)/.tmux.conf)
+    ETC_GIT(https://github.com/tmux-plugins/tpm,$(HOME)/.tmux/plugins/tpm)
+
+    ETC_SETUP_HOOK(`
+        ETC_RUN_NORM(sh $(HOME)/.tmux/plugins/tpm/bin/install_plugins)
+    ')
+    ETC_UPGRADE_HOOK(`
+        ETC_RUN_NORM(sh $(HOME)/.tmux/plugins/tpm/bin/update_plugins all)
+        ETC_RUN_NORM(tmux source-file $(HOME)/.tmux.conf)
+    ')
+    ETC_TEARDOWN_HOOK(`
+        ETC_RUN_NORM(rm -rf $(HOME)/.tmux/plugins)
+    ')
+ETC_MODULE_END(tmux_plug)

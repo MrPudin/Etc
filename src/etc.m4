@@ -107,7 +107,7 @@ ETC_RUN(`cp -af "ETC_DEPLOY_DIR()/$1" "$2"')
 ')dnl
 
 ETC_MAKE_REMOVE_TARGET(ETC_TARGET(),,`dnl
-ETC_RUN(`rm -rf "ETC_DEPLOY_DIR()/$1" "$2"')
+ETC_RUN(`rm -rf "$2"')
 ')dnl
 
 popdef(`ETC_TARGET')dnl
