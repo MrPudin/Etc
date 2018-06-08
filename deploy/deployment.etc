@@ -92,7 +92,7 @@ ETC_MODULE(zsh,ETC_PKG(zsh))
 
 ETC_MODULE_BEGIN(zsh_plug)
     ETC_REMOTE_RESOURCE(https://raw.githubusercontent.com/zplug/installer/master/installer.zsh,/tmp/make_zplug)
-    ETC_DEPLOY_COPY(data/zshrc,$(HOME)/.zshrc)
+    ETC_DEPLOY_COPY(dotfiles/zshrc,$(HOME)/.zshrc)
 
     ETC_SETUP_HOOK(`
        ETC_RUN_NORM(zsh /tmp/make_zplug)
@@ -119,7 +119,7 @@ ETC_MODULE_BEGIN(neovim_plug)
     ETC_PKG(jedi,pip3)
     ETC_REMOTE_RESOURCE(https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim,$(HOME)/.local/share/nvim/site/autoload/plug.vim)
     
-    ETC_DEPLOY_COPY(data/init.vim,$(HOME)/.config/nvim/init.vim)
+    ETC_DEPLOY_COPY(dotfiles/init.vim,$(HOME)/.config/nvim/init.vim)
     
     ETC_UPGRADE_HOOK(`
         ETC_RUN_NORM(nvim +PlugUpdate +qa)
@@ -137,7 +137,7 @@ ETC_MODULE_BEGIN(tmux)
 ETC_MODULE_END(tmux)
 
 ETC_MODULE_BEGIN(tmux_plug)
-    ETC_DEPLOY_COPY(data/tmux.conf,$(HOME)/.tmux.conf)
+    ETC_DEPLOY_COPY(dotfiles/tmux.conf,$(HOME)/.tmux.conf)
     ETC_GIT(https://github.com/tmux-plugins/tpm,$(HOME)/.tmux/plugins/tpm)
 
     ETC_SETUP_HOOK(`
