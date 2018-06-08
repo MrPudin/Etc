@@ -51,10 +51,10 @@ mkdir -p "$WORK_DIR"
 
 # Generate deployment makefile from ETC deployment specification
 # Test if deployment specification is newer than deployment makefile
-# Triggers a regeneration of deployment makefile if older
+# Triggers a regeneration of deployment makefile if older or if makefile does not exist
 DEPLOY_MK_PATH="$WORK_DIR/deployment.mk"
 
-if test -n "$(find -L -- $DEPLOYMENT_PATH -prune -newer $DEPLOY_MK_PATH 2>/dev/null)"
+if test ! -e "$DEPLOY_MK_PATH" -o -n "$(find -L -- $DEPLOYMENT_PATH -prune -newer $DEPLOY_MK_PATH 2>/dev/null)"
 then
     echo "[etcetera]: Generating Build Script..."
     m4 --include="$ETC_DIR/src" "$DEPLOYMENT_PATH" >"$DEPLOY_MK_PATH"
