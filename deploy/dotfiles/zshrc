@@ -64,24 +64,45 @@ PROMPT_LEAN_NOTITLE="1"
 PROMPT_LEAN_NOTITLE="1"
 PROMPT_LEAN_COLOR1="136"
 PROMPT_LEAN_COLOR2="61"
+PROMPT_LEAN_COLOR3="136"
 PROMPT_LEAN_RIGHT="prompt_lean_python_venv_status"
 
 zplug load #Load Plugins
 
 # Lazy Load Implmentation
-# Usage: lazy(load_cmd, activator, activators...)
+# Usage: lazy_load(load_cmd, activator, activators... __EOA__ args_activator
+# Runs the lazy load command, dealiases all activators and executes the
+# activator with the given command line arguments
 lazy_load()
 {
     load_cmd="$1";shift
     activator="$2";shift
 
-    for act_alias in $*
+    # Run Lazy load command
+    eval " $load_cmd"
+
+    # Unalias activator aliases since the lazy load command has already run.
+    local PARSED_ACTIVATORS=false # Whether activators have been parsed
+    local ACTIVATOR_ARGS="" 
+    for arg in $*
     do
-        unalias "$act_alias"
+        if [ $arg = "__EOA__" ]
+        then 
+            local PARSED_ACTIVATORS=true
+        else
+            if $PARSED_ACTIVATORS
+            then 
+                # Collect command line arguments for activator command
+                ACTIVATOR_ARGS="$ACTIVATOR_ARGS $arg"
+            else
+                # Remove activator aliases since load command has already run
+                unalias "$arg"
+            fi
+        fi
     done
 
-    eval " $load_cmd"
-    eval " $activator"
+    # Run activator with collected command line args
+    eval " $activator $ACTIVATOR_ARGS"
 }
 
 # Usage: lazy(load_cmd, activators...)
@@ -97,10 +118,13 @@ lazy()
     shift
     for activator in $*
     do
-        load_alias="`printf 'lazy_load "%s" "%s" %s\n' "$load_cmd" "$activator" "$*"`"
+        # printf required because load command can contain spaces
+        # __EOA__ is used to enote end of activators and start of command line arguments for the activators
+        load_alias="`printf 'lazy_load "%s" %s %s "__EOA__" \n' "$load_cmd" "$activator" "$*"`"
         alias "$activator"="$load_alias"
     done 
 }
 
 #External Scripts
 lazy "source $HOME/.rvm/scripts/rvm" rvm
+lazy "source /usr/local/miniconda3/etc/profile.d/conda.sh" conda

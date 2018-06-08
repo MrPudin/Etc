@@ -1,0 +1,20 @@
+#
+# src/pkg.csv
+# Excetera deployment system
+#
+# Flags:
+# m - macos dependency
+# l - linux dependency
+# s - system package manager
+# r - requres superuser permissions
+# e - continue deployment on non zero return code
+# refresh refers to the command for the package manager to update its listings
+#<cmd>; <install>; <update>;<remove>;[refresh];[flags]
+# System Package Managers
+brew; install; upgrade; remove; update; mse
+apt-get; install -y; upgrade -y; uninstall -y; update; lsr
+# Platform Package Managers
+# no refresh command and flags
+pip; install; install --upgrade; uninstall;; 
+pip3; install; install --upgrade; uninstall;;
+gem; install; update; uninstall; update --system;

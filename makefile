@@ -1,26 +1,11 @@
 #
 # makefile.
 # Etc Project Makefile
-# *NOTE: this is NOT a deployment makefile
-#
+# Used for installing and removing the  etcetera command line tool
+#k
 
-.PHONY: all install clean docs
-.DEFAULT: all
-
-WORK_DIR := .etc_work/
-
-all: install docs
-
-work:
-	mkdir -p $(WORK_DIR)
-	cp -avf deploy $(WORK_DIR)
-
-$(WORK_DIR)/etc.m4: $(WORK_DIR)
-	cp -avf src/etc.m4 $(WORK_DIR)
-$(WORK_DIR)/makefile: $(WORK_DIR)
-	cp -avf src/makefile $(WORK_DIR)
-$(WORK_DIR):
-	mkdir -p $(WORK_DIR)
+.PHONY: install clean 
+.DEFAULT: install
 
 install: 
 	cp -avf src/etcetera.sh /usr/local/bin/etcetera
@@ -28,13 +13,3 @@ install:
 
 remove: 
 	rm -rf /usr/local/bin/etcetera
-
-clean:
-	rm -rf $(WORK_DIR)
-	rm -f docs/macro.txt
-
-docs: docs/macro.txt
-
-docs/macro.txt: src/etc.m4
-	sed -e '/^dnl /!d; s/dnl //g' $? >$@
-

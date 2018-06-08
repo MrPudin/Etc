@@ -27,7 +27,7 @@ clean:
 	rm -rf $(SOURCE_DIR)
 
 $(SOURCE_DIR)/%.mk: $(DEPLOY_DIR)/%.etc
-	m4 --include=. $< >$@
+	m4 --include=src $< >$@
 
 $(PP_SOURCES): $(SOURCE_DIR) $(MARK_DIR)
 
