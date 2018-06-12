@@ -112,7 +112,7 @@ Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-jedi'
 Plug 'carlitux/deoplete-ternjs'
-Plug 'artur-shaik/vim-javacomplete2'
+Plug 'vim-scripts/vim-javacomplete2'
 
 Plug 'landaire/deoplete-swift'
 Plug 'Rip-Rip/clang_complete'

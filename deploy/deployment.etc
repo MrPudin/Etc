@@ -68,6 +68,12 @@ ETC_MODULE_BEGIN(c_cxx)
 ETC_MODULE_END(c_cxx)
 
 
+# Java Development
+ETC_MODULE_BEGIN(java)
+    ETC_PKG(caskroom/cask/java8,brew)
+    ETC_PKG(maven)
+ETC_MODULE_END(java)
+
 #Scala Development
 ETC_MODULE_BEGIN(scala)
     ETC_PKG(scala)
