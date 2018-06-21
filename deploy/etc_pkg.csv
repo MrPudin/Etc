@@ -13,8 +13,8 @@
 # System Package Managers
 brew; install; upgrade; remove; update; mse
 apt-get; install -y; upgrade -y; uninstall -y; update; lsr
+dnf; install -y; upgrade -y; remove -y; check-update; lsr
 # Platform Package Managers
 # no refresh command and flags
-pip; install; install --upgrade; uninstall;; 
-pip3; install; install --upgrade; uninstall;;
+pip3; install --user; install --user --upgrade; uninstall --user;;
 gem; install; update; uninstall; update --system;
