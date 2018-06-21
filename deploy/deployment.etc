@@ -19,12 +19,11 @@ ETC_MODULE_END(util)
 
 #General Development
 ETC_MODULE_BEGIN(dev)
-    ETC_PKG(ag)
+    ETC_PKG(ag,brew)
+    ETC_PKG(the_silver_searcher,dnf)
     ETC_PKG(git)
-    ETC_PKG(opencv)
     ETC_PKG(openssl)
     ETC_PKG(sqlite)
-    ETC_PKG(postgres)
 ETC_MODULE_END(dev)
 
 #Python Development
@@ -36,20 +35,18 @@ ETC_MODULE_BEGIN(python)
     ETC_PKG(numpy,pip3)
     ETC_PKG(scipy,pip3)
     ETC_PKG(scikit-learn,pip3)
+    ETC_PKG(keras,pip3)
     ETC_PKG(pandas,pip3)
 ETC_MODULE_END(python)
 
 #Perl Development
 ETC_MODULE_BEGIN(perl)
     ETC_PKG(perl)
-    ETC_PKG(perl6)
-    ETC_PKG(cpanm)
 ETC_MODULE_END(perl)
 
 #Ruby Development
 ETC_MODULE_BEGIN(ruby)
     ETC_PKG(ruby)
-    ETC_PKG(rails,gem)
 ETC_MODULE_END(ruby)
 
 #MIT-Scheme Development
@@ -61,10 +58,7 @@ ETC_MODULE_BEGIN(c_cxx)
     ETC_PKG(gdb)
     ETC_PKG(cmake)
     ETC_PKG(doxygen)
-    ETC_PKG(cppunit)
     ETC_PKG(pkg-config)
-    ETC_PKG(llvm)
-    ETC_PKG(clang,apt-get)
 ETC_MODULE_END(c_cxx)
 
 
@@ -85,16 +79,14 @@ dnl     ETC_PKG(srecord)
 dnl     ETC_PKG(yotta,pip3)
 dnl ETC_MODULE_END(microbit)
 dnl 
-#Ardunio Development
-ETC_MODULE_BEGIN(arduino)
-    ETC_PKG(caskroom/cask/arduino,brew)
-ETC_MODULE_END(arduino)
-
 
 #Z Shell
 ETC_MODULE_DEPEND(zsh_plug,zsh)
 
-ETC_MODULE(zsh,ETC_PKG(zsh))
+ETC_MODULE_BEGIN(zsh)
+    ETC_PKG(zsh)
+ETC_MODULE_END(zsh)
+
 
 ETC_MODULE_BEGIN(zsh_plug)
     ETC_REMOTE_RESOURCE(https://raw.githubusercontent.com/zplug/installer/master/installer.zsh,/tmp/make_zplug)

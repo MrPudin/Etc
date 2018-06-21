@@ -25,6 +25,7 @@ else
     export EDITOR='nvim'
     export VISUAL="nvim"
 fi
+alias ls='ls --color=never -F'
 alias vim="nvim"
 alias py="python3"
 
@@ -42,7 +43,6 @@ setopt inc_append_history
 source ~/.zplug/init.zsh
 zplug "plugins/vi-mode", from:oh-my-zsh
 zplug "plugins/git-fast", from:oh-my-zsh
-zplug "plugins/tmux", from:oh-my-zsh
 zplug "mafredri/zsh-async"
 zplug "miekg/lean", as:theme, use:"lean.plugin.zsh"
 
