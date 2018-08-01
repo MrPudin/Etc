@@ -25,6 +25,7 @@ ETC_MODULE_BEGIN(dev)
     ETC_PKG(openssl)
     ETC_PKG(sqlite)
     ETC_PKG(postgres)
+    ETC_PKG(mysql)
 ETC_MODULE_END(dev)
 
 #Python Development
@@ -34,8 +35,6 @@ ETC_MODULE_BEGIN(python)
     ETC_PKG(virtualenv,pip3)
     ETC_PKG(cryptography,pip3)
     ETC_PKG(numpy,pip3)
-    ETC_PKG(scipy,pip3)
-    ETC_PKG(scikit-learn,pip3)
     ETC_PKG(pandas,pip3)
 ETC_MODULE_END(python)
 
@@ -90,6 +89,14 @@ ETC_MODULE_BEGIN(arduino)
     ETC_PKG(caskroom/cask/arduino,brew)
 ETC_MODULE_END(arduino)
 
+#Machine Learning 
+ETC_MODULE_BEGIN(ml)
+    ETC_PKG(scipy,pip3)
+    ETC_PKG(scikit-learn,pip3)
+    ETC_PKG(keras,pip3)
+    ETC_PKG(tensorflow,pip3)
+    ETC_PKG(octave)
+ETC_MODULE_END(ml)
 
 #Z Shell
 ETC_MODULE_DEPEND(zsh_plug,zsh)
