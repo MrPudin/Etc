@@ -45,6 +45,16 @@ shift
 # if modules are specifed, subcommand will only operate on the specified modles
 MODULES="$*" 
 
+# Update the etcetera repository if git is present to ensure that update
+# is consisitent with latest upstream deployment
+# Test if git is installed
+(git &>/dev/null) 
+if [ $? -ne 127 ] # Git is installed
+then
+    echo "[etcetera]: Fetching latest deployment..."
+    git -C "$ETC_DIR" pull -s recursive -X theirs -r
+fi
+
 # Contruct working directory
 WORK_DIR="$ETC_DIR/.work"
 mkdir -p "$WORK_DIR"
