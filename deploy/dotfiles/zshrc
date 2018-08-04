@@ -26,7 +26,7 @@ else
     export VISUAL="nvim"
 fi
 
-alias ls='ls --color=never -F'
+alias ls='ls -F'
 alias vim="nvim"
 alias v="nvim"
 alias py="python3"
