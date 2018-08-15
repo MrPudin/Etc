@@ -3,7 +3,7 @@
 " NeoVim Configuration
 " 
 
-"Editing Settings
+"Editor Settings
 set autoindent
 set autoread
 set completeopt=longest,menu,preview
@@ -27,19 +27,6 @@ set wildmode=longest,list,full
 set lazyredraw
 set splitbelow
 set history=1000
-
-"File Settings
-set encoding=utf8
-set path+=/usr/local/include/,/usr/local/include/c++/7.1.0/,/usr/include/
-filetype plugin on
-filetype plugin indent on
-autocmd Filetype scheme setlocal tabstop=2
-autocmd Filetype make setlocal noexpandtab
-autocmd FileType crontab setlocal backupcopy=yes
-autocmd FileType java setlocal omnifunc=javacomplete#Complete
-autocmd FileType ruby setlocal tabstop=2|setlocal shiftwidth=2
-autocmd BufNewFile,BufRead *.sc setf scala
-autocmd BufNewFile,BufRead *.etc setf m4
 
 "Display Settings
 set hlsearch
@@ -82,8 +69,36 @@ function! Binding_Unclutter()
 endfunction
 nnoremap <silent> <Esc><Esc> :noh\|call Binding_Unclutter()<cr>
 
+
+"File Settings
+set encoding=utf8
+set path+=/usr/local/include/,/usr/local/include/c++/7.1.0/,/usr/include/
+filetype plugin on
+filetype plugin indent on
+
+autocmd Filetype scheme setlocal tabstop=2
+autocmd Filetype make setlocal noexpandtab
+autocmd FileType crontab setlocal backupcopy=yes
+autocmd FileType java setlocal omnifunc=javacomplete#Complete
+autocmd FileType ruby setlocal tabstop=2|setlocal shiftwidth=2
+autocmd BufNewFile,BufRead *.sc setf scala
+autocmd BufNewFile,BufRead *.etc setf m4
+
 "Plugin
 call plug#begin('~/.local/share/nvim/plugged')
+
+"Editor
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-characterize'
+Plug 'coderifous/textobj-word-column.vim'
+Plug 'wellle/targets.vim'
+Plug 'tpope/vim-rsi'
+Plug 'tpope/vim-abolish'
+Plug 'haya14busa/incsearch.vim'
+Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-projectionist'
+
 "Utility
 Plug 'Shougo/denite.nvim'
 Plug 'chemzqm/unite-location'
@@ -96,37 +111,27 @@ Plug 'christoomey/vim-tmux-navigator'
 Plug 'roxma/vim-window-resize-easy'
 Plug 'mbbill/undotree'
 
-"Editor
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-characterize'
-Plug 'coderifous/textobj-word-column.vim'
-Plug 'wellle/targets.vim'
-Plug 'tpope/vim-rsi'
-Plug 'tpope/vim-abolish'
-Plug 'haya14busa/incsearch.vim'
-Plug 'tpope/vim-unimpaired'
-
 "Completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neoinclude.vim'
 Plug 'zchee/deoplete-jedi'
 Plug 'carlitux/deoplete-ternjs'
+Plug 'Shougo/neco-syntax'
 Plug 'vim-scripts/vim-javacomplete2'
+Plug 'c9s/perlomni.vim'
+Plug 'zchee/deoplete-asm'
 
 Plug 'landaire/deoplete-swift'
-Plug 'Rip-Rip/clang_complete'
+Plug 'Rip-Rip/clang_complete', { 'for': ['c', 'cpp'] }
 Plug 'Shougo/neco-syntax'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 Plug 'ervandew/supertab'
 
 "Syntax
-Plug 'keith/swift.vim'
-Plug 'leafgarland/typescript-vim'
 Plug 'sirtaj/vim-openscad'
-Plug 'vim-ruby/vim-ruby'
-Plug 'fatih/vim-go'
+Plug 'tpope/vim-rails'
+Plug 'sheerun/vim-polyglot'
 
 "Appearance
 Plug 'altercation/vim-colors-solarized'
@@ -137,7 +142,8 @@ call plug#end()
 "Plugin Configuration
 "Plugin Display configuration
 colorscheme solarized
-    " Usage: Display_Reload(('dark'|'light']))
+
+" Usage: Display_Reload(('dark'|'light']))
 function! Display_Reload(mode)
     if a:mode == 'dark'
         highlight SpellBad ctermfg=White ctermbg=Red
@@ -147,10 +153,8 @@ function! Display_Reload(mode)
         highlight SpellCap ctermfg=White ctermbg=DarkYellow
     endif
 endfunction
-
 call Display_Reload('dark')
-nnoremap <leader>hl :setl background=light\|call Display_Reload('light')<cr>
-nnoremap <leader>hd :setl background=dark\|call Display_Reload('dark')<cr>
+
 
 "Denite
 call denite#custom#var('grep', 'command', ['ag'])
@@ -184,15 +188,7 @@ call denite#custom#map('insert', '<C-x>', '<denite:do_action:split>',
 call denite#custom#map('insert', '<C-t>', '<denite:do_action:tabopen>',
       \'noremap')
 
-nnoremap <c-p> :Denite file_rec<cr>
-nnoremap <c-n> :Denite outline<cr>
-nnoremap <c-l> :Denite location_list<cr>
-nnoremap <c-k> :Denite quickfix<cr>
-nnoremap <c-b> :Denite buffer<cr>
-nnoremap <c-j> :Denite directory_rec<cr>
-
 "Deoplete
-nnoremap <leader>cc :call deoplete#toggle()<cr>
 let g:deoplete#enable_smart_case=1
 let g:deoplete#auto_complete_delay=40
 
@@ -225,35 +221,60 @@ let g:airline_powerline_fonts = 1
 
 "Incsearch
 let g:incsearch#magic = '\v'
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
 
 
 "Tmux-Vim Navigator
 let g:tmux_navigator_no_mappings = 1
-nnoremap <silent> <M-w>h :TmuxNavigateLeft<cr>
-nnoremap <silent> <M-w>j :TmuxNavigateDown<cr>
-nnoremap <silent> <M-w>k :TmuxNavigateUp<cr>
-nnoremap <silent> <M-w>l :TmuxNavigateRight<cr>
 
 "Ack - Ag grep
 let g:ackprg='ag --vimgrep'
-nnoremap <c-g> :Ack! 
-
-"Fugitive - Git
-nnoremap <leader>vv :Gstatus<cr>
-nnoremap <leader>vl :Glog<cr>
-nnoremap <leader>ve :Gread<cr>
-nnoremap <leader>vb :Gblame -MMM<cr>
-
-"Undotree
-nnoremap <leader>uu :UndotreeToggle<cr>
 
 " Vim Go
 let g:go_fmt_command="goimports"
 let g:go_metalinter_autosave=1
 let g:go_gocode_unimported_packages=1
 
-"Plugin Autocommands
+
+"Plugin Bindings 
+" Appearance
+nnoremap <leader>hl :setl background=light\|call Display_Reload('light')<cr>
+nnoremap <leader>hd :setl background=dark\|call Display_Reload('dark')<cr>
+
+" Denite
+nnoremap <c-p> :Denite file_rec<cr>
+nnoremap <c-n> :Denite outline<cr>
+nnoremap <c-l> :Denite location_list<cr>
+nnoremap <c-k> :Denite quickfix<cr>
+nnoremap <c-b> :Denite buffer<cr>
+nnoremap <c-j> :Denite directory_rec<cr>
+
+" Deoplete
+nnoremap <leader>cc :call deoplete#toggle()<cr>
+
+" Neomake
+nnoremap <leader>nn :NeomakeToggle
+
+" Search
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+
+" Tmux integration
+nnoremap <silent> <M-w>h :TmuxNavigateLeft<cr>
+nnoremap <silent> <M-w>j :TmuxNavigateDown<cr>
+nnoremap <silent> <M-w>k :TmuxNavigateUp<cr>
+nnoremap <silent> <M-w>l :TmuxNavigateRight<cr>
+
+" Recursive Project Serach
+nnoremap <c-g> :Ack! 
+
+" Version Control
+nnoremap <leader>vv :Gstatus<cr>
+nnoremap <leader>vl :Glog<cr>
+nnoremap <leader>ve :Gread<cr>
+nnoremap <leader>vb :Gblame -MMM<cr>
+
+nnoremap <leader>uu :UndotreeToggle<cr>
+
+;"Plugin Autocommands
 autocmd InsertEnter * call deoplete#enable()
 
