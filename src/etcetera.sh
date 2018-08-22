@@ -12,7 +12,7 @@ MAKE_ARG=""
 FORCE=false
 
 #Parse Options
-while getopts "hfd:" opt
+while getopts "hid:" opt
 do
 	case $opt in
 		 h) 
