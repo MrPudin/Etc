@@ -252,7 +252,7 @@ nnoremap <c-j> :Denite directory_rec<cr>
 nnoremap <leader>cc :call deoplete#toggle()<cr>
 
 " Neomake
-nnoremap <leader>nn :NeomakeToggle
+nnoremap <leader>mm :NeomakeToggle
 
 " Search
 map /  <Plug>(incsearch-forward)
