@@ -141,6 +141,7 @@ Plug 'Shougo/neco-syntax'
 Plug 'vim-scripts/vim-javacomplete2'
 Plug 'c9s/perlomni.vim'
 Plug 'zchee/deoplete-asm'
+Plug 'OmniSharp/omnisharp-vim'
 
 "Syntax
 Plug 'sirtaj/vim-openscad'
