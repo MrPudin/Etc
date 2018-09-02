@@ -39,26 +39,36 @@ vnoremap * "*y/\V<c-r>*<cr><esc>
 vnoremap # "*y?\V<c-r>*<cr><esc>
 nnoremap & :&&<cr>
 vnoremap & :&&<cr>
+
 nnoremap <leader>q :qa<cr>
 nnoremap <leader>S :setl spell!<cr>
 nnoremap <leader>ss z=
 nnoremap <leader>p "+p
-nnoremap <leader>P :set paste!<cr>
-nnoremap <leader>A :args 
-nnoremap <leader>aa :argadd 
-nnoremap <leader>ax :argdelete %<cr>
-nnoremap <leader>[ :next<cr>
-nnoremap <leader>] :Next<cr>
-nnoremap <leader>a: :argdo
+nnoremap <leader>P "+P
+nnoremap <leader>g :grep
+nnoremap <leader>t :tags<cr>
+nnoremap <C-]> <C-]><cr>
+nnoremap <C-T> <C-T><cr>
+nnoremap <leader>k :execute 'ptag ' . expand('<cword>')<cr>
+
+nnoremap <leader>] :next\|args<cr>
+nnoremap <leader>[ :Next\|args<cr>
+nnoremap <leader>a :args<cr>
+nnoremap <leader>A :argadd 
+nnoremap <leader>aa :argadd\|args<cr>
+nnoremap <leader>ad :argdelete %\|args<cr>
+nnoremap <leader>a0 :argrewind\|args<cr>
+nnoremap <leader>a$ :arglast %\|args<cr>
+
 nnoremap <leader>ww :tabnew<cr>
-nnoremap <leader>wx :tabclose<cr>
+nnoremap <leader>wq :tabclose<cr>
 nnoremap <leader>w] :tabnext<cr>
-nnoremap <leader>w[ :tabNext<cr>
 nnoremap <leader>w[ :tabNext<cr>
 nnoremap <leader>w0 :tabrewind<cr>
 nnoremap <leader>w$ :tablast<cr>
 nnoremap <leader>w{ :tabmove -1<cr>
 nnoremap <leader>w} :tabmove +1<cr>
+
 nnoremap <leader>\ :set colorcolumn=80<cr> :set cursorline<cr>
 nnoremap <leader>\| :set colorcolumn=0<cr> :set nocursorline<cr>
 
@@ -69,10 +79,13 @@ function! Binding_Unclutter()
 endfunction
 nnoremap <silent> <Esc><Esc> :noh\|call Binding_Unclutter()<cr>
 
+"Search Settings 
+set grepprg=ag\ --vimgrep\ --nocolor\ --nogroup\ $*
+set grepformat=%f:%l:%c:%m
 
 "File Settings
 set encoding=utf8
-set path+=/usr/local/include/,/usr/local/include/c++/7.1.0/,/usr/include/
+" set path+=/usr/local/include/,/usr/local/include/c++/7.1.0/,/usr/include/
 filetype plugin on
 filetype plugin indent on
 
@@ -97,36 +110,37 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-abolish'
 Plug 'haya14busa/incsearch.vim'
 Plug 'tpope/vim-unimpaired'
-Plug 'tpope/vim-projectionist'
 
 "Utility
 Plug 'Shougo/denite.nvim'
 Plug 'chemzqm/unite-location'
 Plug 'tpope/vim-fugitive'
 Plug 'neomake/neomake'
-Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-obsession'
 Plug 'tmux-plugins/tmux-resurrect'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'roxma/vim-window-resize-easy'
 Plug 'mbbill/undotree'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'tpope/vim-projectionist'
+Plug 'majutsushi/tagbar'
 
 "Completion
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'Shougo/neoinclude.vim'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'ervandew/supertab'
+
+Plug 'landaire/deoplete-swift'
+Plug 'Rip-Rip/clang_complete', { 'for': ['c', 'cpp'] }
+Plug 'Shougo/neco-syntax'
 Plug 'zchee/deoplete-jedi'
 Plug 'carlitux/deoplete-ternjs'
 Plug 'Shougo/neco-syntax'
 Plug 'vim-scripts/vim-javacomplete2'
 Plug 'c9s/perlomni.vim'
 Plug 'zchee/deoplete-asm'
-
-Plug 'landaire/deoplete-swift'
-Plug 'Rip-Rip/clang_complete', { 'for': ['c', 'cpp'] }
-Plug 'Shougo/neco-syntax'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
-Plug 'ervandew/supertab'
 
 "Syntax
 Plug 'sirtaj/vim-openscad'
@@ -137,6 +151,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'altercation/vim-colors-solarized'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+
 call plug#end()
 
 "Plugin Configuration
@@ -157,6 +172,8 @@ call Display_Reload('dark')
 
 
 "Denite
+call denite#custom#option('default', 'prompt', '>')
+
 call denite#custom#var('grep', 'command', ['ag'])
 call denite#custom#var('grep', 'default_opts',
         \ ['-i', '--vimgrep'])
@@ -173,9 +190,11 @@ call denite#custom#map('normal', 'j', '<denite:move_to_next_line>',
       \'noremap')
 call denite#custom#map('normal', 'k', '<denite:move_to_previous_line>',
       \'noremap')
-call denite#custom#map('insert', 'gd', '<denite:do_action:cd>',
-      \'noremap')
 call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
+      \'noremap')
+call denite#custom#map('insert', '<C-j>', '<denite:do_action:cd>',
+      \'noremap')
+call denite#custom#map('insert', '<cr>', '<denite:do_action:drop>',
       \'noremap')
 call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>',
         \'noremap')
@@ -185,7 +204,9 @@ call denite#custom#map('insert', '<C-v>', '<denite:do_action:vsplit>',
       \'noremap')
 call denite#custom#map('insert', '<C-x>', '<denite:do_action:split>',
       \'noremap')
-call denite#custom#map('insert', '<C-t>', '<denite:do_action:tabopen>',
+call denite#custom#map('insert', '<C-p>', '<denite:do_action:preview>',
+      \'noremap')
+call denite#custom#map('insert', '<C-w>', '<denite:do_action:tabopen>',
       \'noremap')
 
 "Deoplete
@@ -226,9 +247,6 @@ let g:incsearch#magic = '\v'
 "Tmux-Vim Navigator
 let g:tmux_navigator_no_mappings = 1
 
-"Ack - Ag grep
-let g:ackprg='ag --vimgrep'
-
 " Vim Go
 let g:go_fmt_command="goimports"
 let g:go_metalinter_autosave=1
@@ -247,12 +265,18 @@ nnoremap <c-l> :Denite location_list<cr>
 nnoremap <c-k> :Denite quickfix<cr>
 nnoremap <c-b> :Denite buffer<cr>
 nnoremap <c-j> :Denite directory_rec<cr>
+nnoremap <c-g> :Denite grep<cr>
+
+call denite#custom#var('file/rec', 'command',
+    \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', '.'])
+call denite#custom#var("grep", 'command',
+    \ ['ag', '--vimgrep', '--follow', '--nocolor', '--nogroup'])
 
 " Deoplete
 nnoremap <leader>cc :call deoplete#toggle()<cr>
 
 " Neomake
-nnoremap <leader>mm :NeomakeToggle
+nnoremap <leader>mm :NeomakeToggle<cr>
 
 " Search
 map /  <Plug>(incsearch-forward)
@@ -264,8 +288,6 @@ nnoremap <silent> <M-w>j :TmuxNavigateDown<cr>
 nnoremap <silent> <M-w>k :TmuxNavigateUp<cr>
 nnoremap <silent> <M-w>l :TmuxNavigateRight<cr>
 
-" Recursive Project Serach
-nnoremap <c-g> :Ack! 
 
 " Version Control
 nnoremap <leader>vv :Gstatus<cr>
