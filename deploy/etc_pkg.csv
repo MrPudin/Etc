@@ -17,4 +17,4 @@ dnf; install -y; upgrade -y; remove -y; check-update; lsr
 # Platform Package Managers
 # no refresh command and flags
 pip3; install --user; install --user --upgrade; uninstall --user;;
-gem; install; update; uninstall; update --system;
+gem; install; update; uninstall; update --system;;

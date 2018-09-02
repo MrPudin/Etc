@@ -51,9 +51,6 @@ ETC_MODULE_BEGIN(ruby)
     ETC_PKG(ruby)
 ETC_MODULE_END(ruby)
 
-#MIT-Scheme Development
-ETC_MODULE(mit_scheme,ETC_PKG(mit-scheme))
-
 #C/C++ Development
 ETC_MODULE_BEGIN(c_cxx)
     ETC_PKG(gcc)
@@ -74,18 +71,6 @@ ETC_MODULE_END(java)
 ETC_MODULE_BEGIN(scala)
     ETC_PKG(scala)
 ETC_MODULE_END(scala)
-
-dnl #Microbit Development
-dnl ETC_MODULE_BEGIN(microbit)
-dnl     ETC_PKG(srecord)
-dnl     ETC_PKG(yotta,pip3)
-dnl ETC_MODULE_END(microbit)
-dnl 
-
-#Ardunio Development
-ETC_MODULE_BEGIN(arduino)
-    ETC_PKG(caskroom/cask/arduino,brew)
-ETC_MODULE_END(arduino)
 
 #Machine Learning 
 ETC_MODULE_BEGIN(ml)
