@@ -195,7 +195,7 @@ call denite#custom#map('insert', '<Esc>', '<denite:enter_mode:normal>',
       \'noremap')
 call denite#custom#map('insert', '<C-j>', '<denite:do_action:cd>',
       \'noremap')
-call denite#custom#map('insert', '<cr>', '<denite:do_action:drop>',
+call denite#custom#map('insert', '<cr>', '<denite:do_action:open>',
       \'noremap')
 call denite#custom#map('insert', '<C-j>', '<denite:move_to_next_line>',
         \'noremap')
@@ -207,7 +207,7 @@ call denite#custom#map('insert', '<C-x>', '<denite:do_action:split>',
       \'noremap')
 call denite#custom#map('insert', '<C-p>', '<denite:do_action:preview>',
       \'noremap')
-call denite#custom#map('insert', '<C-w>', '<denite:do_action:tabopen>',
+call denite#custom#map('insert', '<C-t>', '<denite:do_action:tabopen>',
       \'noremap')
 
 "Deoplete
