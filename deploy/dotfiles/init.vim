@@ -300,4 +300,4 @@ nnoremap <leader>uu :UndotreeToggle<cr>
 
 ;"Plugin Autocommands
 autocmd InsertEnter * call deoplete#enable()
-
+autocmd FileType gitcommit,gitrebase let g:gutentags_enabled=0
