@@ -80,7 +80,7 @@ endfunction
 nnoremap <silent> <Esc><Esc> :noh\|call Binding_Unclutter()<cr>
 
 "Search Settings 
-set grepprg=ag\ --vimgrep\ --nocolor\ --nogroup\ $*
+set grepprg=ag\ --vimgrep\ --nocolor\ --nogroup\ '$*'
 set grepformat=%f:%l:%c:%m
 
 "File Settings
