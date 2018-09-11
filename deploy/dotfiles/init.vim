@@ -157,7 +157,6 @@ call plug#end()
 
 "Plugin Configuration
 "Plugin Display configuration
-let g:solarized_termtrans = 1 " This gets rid of the grey background
 colorscheme solarized
 
 " Usage: Display_Reload(('dark'|'light']))
