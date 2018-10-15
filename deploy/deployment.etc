@@ -12,20 +12,25 @@ ETC_MODULE_BEGIN(util)
     ETC_PKG(w3m)
     ETC_PKG(wget)
     ETC_PKG(aria2)
+    ETC_PKG(curl)
     ETC_PKG(gawk)
     ETC_PKG(gpg)
 ETC_MODULE_END(util)
-
 
 #General Development
 ETC_MODULE_BEGIN(dev)
     ETC_PKG(ag,brew)
     ETC_PKG(the_silver_searcher,dnf)
+    ETC_PKG(the_silver_searcher,brew)
+    ETC_PKG(silversearcher-ag,apt-get)
     ETC_PKG(git)
+    ETC_PKG(git-lfs)
+    ETC_PKG(opencv,brew)
+    ETC_PKG(libopencv-dev,apt-get)
+    ETC_PKG(python3-opencv,apt-get)
     ETC_PKG(openssl)
     ETC_PKG(sqlite)
-    ETC_PKG(postgres)
-    ETC_PKG(mysql)
+    ETC_PKG(postgresql)
 ETC_MODULE_END(dev)
 
 #Python Development
@@ -49,10 +54,11 @@ ETC_MODULE_END(perl)
 #Ruby Development
 ETC_MODULE_BEGIN(ruby)
     ETC_PKG(ruby)
+    dnl ETC_PKG(rails,gem)
 ETC_MODULE_END(ruby)
 
 #MIT-Scheme Development
-ETC_MODULE(mit_scheme,ETC_PKG(mit-scheme))
+dnl ETC_MODULE(mit_scheme,ETC_PKG(mit-scheme))
 
 #C/C++ Development
 ETC_MODULE_BEGIN(c_cxx)
@@ -61,8 +67,8 @@ ETC_MODULE_BEGIN(c_cxx)
     ETC_PKG(cmake)
     ETC_PKG(doxygen)
     ETC_PKG(pkg-config)
-ETC_MODULE_END(c_cxx)
-
+    ETC_PKG(clang,apt-get)
+ETC_MODULE_END(c_cxx) 
 
 # Java Development
 ETC_MODULE_BEGIN(java)
@@ -74,18 +80,6 @@ ETC_MODULE_END(java)
 ETC_MODULE_BEGIN(scala)
     ETC_PKG(scala)
 ETC_MODULE_END(scala)
-
-dnl #Microbit Development
-dnl ETC_MODULE_BEGIN(microbit)
-dnl     ETC_PKG(srecord)
-dnl     ETC_PKG(yotta,pip3)
-dnl ETC_MODULE_END(microbit)
-dnl 
-
-#Ardunio Development
-ETC_MODULE_BEGIN(arduino)
-    ETC_PKG(caskroom/cask/arduino,brew)
-ETC_MODULE_END(arduino)
 
 #Machine Learning 
 ETC_MODULE_BEGIN(ml)
@@ -126,7 +120,6 @@ ETC_MODULE_BEGIN(neovim)
     ETC_PKG(neovim)
 ETC_MODULE_END(neovim)
 
-
 ETC_MODULE_BEGIN(neovim_plug)
     ETC_PKG(neovim,pip3)
     ETC_PKG(jedi,pip3)
@@ -154,10 +147,10 @@ ETC_MODULE_BEGIN(tmux_plug)
     ETC_GIT(https://github.com/tmux-plugins/tpm,$(HOME)/.tmux/plugins/tpm)
 
     ETC_SETUP_HOOK(`
-        ETC_RUN_NORM(sh $(HOME)/.tmux/plugins/tpm/bin/install_plugins)
+        ETC_RUN_NORM(bash $(HOME)/.tmux/plugins/tpm/bin/install_plugins)
     ')
     ETC_UPGRADE_HOOK(`
-        ETC_RUN_NORM(sh $(HOME)/.tmux/plugins/tpm/bin/update_plugins all)
+        ETC_RUN_NORM(bash $(HOME)/.tmux/plugins/tpm/bin/update_plugins all)
         ETC_RUN_NORM(tmux source-file $(HOME)/.tmux.conf)
     ')
     ETC_TEARDOWN_HOOK(`
