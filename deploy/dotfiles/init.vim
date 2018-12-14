@@ -110,6 +110,7 @@ Plug 'tpope/vim-rsi'
 Plug 'tpope/vim-abolish'
 Plug 'haya14busa/incsearch.vim'
 Plug 'tpope/vim-unimpaired'
+Plug 'lervag/vimtex'
 
 "Utility
 Plug 'Shougo/denite.nvim'
@@ -213,6 +214,9 @@ call denite#custom#map('insert', '<C-t>', '<denite:do_action:tabopen>',
 "Deoplete
 let g:deoplete#enable_smart_case=1
 let g:deoplete#auto_complete_delay=40
+if has('win64')
+    let g:python3_host_prog='C:\Python37\python.exe'
+endif
 
 "Clang Complete
 let g:clang_library_path='/usr/local/opt/llvm/lib/libclang.dylib'
@@ -273,6 +277,7 @@ call denite#custom#var('file/rec', 'command',
 call denite#custom#var("grep", 'command',
     \ ['ag', '--vimgrep', '--follow', '--nocolor', '--nogroup'])
 
+
 " Deoplete
 nnoremap <leader>cc :call deoplete#toggle()<cr>
 
@@ -289,15 +294,15 @@ nnoremap <silent> <M-w>j :TmuxNavigateDown<cr>
 nnoremap <silent> <M-w>k :TmuxNavigateUp<cr>
 nnoremap <silent> <M-w>l :TmuxNavigateRight<cr>
 
-
 " Version Control
 nnoremap <leader>vv :Gstatus<cr>
 nnoremap <leader>vl :Glog<cr>
 nnoremap <leader>ve :Gread<cr>
 nnoremap <leader>vb :Gblame -MMM<cr>
 
+" Undotree
 nnoremap <leader>uu :UndotreeToggle<cr>
 
-;"Plugin Autocommands
+"Plugin Autocommands
 autocmd InsertEnter * call deoplete#enable()
 autocmd FileType gitcommit,gitrebase let g:gutentags_enabled=0
